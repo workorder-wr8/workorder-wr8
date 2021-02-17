@@ -1,20 +1,20 @@
 import { Switch, Route } from 'react-router-dom'
-import AdminDash from './Components/AdminDash/AdminDash'
+import LandingTenant from './Components/LandingTenant/LandingTenant'
+import LandingAdmin from './Components/LandingAdmin/LandingAdmin'
+import ManageWorkOrder from './Components/ManageWorkOrder/ManageWorkOrder'
 import CreateWorkOrder from './Components/CreateWorkOrder/CreateWorkOrder'
-import Landing from './Components/Landing/Landing'
-import Register from './Components/Register/Register'
 import TenantDash from './Components/TenantDash/TenantDash'
-import WorkOrderAdmin from './Components/AdminDash/AdminDash'
-import WorkOrderTenant from './Components/WorkOrderTenant/WorkOrderTenant'
+import StaffDash from './Components/StaffDash/StaffDash'
+import ManagerDash from './Components/ManagerDash/ManagerDash'
 
 export default (
     <Switch>
-        <Route exact path='/' component={Landing} />
-        <Route path='/register' component={Register} />
-        <Route path='/admindash' component={AdminDash} />
-        <Route path='/createworkorder' component={CreateWorkOrder} />
-        <Route path='/tenantdash' component={TenantDash} />
-        <Route path='/workorderadmin' component={WorkOrderAdmin} />
-        <Route path='/workordertenant' component={WorkOrderTenant} />
+        <Route exact path='/' component={LandingTenant} />
+        <Route path='/admin' component={LandingAdmin} />
+        <Route path='/workorder/:id' component={ManageWorkOrder} />
+        <Route path='/workorder/new' component={CreateWorkOrder} />
+        <Route path='/dash' component={TenantDash} />
+        <Route path='/staffdash' component={StaffDash} />
+        <Route path='/managerdash' component={ManagerDash} />
     </Switch>
 )
