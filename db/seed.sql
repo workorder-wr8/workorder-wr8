@@ -18,7 +18,6 @@ email varchar(50),
 phone varchar(12)
 );
 
-
 create table properties (
 id serial primary key,
 landlordid int,
