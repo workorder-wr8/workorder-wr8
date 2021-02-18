@@ -12,7 +12,7 @@ export default (
         <Route exact path='/' component={LandingTenant} />
         <Route path='/admin' component={LandingAdmin} />
         <Route path='/workorder/:id' component={ManageWorkOrder} />
-        <Route path='/workorder/new' component={CreateWorkOrder} />
+        <Route path='/create/workorder' component={CreateWorkOrder} />
         <Route path='/dash' component={TenantDash} />
         <Route path='/staffdash' component={StaffDash} />
         <Route path='/managerdash' component={ManagerDash} />
