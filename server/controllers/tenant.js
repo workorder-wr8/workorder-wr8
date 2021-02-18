@@ -14,10 +14,21 @@ module.exports = {
       return res.status(409).send('Incorrect password');
     }
     req.session.tenant = {
-      //NEEDS TO BE DONE
+      landlordid: tenant.landlordid,
+      managerid: tenant.managerid,
+      propertyid: tenant.propertyid,
+      firstname: tenant.firstname,
+      lastname: tenant.lastname,
+      password: tenant.password,
+      email: tenant.email,
+      phone: tenant.phone,
+      address1: tenant.address1,
+      unitnumber: tenant.unitnumber,
+      city: tenant.city,
+      state: tenant.state,
+      zip: tenant.zip
     }
-
-    return res.status(200);
+    return res.send(req.session.tenant);
   },
   register: async (req,res) => {
     return res.status(200);
