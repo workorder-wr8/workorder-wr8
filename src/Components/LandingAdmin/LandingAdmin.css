@@ -1,0 +1,12 @@
+#landingadmin {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#landingToggle {
+    display: flex;
+    flex-direction: row;
+}
