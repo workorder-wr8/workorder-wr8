@@ -34,13 +34,16 @@ module.exports = {
     const hash = bcrypt.hashSync(password, salt)
 
     const createdStaff = await db.staff.create_staff(firstName, lastName, hash, email, phone)
-    const staffSesh = createdStaff[0] //not returning anything yet
+    const staffSesh = createdStaff[0]
 
     req.session.user = staffSesh
     return res.status(201).send(req.session.user)
   },
   getStaff: async (req, res) => {
-    return res.status(200);
+    if (req.session.user) {
+      return res.send(req.session.user)
+    }
+    return res.status(404).send('No user found');
   },
   logout: async (req, res) => {
     req.session.destroy()
