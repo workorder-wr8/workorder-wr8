@@ -22,7 +22,7 @@ module.exports = {
     return res.status(202).send(req.session.user)
   },
   register: async (req, res) => {
-    const { firstName, lastName, email, password, phone } = req.body;
+    const { firstname, lastname, email, password, phone } = req.body;
     const db = req.app.get('db')
 
     const [userExists] = await db.staff.get_staff(email)
@@ -33,7 +33,7 @@ module.exports = {
     const salt = bcrypt.genSaltSync(10)
     const hash = bcrypt.hashSync(password, salt)
 
-    const createdStaff = await db.staff.create_staff(firstName, lastName, hash, email, phone)
+    const createdStaff = await db.staff.create_staff(firstname, lastname, hash, email, phone)
     const staffSesh = createdStaff[0]
 
     req.session.user = staffSesh
