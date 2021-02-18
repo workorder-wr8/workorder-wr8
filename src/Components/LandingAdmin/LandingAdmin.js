@@ -1,47 +1,59 @@
 import axios from 'axios';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './LandingAdmin.css'
 
 const LandingAdmin = (props) => {
     const [registerView, setRegisterView] = useState(false)
-    const [firstName, setFirstName] = useState('')
-    const [lastName, setLastName] = useState('')
+    const [firstname, setFirstName] = useState('')
+    const [lastname, setLastName] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [verPassword, setVerPassword] = useState('')
     const [phone, setPhone] = useState('')
-    const [role, setRole] = useState('');
+    const [role, setRole] = useState('staff');
+
+    useEffect(() => {
+        document.getElementById('landingContent').style.backgroundColor = 'grey';
+    }, [])
 
     function register() {
-        if(role === 'staff') {
+        if (role === 'staff') {
             axios.post('/api/staff/register',
-            {
-                firstname: firstName,
-                lastname: lastName,
-                email: email,
-                password: password,
-                phone: phone 
-            })
-            .then (res=> {
-                props.history.push('/staffdash')
-                //updateUser from reducer
-
-            })
+                {
+                    firstname, lastname, email, password, phone
+                })
+                .then(res => {
+                    props.history.push('/staffdash')
+                    //updateUser from reducer
+                })
         } else {
             axios.post('/api/manager/register',
-            {
-                landlordid: 1,
-                propertyid: 1,
-                firstname: firstName,
-                lastname: lastName,
-                email: email,
-                password: password,
-                phone: phone
+                {
+                    landlordid: 1, propertyid: 1, firstname, lastname, email, password, phone
+                })
+                .then(res => {
+                    props.history.push('/managerdash')
+                    //updateUser from reducer
+                })
+        }
+    }
+
+    function login() {
+        if (role === 'staff') {
+            axios.post('/api/staff/login', {
+                email, password
             })
-            .then (res=> {
-                props.history.push('/managerdash')
-                //updateUser from reducer
-            }) 
+                .then(res => {
+                    props.history.push('/staffdash')
+                })
+        }
+        else if (role === 'manager') {
+            axios.post('/api/manager/login', {
+                email, password
+            })
+                .then(res => {
+                    props.history.push('/managerdash')
+                })
         }
     }
 
@@ -51,12 +63,12 @@ const LandingAdmin = (props) => {
 
     const toggleStaff = () => {
         setRole('staff');
-        document.getElementById('landingContent').style.backgroundColor = 'green';
+        document.getElementById('landingContent').style.backgroundColor = 'grey';
     }
 
     const toggleManager = () => {
         setRole('manager');
-        document.getElementById('landingContent').style.backgroundColor = 'blue';
+        document.getElementById('landingContent').style.backgroundColor = 'red';
     }
 
     return (
@@ -86,7 +98,7 @@ const LandingAdmin = (props) => {
                         </>
                     ) : (
                             <>
-                                <button>Login</button>
+                                <button onClick={login}>Login</button>
                                 <p>Don't have an account? <span onClick={toggle}>Register</span></p>
                             </>
                         )}
