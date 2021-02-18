@@ -19,9 +19,9 @@ module.exports = {
 
     delete result.password;
 
-    req.session.tenant = result;
+    req.session.user = result;
 
-    res.status(200).send(req.session.tenant);
+    res.status(200).send(req.session.user);
   },
 
   register: async (req, res) => {
