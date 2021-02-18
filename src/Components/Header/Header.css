@@ -1,0 +1,12 @@
+.navbar {
+    background: grey;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 21px;
+    margin: 0px;
+}

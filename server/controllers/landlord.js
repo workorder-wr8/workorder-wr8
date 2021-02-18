@@ -1,14 +1,11 @@
 module.exports = {
-  login: async (req,res) => {
+  login: async (req, res) => {
     return res.status(200);
   },
-  register: async (req,res) => {
+  register: async (req, res) => {
     return res.status(200);
   },
-  getLandlord: async(req,res) => {
-    return res.status(200);
-  },
-  logout: async (req,res) => {
+  getLandlord: async (req, res) => {
     return res.status(200);
   }
 }
