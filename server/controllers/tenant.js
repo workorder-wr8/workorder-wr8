@@ -1,42 +1,89 @@
-const { default: userEvent } = require("@testing-library/user-event");
+const bcrypt = require('bcryptjs');
 
 module.exports = {
-  login: async (req,res) => {
-    const {email, password} = req.body;
+  login: async (req, res) => {
+    const { email, password } = req.body;
     const db = req.app.get('db');
-    const check = await db.tenant.get_tenant_by_email([email]);
-    const tenant = check[0];
-    if(!tenant) {
-      return res.status(401).send('this email is not with an account. please register before logging in');
+
+    const findTenant = await db.tenants.check_tenant({ email });
+    const result = findTenant[0];
+
+    if (!result) {
+      return res.status(404).sned(`Tenant not found!`);
     }
-    const isAuthenticated = bcrypt.compareSync(password, tenant.password);
-    if(!isAuthenticated) {
-      return res.status(409).send('Incorrect password');
+
+    const authenticated = bcrypt.compareSync(password, result.password);
+    if (!authenticated) {
+      return res.status(401).send(`Incorrect password for ${result.email}`);
     }
-    req.session.tenant = {
-      landlordid: tenant.landlordid,
-      managerid: tenant.managerid,
-      propertyid: tenant.propertyid,
-      firstname: tenant.firstname,
-      lastname: tenant.lastname,
-      password: tenant.password,
-      email: tenant.email,
-      phone: tenant.phone,
-      address1: tenant.address1,
-      unitnumber: tenant.unitnumber,
-      city: tenant.city,
-      state: tenant.state,
-      zip: tenant.zip
+
+    delete result.password;
+
+    req.session.tenant = result;
+
+    res.status(200).send(req.session.tenant);
+  },
+
+  register: async (req, res) => {
+    const {
+      firstName,
+      lastName,
+      email,
+      phone,
+      password,
+      property,
+      address1,
+      city,
+      state,
+      zip,
+      unitNumber,
+      landlord,
+      manager
+    } = req.body;
+
+    const db = req.app.get('db');
+
+    const findTenant = await db.tenants.check_tenant({ email });
+    const result = findTenant[0];
+
+    if (result) {
+      return res.status(400).send(`Email already in use`);
     }
-    return res.send(req.session.tenant);
+
+    const salt = bcrypt.genSaltSync(10);
+    const hash = bcrypt.hashSync(password, salt);
+
+    const newTenant = await db.tenants.register_tenant(
+      {
+        landlord,
+        manager,
+        property,
+        firstName,
+        lastName,
+        password: hash,
+        email,
+        phone,
+        address1,
+        unitNumber,
+        city,
+        state,
+        zip
+      });
+
+    req.session.tenant = newTenant[0];
+    res.status(201).send(req.session.tenant);
   },
-  register: async (req,res) => {
-    return res.status(200);
+
+  getTenant: async (req, res) => {
+    if (req.session.tenant) {
+      return res.send(req.session.tenant);
+    }
+
+    res.status(404).send(`No user found`);
   },
-  getTenant: async(req,res) => {
-    return res.status(200);
-  },
-  logout: async (req,res) => {
-    return res.status(200);
-  } 
+
+  logout: async (req, res) => {
+    req.session.destroy();
+    res.sendStatus(200);
+  }
 }
