@@ -1,16 +1,16 @@
 const bcrypt = require('bcryptjs');
 
 module.exports = {
-  login: async (req,res) => {
-    const {email, password} = req.body;
+  login: async (req, res) => {
+    const { email, password } = req.body;
     const db = req.app.get('db');
     const check = await db.manager.get_manager_by_email([email]);
     const manager = check[0];
-    if(!manager) {
+    if (!manager) {
       return res.status(401).send('this email is not with an account. please register before logging in');
     }
     const isAuthenticated = bcrypt.compareSync(password, manager.password);
-    if(!isAuthenticated) {
+    if (!isAuthenticated) {
       return res.status(409).send('Incorrect password');
     }
     req.session.manager = {
@@ -23,14 +23,14 @@ module.exports = {
     }
     return res.send(req.session.manager);
   },
-  register: async (req,res) => {
-    const {landlordid, propertyid, firstname, lastname, password, email, phone} = req.body;
+  register: async (req, res) => {
+    const { landlordid, propertyid, firstname, lastname, password, email, phone } = req.body;
     const db = req.app.get('db');
     const check = await db.manager.get_manager_by_email([email]);
     const manager = check[0];
-    if(manager)
+    if (manager)
       return res.status(409).send('email taken')
-    
+
     const salt = bcrypt.genSaltSync(10);
     const hash = bcrypt.hashSync(password, salt);
     const registeredManager = await db.manager.create_manager([landlordid, propertyid, firstname, lastname, hash, email, phone]);
@@ -48,10 +48,7 @@ module.exports = {
 
     return res.status(200).send(req.session.newManager);
   },
-  getManager: async(req,res) => {
+  getManager: async (req, res) => {
     return res.status(200);
-  },
-  logout: async (req,res) => {
-    return res.status(200);
-  } 
+  }
 }

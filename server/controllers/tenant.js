@@ -80,10 +80,5 @@ module.exports = {
     }
 
     res.status(404).send(`No user found`);
-  },
-
-  logout: async (req, res) => {
-    req.session.destroy();
-    res.sendStatus(200);
   }
 }
