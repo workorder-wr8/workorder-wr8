@@ -1,0 +1,1 @@
+select * from managers where email = $1;

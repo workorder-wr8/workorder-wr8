@@ -1,0 +1,1 @@
+select * landlords where id=$1;
