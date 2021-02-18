@@ -24,22 +24,21 @@ module.exports = {
     return res.send(req.session.manager);
   },
   register: async (req,res) => {
-    const {landlordid, firstname, lastname, password, email, phone} = req.body;
+    const {landlordid, propertyid, firstname, lastname, password, email, phone} = req.body;
     const db = req.app.get('db');
-    const check = await db.manager.find_manager_by_email([email]);
-    const llcheck = await db.landlord.find_landlord_by_id([landlordid])
+    const check = await db.manager.get_manager_by_email([email]);
     const manager = check[0];
     if(manager)
       return res.status(409).send('email taken')
-    if(!llcheck[0])
-      return res.status(408).send('landlord doesn\'t exist');
     
     const salt = bcrypt.genSaltSync(10);
     const hash = bcrypt.hashSync(password, salt);
-    const registeredManager = await db.manager.create_manager([landlordid, firstname, lastname, hash, email, phone]);
+    const registeredManager = await db.manager.create_manager([landlordid, propertyid, firstname, lastname, hash, email, phone]);
     const newManager = registeredManager[0];
+    console.log('AFTER registeredManager', registeredManager);
     req.session.manager = {
       landlordid: newManager.landlordid,
+      propertyid: newManager.propertyid,
       firstname: newManager.firstname,
       lastname: newManager.lastname,
       password: newManager.password,
