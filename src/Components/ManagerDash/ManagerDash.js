@@ -6,21 +6,39 @@ export default function ManagerDash() {
     const [workorders,setWorkOrders] = useState([]);
     const [unassignedWorkOrders, setUnassigned] = useState([])
     const [assignedWorkOrders, setAssigned] = useState([])
+    
     useEffect(()=>{
-        axios.get('/api/workorder/manager')
-        .then(res=>setWorkOrders(res.data))
-        mapWorkOrders();
+        getWorkOrders();
     }, [])
 
-    const mapWorkOrders = () => {
-        workorders.filter((wo)=>{
-            if(wo.status === 'open')
-                setUnassigned(wo)
-            else
-                setAssigned(wo)
+    const getWorkOrders = async () => {
+        await axios.get('/api/workorder/manager')
+        .then(res=>{
+            setWorkOrders(res.data);
         })
+    }
+
+    const mapWorkOrders = () => {
+        console.log('MAPPING ZE VERK ORDAHS: ', workorders)
+        let unassignedFiltered, assignedFiltered;
+        unassignedFiltered = workorders.filter((wo)=>{return wo.status === 'open'}).map((wo)=>(
+            <div className='workOrder'>
+                <h1>pls halp</h1>
+                <div>{wo?.title}</div>
+                <div>{wo?.description}</div>
+            </div>
+        ))
+        assignedFiltered = workorders.filter((wo)=>{return wo.status!=='open'})
+        console.log('unassignedFiltered: ', unassignedFiltered);
+        setUnassigned(unassignedFiltered);
+        setAssigned(assignedFiltered);
     } 
 
+
+
+    useEffect(mapWorkOrders, [workorders]);
+
+    console.log('BEFORE RETURN: ', workorders.length, unassignedWorkOrders)
     return (
         <div>
             ManagerDash

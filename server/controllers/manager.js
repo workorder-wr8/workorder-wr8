@@ -14,10 +14,10 @@ module.exports = {
       return res.status(409).send('Incorrect password');
     }
     req.session.user = {
+      id: manager.id,
       landlordid: manager.landlordid,
       firstname: manager.firstname,
       lastname: manager.lastname,
-      password: manager.password,
       email: manager.email,
       phone: manager.phone
     }

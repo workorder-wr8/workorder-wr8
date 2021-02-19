@@ -1,3 +1,4 @@
+
 module.exports = {
   create: async (req,res)=> {
     const landlordid = req.session.user.landlordid 	
@@ -13,7 +14,7 @@ module.exports = {
   },
   getManager: async (req,res) => {
     const {id} = req.session.user;
-    await req.app.get('db').workorder.get_workorder_by_manager(id);
-    return res.sendStatus(200);
+    const workorders = await req.app.get('db').workorder.get_workorder_by_manager(id);
+    return res.status(200).send(workorders);
   }
 }

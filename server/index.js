@@ -51,6 +51,7 @@ app.get('/api/landlord/me', landlordCtrl.getLandlord);
 //property endpoints
 app.get('/api/properties', propertyCtrl.getProperties);
 app.get('/api/properties/:id', propertyCtrl.getProperty);
+
 //workorder endpoints
 app.post('/api/workorder/create', workorderCtrl.create)
 app.get('/api/workorder/manager', workorderCtrl.getManager)
