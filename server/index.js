@@ -37,6 +37,8 @@ app.get('/api/tenant/me', tenantCtrl.getTenant);
 app.post('/api/staff/login', staffCtrl.login);
 app.post('/api/staff/register', staffCtrl.register);
 app.get('/api/staff/me', staffCtrl.getStaff);
+app.get('/api/staff/workorders/:id', staffCtrl.getworkorders)
+app.put('/api/staff/workorders', staffCtrl.updateworkorders)
 
 //manager endpoints
 app.post('/api/manager/login', managerCtrl.login);
