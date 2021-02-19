@@ -19,9 +19,9 @@ module.exports = {
 
     delete result.password;
 
-    req.session.tenant = result;
+    req.session.user = result;
 
-    res.status(200).send(req.session.tenant);
+    res.status(200).send(req.session.user);
   },
 
   register: async (req, res) => {
@@ -70,13 +70,13 @@ module.exports = {
         zip
       });
 
-    req.session.tenant = newTenant[0];
-    res.status(201).send(req.session.tenant);
+    req.session.user = newTenant[0];
+    res.status(201).send(req.session.user);
   },
 
   getTenant: async (req, res) => {
-    if (req.session.tenant) {
-      return res.send(req.session.tenant);
+    if (req.session.user) {
+      return res.send(req.session.user);
     }
 
     res.status(404).send(`No user found`);

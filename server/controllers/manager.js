@@ -13,7 +13,7 @@ module.exports = {
     if (!isAuthenticated) {
       return res.status(409).send('Incorrect password');
     }
-    req.session.manager = {
+    req.session.user = {
       landlordid: manager.landlordid,
       firstname: manager.firstname,
       lastname: manager.lastname,
@@ -21,7 +21,7 @@ module.exports = {
       email: manager.email,
       phone: manager.phone
     }
-    return res.send(req.session.manager);
+    return res.send(req.session.user);
   },
   register: async (req, res) => {
     const { landlordid, propertyid, firstname, lastname, password, email, phone } = req.body;
@@ -36,7 +36,7 @@ module.exports = {
     const registeredManager = await db.manager.create_manager([landlordid, propertyid, firstname, lastname, hash, email, phone]);
     const newManager = registeredManager[0];
     console.log('AFTER registeredManager', registeredManager);
-    req.session.manager = {
+    req.session.user = {
       landlordid: newManager.landlordid,
       propertyid: newManager.propertyid,
       firstname: newManager.firstname,
@@ -46,7 +46,7 @@ module.exports = {
       phone: newManager.phone
     }
 
-    return res.status(200).send(req.session.newManager);
+    return res.status(200).send(req.session.user);
   },
   getManager: async (req, res) => {
     return res.status(200);
