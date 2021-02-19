@@ -52,8 +52,5 @@ app.get('/api/logout', (req, res) => {
     return res.sendStatus(200);
 })
 
-
-
-
 app.listen(SERVER_PORT, () => console.log(`Listening on port ${SERVER_PORT}`))
 
