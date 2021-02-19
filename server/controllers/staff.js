@@ -44,5 +44,22 @@ module.exports = {
       return res.send(req.session.user)
     }
     return res.status(404).send('No user found');
+  },
+  getworkorders: async (req, res) => {
+    const { id } = req.params
+    const db = req.app.get('db')
+
+    const workorders = await db.staff.get_workorders(id)
+
+    res.status(200).send(workorders)
+  },
+  updateworkorders: async (req, res) => {
+    const { id, status, staffid } = req.body
+    const db = req.app.get('db')
+
+    const updatedStatus = await db.staff.schedule_workorder(id, status, staffid)
+    console.log(updatedStatus)
+
+    return res.status(200).send(updatedStatus);
   }
 }
