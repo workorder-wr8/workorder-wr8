@@ -29,7 +29,7 @@ const LandingAdmin = (props) => {
         } else {
             axios.post('/api/manager/register',
                 {
-                    landlordid: 1, propertyid: 1, firstname, lastname, email, password, phone
+                    landlordid: 1, propertyid: 3, firstname, lastname, email, password, phone
                 })
                 .then(res => {
                     props.history.push('/managerdash')

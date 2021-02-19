@@ -9,6 +9,11 @@ module.exports = {
     const description	=req.body.description
     const status	= 'open'
     await req.app.get('db').workorder.create_workorder(landlordid, managerid, propertyid, tenantid, staffid, title, description, status)
-    return res.send(200);
+    return res.sendStatus(200);
+  },
+  getManager: async (req,res) => {
+    const {id} = req.session.user;
+    await req.app.get('db').workorder.get_workorder_by_manager(id);
+    return res.sendStatus(200);
   }
 }

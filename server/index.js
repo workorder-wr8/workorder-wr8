@@ -49,6 +49,7 @@ app.get('/api/landlord/me', landlordCtrl.getLandlord);
 
 //workorder endpoints
 app.post('/api/workorder/create', workorderCtrl.create)
+app.get('/api/workorder/manager', workorderCtrl.getManager)
 
 
 //logout
@@ -56,9 +57,6 @@ app.get('/api/logout', (req, res) => {
     req.session.destroy()
     return res.sendStatus(200);
 })
-
-
-
 
 app.listen(SERVER_PORT, () => console.log(`Listening on port ${SERVER_PORT}`))
 
