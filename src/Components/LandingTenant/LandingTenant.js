@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react';
+import { connect } from 'react-redux';
+import { getUser } from '../../redux/reducers/userReducer';
 import axios from 'axios';
 
 const LandingTenant = props => {
@@ -59,7 +61,7 @@ const LandingTenant = props => {
         let password = input.password;
         axios.post('/api/tenant/login', { email, password })
             .then(tenant => {
-                //USE REDUX to set TENANT ON STAT
+                props.getUser(tenant.data);
                 props.history.push('/dash');
             })
             .catch(err => console.log(`Error: ${err.message}`));
@@ -103,6 +105,7 @@ const LandingTenant = props => {
             })
     }
 
+    console.log(props)
     return (
         <div>
             <section className='container tenant-landing-container'>
@@ -159,4 +162,4 @@ const LandingTenant = props => {
     )
 }
 
-export default LandingTenant;
+export default connect(null, { getUser })(LandingTenant);
