@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { connect } from 'react-redux';
+import { getUser } from '../../redux/reducers/userReducer';
 import axios from 'axios';
 
 const LandingTenant = props => {
-    //TODO make get request to fill in property, manager, landlord and address details so those don't have to be null or hard coded
     const [input, setInput] = useState({
         firstName: '',
         lastName: '',
@@ -11,18 +12,25 @@ const LandingTenant = props => {
         password: '',
         verPassword: '',
         address1: '',
-        property: 1,
-        manager: 1,
-        landlord: 1,
+        property: 0,
+        manager: 0,
+        landlord: 0,
         city: '',
         state: '',
         zip: '',
         unitNumber: ''
     });
 
+    const [properties, setProperties] = useState([]);
 
     const [registeredView, setRegisteredView] = useState(false);
 
+    useEffect(() => {
+        axios.get('/api/properties')
+            .then(properties => {
+                setProperties(properties.data);
+            })
+    }, []);
 
     const handleToggle = () => {
         setRegisteredView(!registeredView);
@@ -30,6 +38,22 @@ const LandingTenant = props => {
 
     const handleInputChange = e => {
         setInput({ ...input, [e.target.name]: e.target.value });
+
+    }
+
+    const handleSelectChange = (e) => {
+        const propertyID = + e.target.value;
+        const property = properties.find(prop => prop.id = propertyID);
+        setInput({
+            ...input,
+            property: property.id,
+            manager: property.manager_id,
+            landlord: property.landlord_id,
+            address1: property.address1,
+            state: property.state,
+            city: property.city,
+            zip: property.zip
+        });
     }
 
     const login = () => {
@@ -37,7 +61,7 @@ const LandingTenant = props => {
         let password = input.password;
         axios.post('/api/tenant/login', { email, password })
             .then(tenant => {
-                //USE REDUX to set TENANT ON STATE
+                props.getUser(tenant.data);
                 props.history.push('/dash');
             })
             .catch(err => console.log(`Error: ${err.message}`));
@@ -82,7 +106,6 @@ const LandingTenant = props => {
     }
 
     console.log(props)
-    console.log(input)
     return (
         <div>
             <section className='container tenant-landing-container'>
@@ -116,12 +139,11 @@ const LandingTenant = props => {
                                 <label>Phone Number:</label>
                                 <input onChange={e => handleInputChange(e)} type='tel' name='phone' value={input.phone} />
                                 <label>Property:</label>
-                                <select onChange={e => handleInputChange(e)} defaultValue='Select Property' name='properties'>
+                                <select onChange={e => handleSelectChange(e)} defaultValue='Select Property' name='property'>
                                     <option value='Select Property' disabled >Choose here</option>
-                                    <option name='property' value='property-1'>property-1</option>
-                                    <option name='property' value='property-2'>property-2</option>
-                                    <option name='property' value='property-3'>property-3</option>
-                                    <option name='property' value='property-4'>property-4</option>
+                                    {properties.map((property, index) => (
+                                        <option key={index} value={property.id}>{property.name}</option>
+                                    ))}
                                 </select>
                                 <label>Unit Number:</label>
                                 <input onChange={e => handleInputChange(e)} value={input.unitNumber} name='unitNumber' type='text' />
@@ -140,4 +162,4 @@ const LandingTenant = props => {
     )
 }
 
-export default LandingTenant;
+export default connect(null, { getUser })(LandingTenant);

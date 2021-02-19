@@ -9,7 +9,7 @@ module.exports = {
     const result = findTenant[0];
 
     if (!result) {
-      return res.status(404).sned(`Tenant not found!`);
+      return res.status(404).send(`Tenant not found!`);
     }
 
     const authenticated = bcrypt.compareSync(password, result.password);
@@ -70,13 +70,13 @@ module.exports = {
         zip
       });
 
-    req.session.tenant = newTenant[0];
-    res.status(201).send(req.session.tenant);
+    req.session.user = newTenant[0];
+    res.status(201).send(req.session.user);
   },
 
   getTenant: async (req, res) => {
-    if (req.session.tenant) {
-      return res.send(req.session.tenant);
+    if (req.session.user) {
+      return res.send(req.session.user);
     }
 
     res.status(404).send(`No user found`);
