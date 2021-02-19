@@ -9,7 +9,7 @@ module.exports = {
     const result = findTenant[0];
 
     if (!result) {
-      return res.status(404).sned(`Tenant not found!`);
+      return res.status(404).send(`Tenant not found!`);
     }
 
     const authenticated = bcrypt.compareSync(password, result.password);
