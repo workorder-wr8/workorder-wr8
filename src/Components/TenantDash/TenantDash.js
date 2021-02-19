@@ -1,9 +1,12 @@
 import React from 'react'
 
-export default function TenantDash() {
+const TenantDash = props => {
+    console.log('Tenant Dash', props)
     return (
         <div>
             TenantDash
         </div>
     )
 }
+
+export default TenantDash;
