@@ -105,7 +105,6 @@ const LandingTenant = props => {
             })
     }
 
-    console.log(props)
     return (
         <div>
             <section className='container tenant-landing-container'>

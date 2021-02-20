@@ -55,7 +55,7 @@ app.get('/api/properties', propertyCtrl.getProperties);
 app.get('/api/properties/:id', propertyCtrl.getProperty);
 //workorder endpoints
 app.post('/api/workorder/create', workorderCtrl.create)
-
+app.get('/api/workorder/tenant', workorderCtrl.getWorkOrderByTenant);
 
 //logout
 app.get('/api/logout', (req, res) => {

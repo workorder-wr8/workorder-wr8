@@ -21,7 +21,6 @@ function Header(props) {
             });
     }
 
-    console.log('header', props)
     return (
         <header className='navbar'>
 
