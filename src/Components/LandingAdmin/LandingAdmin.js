@@ -1,5 +1,7 @@
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
+import { connect } from 'react-redux'
+import { getUser } from '../../redux/reducers/userReducer'
 import './LandingAdmin.css'
 
 const LandingAdmin = (props) => {
@@ -9,11 +11,16 @@ const LandingAdmin = (props) => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [verPassword, setVerPassword] = useState('')
+    const [propertyid, setPropertyid] = useState(0)
     const [phone, setPhone] = useState('')
     const [role, setRole] = useState('staff');
+    const [properties, setProperties] = useState([]);
 
     useEffect(() => {
-        document.getElementById('landingContent').style.backgroundColor = 'grey';
+        axios.get('/api/properties')
+            .then(properties => {
+                setProperties(properties.data);
+            })
     }, [])
 
     function register(e) {
@@ -22,21 +29,21 @@ const LandingAdmin = (props) => {
             if (role === 'staff') {
                 axios.post('/api/staff/register',
                     {
-                        firstname, lastname, email, password, phone
+                        firstname, lastname, email, password, phone, propertyid
                     })
                     .then(res => {
                         props.history.push('/staffdash')
-                        //updateUser from reducer
+                        props.getUser(res.data)
                     })
                     .catch(err => console.log(err.response.data))
             } else {
                 axios.post('/api/manager/register',
                     {
-                        landlordid: 1, propertyid: 1, firstname, lastname, email, password, phone
+                        landlordid: 1, propertyid, firstname, lastname, email, password, phone
                     })
                     .then(res => {
                         props.history.push('/managerdash')
-                        //updateUser from reducer
+                        props.getUser(res.data)
                     })
                     .catch(err => console.log(err.response.data))
             }
@@ -50,6 +57,7 @@ const LandingAdmin = (props) => {
             axios.post('/api/staff/login', { email, password })
                 .then(res => {
                     props.history.push('/staffdash')
+                    props.getUser(res.data)
                 })
                 .catch(err => console.log(err.response.data))
         }
@@ -57,6 +65,7 @@ const LandingAdmin = (props) => {
             axios.post('/api/manager/login', { email, password })
                 .then(res => {
                     props.history.push('/managerdash')
+                    props.getUser(res.data)
                 })
                 .catch(err => console.log(err.response.data))
         }
@@ -76,6 +85,7 @@ const LandingAdmin = (props) => {
         document.getElementById('landingContent').style.backgroundColor = 'red';
     }
 
+    // console.log(property)
     return (
         <div >
             <section id='landingadmin'>
@@ -99,8 +109,21 @@ const LandingAdmin = (props) => {
                         <>
                             <input placeholder='Verify Password' type='password' onChange={e => setVerPassword(e.target.value)} />
                             <input type='number' placeholder='Phone Number' max='12' onChange={e => setPhone(e.target.value)} />
+
+                            {/* Sign up for specific property */}
+                            <label>Property:</label>
+                            <select onChange={e => setPropertyid(e.target.value)} defaultValue='Select Property' >
+                                <option value='Select Property' disabled >Choose here</option>
+                                {properties.map((property, index) => (
+                                    <option key={index} value={property.id}>{property.name}</option>
+                                ))}
+                            </select>
+                            <input type='password' placeholder='Property Passcode' />
+
                             <button onClick={register}>Submit</button>
                             <p>Already have an account <span onClick={toggle}>Login</span> </p>
+
+
                         </>
                     ) : (
                             <>
@@ -114,4 +137,4 @@ const LandingAdmin = (props) => {
         </div>
     )
 }
-export default LandingAdmin;
+export default connect(null, { getUser })(LandingAdmin);
