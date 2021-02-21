@@ -100,6 +100,7 @@ const LandingTenant = props => {
             manager
         })
             .then(tenant => {
+                props.getUser(tenant.data);
                 //USE REDUX TO SET THEM ON STATE
                 props.history.push('/dash');
             })

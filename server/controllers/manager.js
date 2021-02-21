@@ -13,11 +13,15 @@ module.exports = {
     if (!isAuthenticated) {
       return res.status(409).send('Incorrect password');
     }
+
+    delete manager.password;
+
     req.session.user = {
       landlordid: manager.landlordid,
+      managerid: manager.managerid,
+      name: manager.name,
       firstname: manager.firstname,
       lastname: manager.lastname,
-      password: manager.password,
       email: manager.email,
       phone: manager.phone
     }
@@ -38,10 +42,11 @@ module.exports = {
     console.log('AFTER registeredManager', registeredManager);
     req.session.user = {
       landlordid: newManager.landlordid,
+      managerid: newManager.managerid,
       propertyid: newManager.propertyid,
+      name: newManager.name,
       firstname: newManager.firstname,
       lastname: newManager.lastname,
-      password: newManager.password,
       email: newManager.email,
       phone: newManager.phone
     }
