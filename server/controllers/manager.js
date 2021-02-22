@@ -16,16 +16,9 @@ module.exports = {
 
     delete manager.password;
 
-    req.session.user = {
-      id: manager.id,
-      landlordid: manager.landlordid,
-      managerid: manager.managerid,
-      name: manager.name,
-      firstname: manager.firstname,
-      lastname: manager.lastname,
-      email: manager.email,
-      phone: manager.phone
-    }
+    req.session.user = manager;
+    console.log('manager: ', req.session.user)
+
     return res.send(req.session.user);
   },
   register: async (req, res) => {

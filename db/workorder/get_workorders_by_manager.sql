@@ -12,4 +12,4 @@ w.lastupdated,
 w.datecompleted
 from workorders w
 join managers m on m.id = w.managerid
-where managerid = $1;
+where w.managerid = $1;
