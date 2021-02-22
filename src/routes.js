@@ -11,7 +11,7 @@ export default (
     <Switch>
         <Route exact path='/' component={LandingTenant} />
         <Route path='/admin' component={LandingAdmin} />
-        <Route path='/workorder/:id' component={ManageWorkOrder} />
+        <Route path='/workorder' component={ManageWorkOrder} />
         <Route path='/create/workorder' component={CreateWorkOrder} />
         <Route path='/dash' component={TenantDash} />
         <Route path='/staffdash' component={StaffDash} />

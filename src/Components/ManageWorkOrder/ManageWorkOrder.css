@@ -1,0 +1,11 @@
+.workorder-container {
+    border: 3px solid black;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.workorder-title {
+    display: flex;
+
+}
