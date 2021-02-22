@@ -1,3 +1,4 @@
+
 module.exports = {
   create: async (req, res) => {
     const landlordid = req.session.user.landlordid
@@ -9,7 +10,12 @@ module.exports = {
     const description = req.body.description
     const status = 'open'
     await req.app.get('db').workorder.create_workorder(landlordid, managerid, propertyid, tenantid, staffid, title, description, status)
-    return res.send(200);
+    return res.sendStatus(200);
+  },
+  getManager: async (req,res) => {
+    const {id} = req.session.user;
+    const workorders = await req.app.get('db').workorder.get_workorder_by_manager(id);
+    return res.status(200).send(workorders);
   },
 
   getWorkOrderByTenant: async (req, res) => {
