@@ -17,6 +17,7 @@ module.exports = {
     delete manager.password;
 
     req.session.user = {
+      id: manager.id,
       landlordid: manager.landlordid,
       managerid: manager.managerid,
       name: manager.name,
