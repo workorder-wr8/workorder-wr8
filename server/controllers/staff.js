@@ -22,7 +22,7 @@ module.exports = {
     return res.status(202).send(req.session.user)
   },
   register: async (req, res) => {
-    const { firstname, lastname, email, password, phone } = req.body;
+    const { firstname, lastname, email, password, phone, propertyid } = req.body;
     const db = req.app.get('db')
 
     const [userExists] = await db.staff.get_staff(email)
@@ -33,7 +33,8 @@ module.exports = {
     const salt = bcrypt.genSaltSync(10)
     const hash = bcrypt.hashSync(password, salt)
 
-    const createdStaff = await db.staff.create_staff(firstname, lastname, hash, email, phone)
+    const createdStaff = await db.staff.create_staff(propertyid, firstname, lastname, hash, email, phone)
+    // console.log(userExists)
     const staffSesh = createdStaff[0]
 
     req.session.user = staffSesh
@@ -47,6 +48,7 @@ module.exports = {
   },
   getworkorders: async (req, res) => {
     const { id } = req.params
+    // console.log('id:', id)
     const db = req.app.get('db')
 
     const workorders = await db.staff.get_workorders(id)
@@ -55,6 +57,7 @@ module.exports = {
   },
   updateworkorders: async (req, res) => {
     const { id, status, staffid } = req.body
+    console.log('staffid:', staffid)
     const db = req.app.get('db')
 
     const updatedStatus = await db.staff.schedule_workorder(id, status, staffid)

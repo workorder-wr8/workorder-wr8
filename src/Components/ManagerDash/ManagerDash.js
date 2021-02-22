@@ -1,8 +1,9 @@
 import axios from 'axios';
 import {useEffect, useState} from 'react';
+import React from 'react'
+import { connect } from 'react-redux'
 
-
-export default function ManagerDash() {
+ function ManagerDash() {
     const [workorders,setWorkOrders] = useState([]);
     const [unassignedWorkOrders, setUnassigned] = useState([])
     const [assignedWorkOrders, setAssigned] = useState([])
@@ -52,3 +53,9 @@ export default function ManagerDash() {
         </div>
     )
 }
+
+const mapStateToProps = reduxState => ({
+    user: reduxState.userReducer.user
+})
+
+export default connect(mapStateToProps)(ManagerDash)

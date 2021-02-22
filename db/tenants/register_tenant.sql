@@ -27,6 +27,9 @@ INSERT INTO tenants
     ${city},
     ${state},
     ${zip}
-)
+);
 
-RETURNING id, firstname, lastname, email, unitnumber;
+select t.id as tenantid, t.firstname, t.lastname, t.email, t.unitnumber, p.name
+from tenants t
+join properties p on p.id = t.propertyid
+where t.email = ${email};

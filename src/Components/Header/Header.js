@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import './Header.css';
 import { connect } from 'react-redux';
 import { getUser, clearUser } from '../../redux/reducers/userReducer';
@@ -11,7 +11,7 @@ function Header(props) {
     useEffect(() => {
         axios.get('/api/tenant/me')
             .then(user => getUser(user.data));
-    },[getUser]);
+    }, [getUser]);
 
     const logout = () => {
         axios.get('/api/logout')
@@ -24,7 +24,7 @@ function Header(props) {
             });
     }
 
-    console.log('header', props)
+    console.log(props)
     return (
         <header className='navbar'>
 
@@ -34,8 +34,8 @@ function Header(props) {
                 (
                     <nav>
                         <ul className='nav-links'>
-                            <li>FirstName, LastName</li>
-                            <li>Name of Property</li>
+                            <li>{props.user.firstname}, {props.user.lastname}</li>
+                            <li>{props.user.name}</li>
                             <li><button onClick={logout}>Logout</button></li>
                         </ul>
                     </nav>
@@ -47,4 +47,8 @@ function Header(props) {
     )
 }
 
-export default withRouter(connect(null, { getUser, clearUser })(Header));
+const mapStateToProps = reduxState => ({
+    user: reduxState.userReducer.user
+})
+
+export default withRouter(connect(mapStateToProps, { getUser, clearUser })(Header));

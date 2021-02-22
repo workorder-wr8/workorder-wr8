@@ -1,29 +1,29 @@
 import React, { useState, useEffect } from 'react'
+import { connect } from 'react-redux'
 import axios from 'axios'
 import './StaffDash.css'
-// need redux for user id for the two axios calls
 
-
-export default function StaffDash(props) {
+function StaffDash(props) {
 
     const [assignments, setAssignments] = useState([])
     const [scheduled, setScheduled] = useState([])
 
     useEffect(() => {
-        axios.get(`/api/staff/workorders/5`) //update to user id from redux
+        axios.get(`/api/staff/workorders/${props.user.staffid}`)
             .then(res => {
                 setAssignments(res.data)
             })
             .catch(err => console.log(err))
-    }, [scheduled])
+    }, [scheduled, props])
 
     const handleSelectChange = (e, id) => {
-        axios.put(`/api/staff/workorders`, { id: id, status: e, staffid: 5 }) //update to user id from redux
+        axios.put(`/api/staff/workorders`, { id, status: e, staffid: props.user.staffid })
             .then(res => setScheduled(res.data))
 
             .catch(err => console.log(err))
     }
 
+    console.log(props)
     return (
         <div id='staffDash'>
 
@@ -82,3 +82,9 @@ export default function StaffDash(props) {
         </div>
     )
 }
+
+const mapStateToProps = reduxState => ({
+    user: reduxState.userReducer.user
+})
+
+export default connect(mapStateToProps)(StaffDash)

@@ -16,5 +16,18 @@ module.exports = {
     const {id} = req.session.user;
     const workorders = await req.app.get('db').workorder.get_workorder_by_manager(id);
     return res.status(200).send(workorders);
+  },
+
+  getWorkOrderByTenant: async (req, res) => {
+    const { id } = req.session.user;
+    const db = req.app.get('db');
+
+    const workOrders = await db.workorder.get_workorders_by_tenant({ id });
+
+    if (!workOrders[0]) {
+      return res.status(404).send(`No workorders to display`);
+    }
+
+    res.status(200).send(workOrders);
   }
 }
