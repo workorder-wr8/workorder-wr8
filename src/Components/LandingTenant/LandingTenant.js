@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { getUser } from '../../redux/reducers/userReducer';
+import './LandingTenant.css'
 import axios from 'axios';
 
 const LandingTenant = props => {
@@ -56,7 +57,8 @@ const LandingTenant = props => {
         });
     }
 
-    const login = () => {
+    const login = (e) => {
+        e.preventDefault();
         let email = input.email;
         let password = input.password;
         axios.post('/api/tenant/login', { email, password })
@@ -64,10 +66,12 @@ const LandingTenant = props => {
                 props.getUser(tenant.data);
                 props.history.push('/dash');
             })
-            .catch(err => console.log(`Error: ${err.message}`));
+            .catch(err => alert(err.response.data));
+        //error alerting twice
     }
 
-    const register = () => {
+    const register = (e) => {
+        e.preventDefault();
         const {
             firstName,
             lastName,
@@ -104,61 +108,64 @@ const LandingTenant = props => {
                 //USE REDUX TO SET THEM ON STATE
                 props.history.push('/dash');
             })
+            .catch(err => alert(err.response.data))
     }
 
     return (
-        <div>
+        <div id='landingtenant'>
             <section className='container tenant-landing-container'>
                 <section className='input-fields'>
-                    {registeredView ?
+                    {/* id=landingcontent is on LandingAdmin.css */}
+                    <form id='landingContent' onSubmit={registeredView ? register : login}>
+                        {registeredView ?
 
-                        (
-                            <>
-                                <h1>Register</h1>
-                                <label>First Name:</label>
-                                <input onChange={e => handleInputChange(e)} name='firstName' value={input.firstName} type='text' />
-                                <label>Last Name:</label>
-                                <input onChange={e => handleInputChange(e)} name='lastName' value={input.lastName} type='text' />
-                            </>
-                        )
-                        : (
-                            <>
-                                <h1>Login</h1>
-                            </>
-                        )}
-                    <label>Email:</label>
-                    <input onChange={e => handleInputChange(e)} name='email' value={input.email} type='text' />
-                    <label>Password:</label>
-                    <input onChange={e => handleInputChange(e)} name='password' value={input.password} type='password' />
-                    {registeredView ?
-                        (
-                            <>
+                            (
+                                <>
+                                    <h1>Register</h1>
+                                    <label>First Name:</label>
+                                    <input onChange={e => handleInputChange(e)} name='firstName' value={input.firstName} type='text' />
+                                    <label>Last Name:</label>
+                                    <input onChange={e => handleInputChange(e)} name='lastName' value={input.lastName} type='text' />
+                                </>
+                            )
+                            : (
+                                <>
+                                    <h1>Login</h1>
+                                </>
+                            )}
+                        <label>Email:</label>
+                        <input onChange={e => handleInputChange(e)} name='email' value={input.email} type='text' />
+                        <label>Password:</label>
+                        <input onChange={e => handleInputChange(e)} name='password' value={input.password} type='password' />
+                        {registeredView ?
+                            (
+                                <>
 
-                                <label>Verify Password:</label>
-                                <input onChange={e => handleInputChange(e)} name='verPassword' value={input.verPassword} type='password' />
-                                <label>Phone Number:</label>
-                                <input onChange={e => handleInputChange(e)} type='tel' name='phone' value={input.phone} />
-                                <label>Property:</label>
-                                <select onChange={e => handleSelectChange(e)} defaultValue='Select Property' name='property'>
-                                    <option value='Select Property' disabled >Choose here</option>
-                                    {properties.map((property, index) => (
-                                        <option key={index} value={property.id}>{property.name}</option>
-                                    ))}
-                                </select>
-                                <label>Unit Number:</label>
-                                <input onChange={e => handleInputChange(e)} value={input.unitNumber} name='unitNumber' type='text' />
-                                <button className='btn signup-btn' onClick={() => register()}>Sign Up</button>
-                                <p>Already have an account? <span onClick={() => handleToggle()}>Login Here</span></p>
-                            </>
-                        ) : (
-                            <>
-                                <button className='btn login-btn' onClick={() => login()}>Login</button>
-                                <p>Don't have an account? <span onClick={() => handleToggle()}>Register Here</span></p>
-                            </>)}
-
+                                    <label>Verify Password:</label>
+                                    <input onChange={e => handleInputChange(e)} name='verPassword' value={input.verPassword} type='password' />
+                                    <label>Phone Number:</label>
+                                    <input onChange={e => handleInputChange(e)} type='tel' name='phone' value={input.phone} />
+                                    <label>Property:</label>
+                                    <select onChange={e => handleSelectChange(e)} defaultValue='Select Property' name='property'>
+                                        <option value='Select Property' disabled >Choose here</option>
+                                        {properties.map((property, index) => (
+                                            <option key={index} value={property.id}>{property.name}</option>
+                                        ))}
+                                    </select>
+                                    <label>Unit Number:</label>
+                                    <input onChange={e => handleInputChange(e)} value={input.unitNumber} name='unitNumber' type='text' />
+                                    <button className='btn signup-btn' onClick={register}>Sign Up</button>
+                                    <p>Already have an account? <span onClick={() => handleToggle()}>Login Here</span></p>
+                                </>
+                            ) : (
+                                <>
+                                    <button className='btn login-btn' onClick={login}>Login</button>
+                                    <p>Don't have an account? <span onClick={() => handleToggle()}>Register Here</span></p>
+                                </>)}
+                    </form>
                 </section>
             </section>
-        </div>
+        </div >
     )
 }
 
