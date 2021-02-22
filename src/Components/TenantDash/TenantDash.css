@@ -1,0 +1,16 @@
+.table-container {
+    margin-top: 10px!important;
+    width:60%!important;
+    margin: 0 auto;
+}
+
+.search-workorder-field {
+    width: 100%;
+}
+
+.tenant-wo-description {
+    max-width: 40px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}

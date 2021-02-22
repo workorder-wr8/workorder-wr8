@@ -35,7 +35,7 @@ const LandingAdmin = (props) => {
                         props.history.push('/staffdash')
                         props.getUser(res.data)
                     })
-                    .catch(err => console.log(err.response.data))
+                    .catch(err => alert(err.response.data))
             } else {
                 axios.post('/api/manager/register',
                     {
@@ -45,7 +45,7 @@ const LandingAdmin = (props) => {
                         props.history.push('/managerdash')
                         props.getUser(res.data)
                     })
-                    .catch(err => console.log(err.response.data))
+                    .catch(err => alert(err.response.data))
             }
         }
 
@@ -59,7 +59,7 @@ const LandingAdmin = (props) => {
                     props.history.push('/staffdash')
                     props.getUser(res.data)
                 })
-                .catch(err => console.log(err.response.data))
+                .catch(err => alert(err.response.data))
         }
         else if (role === 'manager') {
             axios.post('/api/manager/login', { email, password })
@@ -67,7 +67,7 @@ const LandingAdmin = (props) => {
                     props.history.push('/managerdash')
                     props.getUser(res.data)
                 })
-                .catch(err => console.log(err.response.data))
+                .catch(err => alert(err.response.data))
         }
     }
 
