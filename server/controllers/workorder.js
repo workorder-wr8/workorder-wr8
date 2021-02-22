@@ -19,10 +19,10 @@ module.exports = {
   },
 
   getWorkOrderByTenant: async (req, res) => {
-    const { id } = req.session.user;
+    const { tenantid } = req.session.user;
     const db = req.app.get('db');
 
-    const workOrders = await db.workorder.get_workorders_by_tenant({ id });
+    const workOrders = await db.workorder.get_workorders_by_tenant({ tenantid });
 
     if (!workOrders[0]) {
       return res.status(404).send(`No workorders to display`);
