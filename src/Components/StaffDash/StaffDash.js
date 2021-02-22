@@ -21,31 +21,37 @@ function StaffDash(props) {
     const classes = useStyles();
     const [assignments, setAssignments] = useState([])
     const [scheduled, setScheduled] = useState([])
+    const [search, setSearch] = useState('')
 
     useEffect(() => {
-        axios.get(`/api/staff/workorders/${props.user.staffid}`)
-            .then(res => {
-                setAssignments(res.data)
-            })
-            .catch(err => console.log(err))
+        if (props.user.staffid) {
+            axios.get(`/api/staff/workorders/${props.user.staffid}`)
+                .then(res => {
+                    setAssignments(res.data)
+                })
+                .catch(err => console.log(err))
+        }
     }, [scheduled, props])
 
     const handleSelectChange = (e, id) => {
-        // console.log('e:', e)
-        // console.log('id:', id)
-        // console.log('staffid:', props.user.staffid)
         axios.put(`/api/staff/workorders`, { id, status: e, staffid: props.user.staffid })
             .then(res => {
-                console.log(res.data)
                 setScheduled(res.data)
             })
 
             .catch(err => console.log(err))
     }
 
-    // console.log(assignments)
+    const filterassignments = e => {
+        setSearch(e.target.value.toLowerCase())
+    }
+
     return (
         <div id='staffDash'>
+
+            <br />
+            <label>Search:</label>
+            <input type='search' onChange={e => filterassignments(e)} value={search} />
 
             <h1>Unread</h1>
             <TableContainer component={Paper}>
@@ -63,7 +69,7 @@ function StaffDash(props) {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {assignments.filter(e => e.status === 'Unread').map((assignment) => (
+                        {assignments.filter(e => e.status === 'Unread' && (e.description.includes(search) || e.title.includes(search))).map((assignment) => (
                             <TableRow key={assignment.id}>
                                 <TableCell component="th" scope="row">
                                     {assignment.id}
@@ -109,7 +115,7 @@ function StaffDash(props) {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {assignments.filter(e => e.status === 'In Progress').map((assignment) => (
+                        {assignments.filter(e => e.status === 'In Progress' && (e.description.includes(search) || e.title.includes(search))).map((assignment) => (
                             <TableRow key={assignment.id}>
                                 <TableCell component="th" scope="row">
                                     {assignment.id}
