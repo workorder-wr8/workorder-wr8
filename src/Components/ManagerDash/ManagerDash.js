@@ -23,7 +23,8 @@ export default function ManagerDash() {
         let unassignedFiltered, assignedFiltered;
         unassignedFiltered = workorders.filter((wo)=>{return wo.status === 'open'}).map((wo)=>(
             <div className='workOrder'>
-                <h1>pls halp</h1>
+                <div>{wo.firstname}</div>
+                <div>{wo.lastname}</div>
                 <div>{wo?.title}</div>
                 <div>{wo?.description}</div>
             </div>
