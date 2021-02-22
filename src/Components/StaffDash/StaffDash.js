@@ -2,9 +2,23 @@ import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux'
 import axios from 'axios'
 import './StaffDash.css'
+import { makeStyles } from '@material-ui/core/styles';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import Paper from '@material-ui/core/Paper';
+
+const useStyles = makeStyles({
+    table: {
+        minWidth: 650,
+    },
+});
 
 function StaffDash(props) {
-
+    const classes = useStyles();
     const [assignments, setAssignments] = useState([])
     const [scheduled, setScheduled] = useState([])
 
@@ -17,17 +31,114 @@ function StaffDash(props) {
     }, [scheduled, props])
 
     const handleSelectChange = (e, id) => {
+        // console.log('e:', e)
+        // console.log('id:', id)
+        // console.log('staffid:', props.user.staffid)
         axios.put(`/api/staff/workorders`, { id, status: e, staffid: props.user.staffid })
-            .then(res => setScheduled(res.data))
+            .then(res => {
+                console.log(res.data)
+                setScheduled(res.data)
+            })
 
             .catch(err => console.log(err))
     }
 
-    console.log(props)
+    // console.log(assignments)
     return (
         <div id='staffDash'>
 
-            <section id='unopened'>
+            <h1>Unread</h1>
+            <TableContainer component={Paper}>
+                <Table className={classes.table} aria-label="simple table">
+                    <TableHead>
+                        <TableRow>
+                            <TableCell>ID#</TableCell>
+                            <TableCell align="right">Name</TableCell>
+                            <TableCell align="right">Title</TableCell>
+                            <TableCell align="right">Description</TableCell>
+                            <TableCell align="right">Date Created</TableCell>
+                            {/* <TableCell align="right">Last Updated</TableCell> */}
+                            <TableCell align="right">Status</TableCell>
+                            <TableCell align="right">Action</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {assignments.filter(e => e.status === 'Unread').map((assignment) => (
+                            <TableRow key={assignment.id}>
+                                <TableCell component="th" scope="row">
+                                    {assignment.id}
+                                </TableCell>
+                                <TableCell align="right">{assignment.firstname} {assignment.lastname}</TableCell>
+                                <TableCell align="right">{assignment.title}</TableCell>
+                                <TableCell align="right">{assignment.description}</TableCell>
+                                <TableCell align="right">{assignment.datecreated}</TableCell>
+                                {/* <TableCell align="right">{assignment.lastupdated}</TableCell> */}
+                                <TableCell align="right">{assignment.status}</TableCell>
+                                <TableCell align="right">{
+                                    <div >Mark as <span>{
+                                        <>
+                                            <select defaultValue={assignment.status} name='statusoptions' id='statusoptions' onChange={e => handleSelectChange(e.target.value, assignment.id)}>
+                                                <option value='Unread' >Unread</option>
+                                                <option value='In Progress'>In Progress</option>
+                                                <option value='Completed'>Completed</option>
+                                            </select>
+                                        </>
+                                    }</span></div>
+                                }</TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </TableContainer>
+
+            <br />
+
+            <h1>In Progress</h1>
+            <TableContainer component={Paper}>
+                <Table className={classes.table} aria-label="simple table">
+                    <TableHead>
+                        <TableRow>
+                            <TableCell>ID#</TableCell>
+                            <TableCell align="right">Name</TableCell>
+                            <TableCell align="right">Title</TableCell>
+                            <TableCell align="right">Description</TableCell>
+                            <TableCell align="right">Date Created</TableCell>
+                            <TableCell align="right">Last Updated</TableCell>
+                            <TableCell align="right">Status</TableCell>
+                            <TableCell align="right">Action</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {assignments.filter(e => e.status === 'In Progress').map((assignment) => (
+                            <TableRow key={assignment.id}>
+                                <TableCell component="th" scope="row">
+                                    {assignment.id}
+                                </TableCell>
+                                <TableCell align="right">{assignment.firstname} {assignment.lastname}</TableCell>
+                                <TableCell align="right">{assignment.title}</TableCell>
+                                <TableCell align="right">{assignment.description}</TableCell>
+                                <TableCell align="right">{assignment.datecreated}</TableCell>
+                                <TableCell align="right">{assignment.lastupdated}</TableCell>
+                                <TableCell align="right">{assignment.status}</TableCell>
+                                <TableCell align="right">{
+                                    <div >Mark as <span>{
+                                        <>
+                                            <select defaultValue={assignment.status} name='statusoptions' id='statusoptions' onChange={e => handleSelectChange(e.target.value, assignment.id)}>
+                                                <option value='Unread' >Unread</option>
+                                                <option value='In Progress'>In Progress</option>
+                                                <option value='Completed'>Completed</option>
+                                            </select>
+                                        </>
+                                    }</span></div>
+                                }</TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </TableContainer>
+
+            {/*  */}
+            {/* <section id='unopened'>
                 <h1>Unread Workorders</h1>
 
                 {assignments.filter(e => e.status === 'Unread').map(wo => (
@@ -75,11 +186,11 @@ function StaffDash(props) {
 
                     </section>
                 ))}
-            </section>
+            </section> */}
 
 
             {/* Status = completed will not show unless filtered to that */}
-        </div>
+        </div >
     )
 }
 
