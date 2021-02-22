@@ -9,13 +9,22 @@ module.exports = {
     const title = req.body.title
     const description = req.body.description
     const status = 'open'
+    console.log(landlordid, managerid, propertyid, tenantid, staffid, title, description, status);
     await req.app.get('db').workorder.create_workorder(landlordid, managerid, propertyid, tenantid, staffid, title, description, status)
     return res.sendStatus(200);
   },
   getManager: async (req,res) => {
-    const {id} = req.session.user;
-    const workorders = await req.app.get('db').workorder.get_workorder_by_manager(id);
-    return res.status(200).send(workorders);
+    if(req.session.user) {
+      const {managerid} = req.session.user;
+      console.log('MANAGERID: ', managerid);
+      const workorders = await req.app.get('db').workorder.get_workorders_by_manager(managerid);
+
+      if (!workorders[0]) {
+        return res.status(404).send(`No workorders to display`);
+      }
+
+      return res.status(200).send(workorders);
+    }
   },
 
   getWorkOrderByTenant: async (req, res) => {
