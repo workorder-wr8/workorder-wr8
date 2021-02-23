@@ -17,6 +17,7 @@ module.exports = {
     delete manager.password;
 
     req.session.user = manager;
+    console.log(manager)
 
     return res.send(req.session.user);
   },
@@ -50,9 +51,10 @@ module.exports = {
   },
   getStaffMembers: async(req,res) => {
     if(req.session.user) {
-      const {managerid} = req.session.user;
+      const {propertyid} = req.session.user;
+      console.log(req.session.user)
       const db = req.app.get('db');
-      const staff = await db.manager.get_staff_by_manager(managerid)
+      const staff = await db.manager.get_staff_by_property(propertyid)
       if(!staff[0]) {
         return res.status(404).send('No Staff Found')
       }

@@ -1,1 +1,0 @@
-select id, firstname, lastname from staff where managerid = $1;
