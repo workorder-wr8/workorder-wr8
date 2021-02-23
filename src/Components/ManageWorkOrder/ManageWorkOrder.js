@@ -1,29 +1,69 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import './ManageWorkOrder.css';
-
+import { useParams } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
+import axios from 'axios';
+import dayjs from 'dayjs';
 const ManageWorkOrder = (props) => {
 
     const [workOrder, setWorkOrder] = useState([]);
+    const [comments, setComments] = useState([]);
+
+    console.log('workorder', props)
+    useEffect(() => {
+        getWorkOrder();
+    }, [])
+
+    const getWorkOrder = () => {
+        let id = + props.match.params.id;
+        axios.get(`/api/workorder/${id}`)
+            .then(res => setWorkOrder(res.data[0]))
+            .catch(err => console.log(`Error: ${err.message}`));
+    }
+    console.log('w', workOrder)
+    const displayWorkOrder = () => {
+        const { title, datecompleted, datecreated, lastupdated, description, id, status } = workOrder;
+        return (
+            <>
+                <div className='workorder-title'>
+                    <h4>{title}</h4>
+                    <span>#{id}</span>
+                </div>
+                <div className='workorder-description'>
+                    <p>{description}</p>
+                </div>
+                <div className='workorder-details'>
+                    <span>Status: {status}</span>
+                    <span>Created at: {dayjs(datecreated).format('DD/MM/YYYY')}</span>
+                    {lastupdated === null
+                        ?
+                        null
+                        :
+                        <span>Updated at: {lastupdated}</span>
+                    }
+                    {datecompleted === null
+                        ?
+                        null
+                        :
+                        <span>{datecompleted}</span>
+                    }
+                </div>
+            </>
+        )
+    }
+
     return (
         <section className='workorder-container'>
-            <div className='workorder-title'>
-                <h4>Title</h4>
-                <span>work order id</span>
-            </div>
-            <div>
-                <p>work order description</p>
-            </div>
-            <div>
-                <span>status</span>
-                <span>created at</span>
-                <span>last updated at</span>
-                <span>completed</span>
-            </div>
-            <section>
-                comments
+
+            {displayWorkOrder()}
+            <section className='comment-container'>
+                <div className='comments'>
+                    <p className='comment-header'>Comments:</p>
+                    <p className='comment'>this is a test comment lorem iipsu lthe lord of the rings the return of the king</p>
+                </div>
             </section>
         </section>
     )
 }
 
-export default ManageWorkOrder;
+export default withRouter(ManageWorkOrder);

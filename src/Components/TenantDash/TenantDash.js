@@ -8,13 +8,18 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import TextField from '@material-ui/core/TextField';
+import { Route, Switch } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import dayjs from 'dayjs';
+import ManageWorkOrder from '../ManageWorkOrder/ManageWorkOrder';
+
 import './TenantDash.css';
 
 const TenantDash = props => {
     const [workOrders, setWorkOrders] = useState([]);
     const [search, setSearch] = useState('');
-    const columns = [{ id: 'title', label: 'Title' }, { id: 'short-desc', label: 'Short Description' }, { id: 'date', label: 'Date Created' }, { id: 'status', label: 'Status' }];
+    const [isOpen, setOpen] = useState(false);
+    const columns = [{ id: 'number', label: 'Work Order #' }, { id: 'title', label: 'Title' }, { id: 'short-desc', label: 'Short Description' }, { id: 'date', label: 'Date Created' }, { id: 'status', label: 'Status' }];
     useEffect(() => {
         getWorkOrders();
     }, []);
@@ -33,6 +38,10 @@ const TenantDash = props => {
         setSearch(e.target.value);
     }
 
+    const viewWorkOrder = () => {
+        setOpen(!isOpen);
+    }
+    console.log('tenant dash', props)
     return (
         <div>
             <section className='open'>
@@ -51,8 +60,11 @@ const TenantDash = props => {
                                 wo.status.toLowerCase().includes(search.toLowerCase()) || wo.title.toLowerCase().includes(search.toLowerCase())
                             )).map(wo => (
                                 <TableRow key={wo.id}>
+                                    <TableCell>{wo.id}</TableCell>
                                     <TableCell component="th" scope="row">
-                                        {wo.title}
+                                        <Link to={`/workorder/${wo.id}`}>
+                                            {wo.title}
+                                        </Link>
                                     </TableCell>
                                     <TableCell align="right" className='tenant-wo-description'>{wo.description}</TableCell>
                                     <TableCell>{dayjs(wo.datecreated).format('DD/MM/YYYY')}</TableCell>
@@ -67,7 +79,6 @@ const TenantDash = props => {
                                             <TableCell>In Progress</TableCell>
                                         )
                                     }
-
                                 </TableRow>
                             ))}
                         </TableBody>

@@ -3,9 +3,38 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
+    width: 50%;
+    margin: 0 auto;
 }
 
 .workorder-title {
     display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
 
+.workorder-description {
+    text-align: start;
+}
+
+.workorder-details {
+    display: flex;
+    justify-content: space-around;
+}
+
+.comments-container {
+    margin: 5px;
+    
+}
+
+.comments {
+    text-align: start;
+}
+
+.comment {
+    background-color: rgb(72, 255, 0);
+    border-radius: 100px;
+    padding: 3px 8px;
+    display: inline-block;
 }

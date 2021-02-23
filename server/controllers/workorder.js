@@ -13,9 +13,9 @@ module.exports = {
     await req.app.get('db').workorder.create_workorder(landlordid, managerid, propertyid, tenantid, staffid, title, description, status)
     return res.sendStatus(200);
   },
-  getManager: async (req,res) => {
-    if(req.session.user) {
-      const {managerid} = req.session.user;
+  getManager: async (req, res) => {
+    if (req.session.user) {
+      const { managerid } = req.session.user;
       console.log('MANAGERID: ', managerid);
       const workorders = await req.app.get('db').workorder.get_workorders_by_manager(managerid);
 
@@ -38,5 +38,14 @@ module.exports = {
     }
 
     res.status(200).send(workOrders);
+  },
+
+  getWorkOrderById: (req, res) => {
+    const { id } = req.params;
+    const db = req.app.get('db');
+
+    db.workorder.get_workorder_by_id({ id })
+      .then(wo => res.status(200).send(wo))
+      .catch(err => console.log(`Error: ${err.message}`))
   }
 }
