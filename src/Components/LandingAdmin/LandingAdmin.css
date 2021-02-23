@@ -22,3 +22,9 @@
 #landingContent input {
     margin: 5px;
 }
+
+.toggleAuth {
+    cursor: pointer;
+    color: rgb(23, 152, 200);
+    text-decoration: underline;
+}

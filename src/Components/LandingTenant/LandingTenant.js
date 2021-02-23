@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { getUser } from '../../redux/reducers/userReducer';
 import './LandingTenant.css'
 import axios from 'axios';
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const LandingTenant = props => {
     const [input, setInput] = useState({
@@ -156,12 +156,12 @@ const LandingTenant = props => {
                                     <label>Unit Number:</label>
                                     <input onChange={e => handleInputChange(e)} value={input.unitNumber} name='unitNumber' type='text' />
                                     <button className='btn signup-btn' onClick={register}>Sign Up</button>
-                                    <p>Already have an account? <span onClick={() => handleToggle()}>Login Here</span></p>
+                                    <p>Already have an account? <span className='toggleAuth' onClick={() => handleToggle()}>Login Here</span></p>
                                 </>
                             ) : (
                                 <>
                                     <button className='btn login-btn' onClick={login}>Login</button>
-                                    <p>Don't have an account? <span onClick={() => handleToggle()}>Register Here</span></p>
+                                    <p>Don't have an account? <span className='toggleAuth' onClick={() => handleToggle()}>Register Here</span></p>
                                     <p>For admin access click <Link to='/admin'>Here</Link></p>
                                 </>)}
                     </form>
