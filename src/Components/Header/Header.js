@@ -17,7 +17,7 @@ function Header(props) {
         axios.get('/api/logout')
             .then(() => {
                 props.clearUser();
-                if((props.location.pathname.includes('manager') || props.location.pathname.includes('staff')))
+                if ((props.location.pathname.includes('manager') || props.location.pathname.includes('staff') || props.location.pathname.includes('landlord')))
                     props.history.push('/admin')
                 else
                     props.history.push('/')

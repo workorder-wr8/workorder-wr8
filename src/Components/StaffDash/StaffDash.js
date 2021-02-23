@@ -21,10 +21,10 @@ function StaffDash(props) {
     const classes = useStyles();
     const [assignments, setAssignments] = useState([])
     const [scheduled, setScheduled] = useState([])
+    const [search, setSearch] = useState('')
 
     useEffect(() => {
-        if(props.user.staffid)
-        {
+        if (props.user.staffid) {
             axios.get(`/api/staff/workorders/${props.user.staffid}`)
                 .then(res => {
                     setAssignments(res.data)
@@ -36,16 +36,22 @@ function StaffDash(props) {
     const handleSelectChange = (e, id) => {
         axios.put(`/api/staff/workorders`, { id, status: e, staffid: props.user.staffid })
             .then(res => {
-                console.log(res.data)
                 setScheduled(res.data)
             })
 
             .catch(err => console.log(err))
     }
 
-    // console.log(assignments)
+    const filterassignments = e => {
+        setSearch(e.target.value)
+    }
+
     return (
         <div id='staffDash'>
+
+            <br />
+            <label>Search:</label>
+            <input type='search' onChange={e => filterassignments(e)} value={search} />
 
             <h1>Unread</h1>
             <TableContainer component={Paper}>
@@ -63,30 +69,32 @@ function StaffDash(props) {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {assignments.filter(e => e.status === 'Unread').map((assignment) => (
-                            <TableRow key={assignment.id}>
-                                <TableCell component="th" scope="row">
-                                    {assignment.id}
-                                </TableCell>
-                                <TableCell align="right">{assignment.firstname} {assignment.lastname}</TableCell>
-                                <TableCell align="right">{assignment.title}</TableCell>
-                                <TableCell align="right">{assignment.description}</TableCell>
-                                <TableCell align="right">{assignment.datecreated}</TableCell>
-                                {/* <TableCell align="right">{assignment.lastupdated}</TableCell> */}
-                                <TableCell align="right">{assignment.status}</TableCell>
-                                <TableCell align="right">{
-                                    <div >Mark as <span>{
-                                        <>
-                                            <select defaultValue={assignment.status} name='statusoptions' id='statusoptions' onChange={e => handleSelectChange(e.target.value, assignment.id)}>
-                                                <option value='Unread' >Unread</option>
-                                                <option value='In Progress'>In Progress</option>
-                                                <option value='Completed'>Completed</option>
-                                            </select>
-                                        </>
-                                    }</span></div>
-                                }</TableCell>
-                            </TableRow>
-                        ))}
+                        {assignments
+                            .filter(e => e.status === 'Unread' && (e.description.toLowerCase().includes(search.toLocaleLowerCase()) || e.title.toLowerCase().includes(search.toLowerCase())))
+                            .map((assignment) => (
+                                <TableRow key={assignment.id}>
+                                    <TableCell component="th" scope="row">
+                                        {assignment.id}
+                                    </TableCell>
+                                    <TableCell align="right">{assignment.firstname} {assignment.lastname}</TableCell>
+                                    <TableCell align="right">{assignment.title}</TableCell>
+                                    <TableCell align="right">{assignment.description}</TableCell>
+                                    <TableCell align="right">{assignment.datecreated}</TableCell>
+                                    {/* <TableCell align="right">{assignment.lastupdated}</TableCell> */}
+                                    <TableCell align="right">{assignment.status}</TableCell>
+                                    <TableCell align="right">{
+                                        <div >Mark as <span>{
+                                            <>
+                                                <select defaultValue={assignment.status} name='statusoptions' id='statusoptions' onChange={e => handleSelectChange(e.target.value, assignment.id)}>
+                                                    <option value='Unread' >Unread</option>
+                                                    <option value='In Progress'>In Progress</option>
+                                                    <option value='Completed'>Completed</option>
+                                                </select>
+                                            </>
+                                        }</span></div>
+                                    }</TableCell>
+                                </TableRow>
+                            ))}
                     </TableBody>
                 </Table>
             </TableContainer>
@@ -109,7 +117,7 @@ function StaffDash(props) {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {assignments.filter(e => e.status === 'In Progress').map((assignment) => (
+                        {assignments.filter(e => e.status === 'In Progress' && (e.description.includes(search) || e.title.includes(search))).map((assignment) => (
                             <TableRow key={assignment.id}>
                                 <TableCell component="th" scope="row">
                                     {assignment.id}
