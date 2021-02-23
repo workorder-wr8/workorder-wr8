@@ -49,6 +49,7 @@ app.get('/api/manager/me', managerCtrl.getManager);
 app.post('/api/landlord/login', landlordCtrl.login);
 app.post('/api/landlord/register', landlordCtrl.register);
 app.get('/api/landlord/me', landlordCtrl.getLandlord);
+app.get('/api/landlord/properties/:id', landlordCtrl.getProperties)
 
 //property endpoints
 app.get('/api/properties', propertyCtrl.getProperties);
