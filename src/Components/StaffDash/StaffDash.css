@@ -1,9 +1,7 @@
 #unopened {
-    /* transform: translateY(50%); */
     background-color: rgb(162, 21, 150);
 }
 
 #inprogress {
-    /* transform: translateY(50%); */
     background-color: rgb(245, 238, 37);
 }

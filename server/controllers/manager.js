@@ -33,7 +33,6 @@ module.exports = {
     const hash = bcrypt.hashSync(password, salt);
     const registeredManager = await db.manager.create_manager([landlordid, propertyid, firstname, lastname, hash, email, phone]);
     const newManager = registeredManager[0];
-    console.log('AFTER registeredManager', registeredManager);
     req.session.user = {
       landlordid: newManager.landlordid,
       managerid: newManager.managerid,
@@ -52,14 +51,13 @@ module.exports = {
   },
   getStaffMembers: async(req,res) => {
     if(req.session.user) {
-      const {managerid} = req.session.user;
-      console.log('BEFORE GET STAFF SQL: ', managerid)
+      const {propertyid} = req.session.user;
+      console.log(req.session.user)
       const db = req.app.get('db');
-      const staff = await db.manager.get_staff_by_manager(managerid)
+      const staff = await db.manager.get_staff_by_property(propertyid)
       if(!staff[0]) {
         return res.status(404).send('No Staff Found')
       }
-      console.log('AFTER GET STAFF SQL: ', staff)
       return res.status(200).send(staff);
     }
   },

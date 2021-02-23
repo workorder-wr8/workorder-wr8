@@ -1,7 +1,6 @@
 
 module.exports = {
   create: async (req, res) => {
-    console.log('CREATING FOR : ',req.session.user)
     if(req.session.user) {
       const landlordid = req.session.user.landlordid
       const managerid = req.session.user.managerid
@@ -10,16 +9,13 @@ module.exports = {
       const staffid = null
       const title = req.body.title
       const description = req.body.description
-      const status = 'open'
-      console.log(landlordid, managerid, propertyid, tenantid, staffid, title, description, status);
-      await req.app.get('db').workorder.create_workorder(landlordid, managerid, propertyid, tenantid, staffid, title, description, status)
+      await req.app.get('db').workorder.create_workorder(landlordid, managerid, propertyid, tenantid, staffid, title, description)
       return res.sendStatus(200);
     }
   },
-  getManager: async (req, res) => {
-    if (req.session.user) {
-      const { managerid } = req.session.user;
-      console.log('MANAGERID: ', managerid);
+  getManager: async (req,res) => {
+    if(req.session.user) {
+      const {managerid} = req.session.user;
       const workorders = await req.app.get('db').workorder.get_workorders_by_manager(managerid);
 
       if (!workorders[0]) {

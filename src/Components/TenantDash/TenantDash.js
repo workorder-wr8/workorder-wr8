@@ -65,7 +65,7 @@ const TenantDash = props => {
                                     </TableCell>
                                     <TableCell align="right" className='tenant-wo-description'>{wo.description}</TableCell>
                                     <TableCell>{dayjs(wo.datecreated).format('DD/MM/YYYY')}</TableCell>
-                                    {wo.status === 'open'
+                                    {(wo.status === 'Open' || wo.status === 'Completed')
                                         ?
                                         (
                                             <TableCell>{wo.status}</TableCell>

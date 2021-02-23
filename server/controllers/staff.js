@@ -34,7 +34,6 @@ module.exports = {
     const hash = bcrypt.hashSync(password, salt)
 
     const createdStaff = await db.staff.create_staff(propertyid, firstname, lastname, hash, email, phone)
-    // console.log(userExists)
     const staffSesh = createdStaff[0]
 
     req.session.user = staffSesh
@@ -48,7 +47,6 @@ module.exports = {
   },
   getworkorders: async (req, res) => {
     const { id } = req.params
-    // console.log('id:', id)
     const db = req.app.get('db')
 
     const workorders = await db.staff.get_workorders(id)
@@ -57,12 +55,10 @@ module.exports = {
   },
   updateworkorders: async (req, res) => {
     const { id, status, staffid } = req.body
-    console.log('staffid:', staffid)
     const db = req.app.get('db')
 
     const updatedStatus = await db.staff.schedule_workorder(id, status, staffid)
-    console.log(updatedStatus)
-
+    
     return res.status(200).send(updatedStatus);
   }
 }

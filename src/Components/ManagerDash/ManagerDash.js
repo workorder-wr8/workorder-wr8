@@ -39,7 +39,6 @@ const StyledTableCell = withStyles((theme) => ({
     const [selectedStaff, setSelectedStaff] = useState([]);
     
     useEffect(()=>{
-        console.log(props)
         getWorkOrders();
         getStaffMembers();
     }, [])
@@ -63,9 +62,9 @@ const StyledTableCell = withStyles((theme) => ({
 
     const mapWorkOrders = () => {
         let unassignedFiltered, assignedFiltered;
-        unassignedFiltered = workorders.filter((wo)=>{
-            return wo.status === 'open'})
-        assignedFiltered = workorders.filter((wo)=>{return wo.status!=='open'})
+        unassignedFiltered = workorders.filter((wo)=>{return wo.status === 'Open'})
+        assignedFiltered = workorders.filter((wo)=>{return wo.status!=='Open'})
+        console.log('MAPPED: ', unassignedFiltered, assignedFiltered)
         setUnassigned(unassignedFiltered);
         setAssigned(assignedFiltered);
     } 
@@ -81,7 +80,6 @@ const StyledTableCell = withStyles((theme) => ({
     useEffect(mapWorkOrders, [workorders]);
     useEffect(mapStaff, [staffMembers]);
 
-    console.log('BEFORE RETURN: ', staffOptions)
     return (
         <div>
             ManagerDash

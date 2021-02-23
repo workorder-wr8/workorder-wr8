@@ -1,0 +1,1 @@
+select id, firstname, lastname from staff where propertyid = $1;
