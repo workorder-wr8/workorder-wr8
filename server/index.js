@@ -44,6 +44,8 @@ app.put('/api/staff/workorders', staffCtrl.updateworkorders)
 app.post('/api/manager/login', managerCtrl.login);
 app.post('/api/manager/register', managerCtrl.register);
 app.get('/api/manager/me', managerCtrl.getManager);
+app.get('/api/manager/staffmembers', managerCtrl.getStaffMembers);
+app.put('/api/manager/workorders', managerCtrl.assignWorkOrder);
 
 //landlord endpoints
 app.post('/api/landlord/login', landlordCtrl.login);

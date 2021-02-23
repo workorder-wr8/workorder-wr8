@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { getUser } from '../../redux/reducers/userReducer';
 import './LandingTenant.css'
 import axios from 'axios';
+import {Link} from 'react-router-dom';
 
 const LandingTenant = props => {
     const [input, setInput] = useState({
@@ -161,6 +162,7 @@ const LandingTenant = props => {
                                 <>
                                     <button className='btn login-btn' onClick={login}>Login</button>
                                     <p>Don't have an account? <span onClick={() => handleToggle()}>Register Here</span></p>
+                                    <p>For admin access click <Link to='/admin'>Here</Link></p>
                                 </>)}
                     </form>
                 </section>

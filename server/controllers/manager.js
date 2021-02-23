@@ -17,7 +17,6 @@ module.exports = {
     delete manager.password;
 
     req.session.user = manager;
-    console.log('manager: ', req.session.user)
 
     return res.send(req.session.user);
   },
@@ -33,7 +32,6 @@ module.exports = {
     const hash = bcrypt.hashSync(password, salt);
     const registeredManager = await db.manager.create_manager([landlordid, propertyid, firstname, lastname, hash, email, phone]);
     const newManager = registeredManager[0];
-    console.log('AFTER registeredManager', registeredManager);
     req.session.user = {
       landlordid: newManager.landlordid,
       managerid: newManager.managerid,
@@ -49,5 +47,22 @@ module.exports = {
   },
   getManager: async (req, res) => {
     return res.status(200);
+  },
+  getStaffMembers: async(req,res) => {
+    if(req.session.user) {
+      const {managerid} = req.session.user;
+      const db = req.app.get('db');
+      const staff = await db.manager.get_staff_by_manager(managerid)
+      if(!staff[0]) {
+        return res.status(404).send('No Staff Found')
+      }
+      return res.status(200).send(staff);
+    }
+  },
+  assignWorkOrder: async(req,res) => {
+    const {id, staffid} = req.body;
+    const db = req.app.get('db');
+    const member = await db.manager.update_staff_id(id, staffid)
+    return res.status(200).send(member);
   }
 }
