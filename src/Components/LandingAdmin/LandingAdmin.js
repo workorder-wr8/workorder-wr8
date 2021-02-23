@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux'
 import { getUser } from '../../redux/reducers/userReducer'
 import './LandingAdmin.css'
+import {Link} from 'react-router-dom';
 
 const LandingAdmin = (props) => {
     const [registerView, setRegisterView] = useState(false)
@@ -166,6 +167,7 @@ const LandingAdmin = (props) => {
                             <>
                                 <button onClick={login}>Login</button>
                                 <p>Don't have an account? <span onClick={toggle}>Register</span></p>
+                                <p>To login as tenant click <Link to='/'>Here</Link></p>
                             </>
                         )}
 
