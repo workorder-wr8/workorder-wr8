@@ -43,7 +43,7 @@ function StaffDash(props) {
     }
 
     const filterassignments = e => {
-        setSearch(e.target.value.toLowerCase())
+        setSearch(e.target.value)
     }
 
     return (
@@ -69,30 +69,32 @@ function StaffDash(props) {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {assignments.filter(e => e.status === 'Unread' && (e.description.includes(search) || e.title.includes(search))).map((assignment) => (
-                            <TableRow key={assignment.id}>
-                                <TableCell component="th" scope="row">
-                                    {assignment.id}
-                                </TableCell>
-                                <TableCell align="right">{assignment.firstname} {assignment.lastname}</TableCell>
-                                <TableCell align="right">{assignment.title}</TableCell>
-                                <TableCell align="right">{assignment.description}</TableCell>
-                                <TableCell align="right">{assignment.datecreated}</TableCell>
-                                {/* <TableCell align="right">{assignment.lastupdated}</TableCell> */}
-                                <TableCell align="right">{assignment.status}</TableCell>
-                                <TableCell align="right">{
-                                    <div >Mark as <span>{
-                                        <>
-                                            <select defaultValue={assignment.status} name='statusoptions' id='statusoptions' onChange={e => handleSelectChange(e.target.value, assignment.id)}>
-                                                <option value='Unread' >Unread</option>
-                                                <option value='In Progress'>In Progress</option>
-                                                <option value='Completed'>Completed</option>
-                                            </select>
-                                        </>
-                                    }</span></div>
-                                }</TableCell>
-                            </TableRow>
-                        ))}
+                        {assignments
+                            .filter(e => e.status === 'Unread' && (e.description.toLowerCase().includes(search.toLocaleLowerCase()) || e.title.toLowerCase().includes(search.toLowerCase())))
+                            .map((assignment) => (
+                                <TableRow key={assignment.id}>
+                                    <TableCell component="th" scope="row">
+                                        {assignment.id}
+                                    </TableCell>
+                                    <TableCell align="right">{assignment.firstname} {assignment.lastname}</TableCell>
+                                    <TableCell align="right">{assignment.title}</TableCell>
+                                    <TableCell align="right">{assignment.description}</TableCell>
+                                    <TableCell align="right">{assignment.datecreated}</TableCell>
+                                    {/* <TableCell align="right">{assignment.lastupdated}</TableCell> */}
+                                    <TableCell align="right">{assignment.status}</TableCell>
+                                    <TableCell align="right">{
+                                        <div >Mark as <span>{
+                                            <>
+                                                <select defaultValue={assignment.status} name='statusoptions' id='statusoptions' onChange={e => handleSelectChange(e.target.value, assignment.id)}>
+                                                    <option value='Unread' >Unread</option>
+                                                    <option value='In Progress'>In Progress</option>
+                                                    <option value='Completed'>Completed</option>
+                                                </select>
+                                            </>
+                                        }</span></div>
+                                    }</TableCell>
+                                </TableRow>
+                            ))}
                     </TableBody>
                 </Table>
             </TableContainer>

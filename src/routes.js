@@ -6,6 +6,7 @@ import CreateWorkOrder from './Components/CreateWorkOrder/CreateWorkOrder'
 import TenantDash from './Components/TenantDash/TenantDash'
 import StaffDash from './Components/StaffDash/StaffDash'
 import ManagerDash from './Components/ManagerDash/ManagerDash'
+import LandlordDash from './Components/LandlordDash/LandlordDash'
 
 export default (
     <Switch>
@@ -15,6 +16,7 @@ export default (
         <Route path='/create/workorder' component={CreateWorkOrder} />
         <Route path='/dash' component={TenantDash} />
         <Route path='/staffdash' component={StaffDash} />
+        <Route path='/landlorddash' component={LandlordDash} />
         <Route path='/managerdash' component={ManagerDash} />
     </Switch>
 )
