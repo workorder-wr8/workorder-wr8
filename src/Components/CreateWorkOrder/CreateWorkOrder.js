@@ -7,7 +7,6 @@ const CreateWorkOrder = (props) => {
     const [description, setDescription] = useState('')
 
     const createWO = () => {
-        console.log('CREATING')
         axios.post('/api/workorder/create', {
             title: title,
             description: description
@@ -16,7 +15,6 @@ const CreateWorkOrder = (props) => {
         })
     }
 
-    // console.log(props);
     return (
         <div>
             CreateWorkOrder
