@@ -8,17 +8,17 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import TextField from '@material-ui/core/TextField';
-import { Route, Switch } from 'react-router-dom';
 import { Link } from 'react-router-dom';
-import dayjs from 'dayjs';
+import { ModalRoute, ModalContainer } from 'react-router-modal';
 import ManageWorkOrder from '../ManageWorkOrder/ManageWorkOrder';
+import dayjs from 'dayjs';
+
 
 import './TenantDash.css';
 
 const TenantDash = props => {
     const [workOrders, setWorkOrders] = useState([]);
     const [search, setSearch] = useState('');
-    const [isOpen, setOpen] = useState(false);
     const columns = [{ id: 'number', label: 'Work Order #' }, { id: 'title', label: 'Title' }, { id: 'short-desc', label: 'Short Description' }, { id: 'date', label: 'Date Created' }, { id: 'status', label: 'Status' }];
     useEffect(() => {
         getWorkOrders();
@@ -31,25 +31,22 @@ const TenantDash = props => {
                 setWorkOrders(wo.data);
             })
             .catch(err => console.log(`Error: ${err.message}`));
-
     }
 
     const searchWorkOrders = e => {
         setSearch(e.target.value);
     }
 
-    const viewWorkOrder = () => {
-        setOpen(!isOpen);
-    }
-    console.log('tenant dash', props)
     return (
         <div>
+
+
             <section className='open'>
                 <TableContainer className='table-container' component={Paper} >
                     <TextField onChange={e => searchWorkOrders(e)} className='search-workorder-field' id="outlined-basic" label="Search" variant="outlined" value={search} />
                     <Table stickyHeader aria-label="sticky table">
-                        <TableHead>
-                            <TableRow>
+                        <TableHead  style={{backgroundColor:'red'}}>
+                            <TableRow className='wo-table'> 
                                 {columns.map(column => (
                                     <TableCell key={column.id}>{column.label}</TableCell>
                                 ))}
@@ -62,7 +59,7 @@ const TenantDash = props => {
                                 <TableRow key={wo.id}>
                                     <TableCell>{wo.id}</TableCell>
                                     <TableCell component="th" scope="row">
-                                        <Link to={`/workorder/${wo.id}`}>
+                                        <Link to={{ pathname: `/dash/workorder/${wo.id}`, id: wo.id }}>
                                             {wo.title}
                                         </Link>
                                     </TableCell>
@@ -85,6 +82,17 @@ const TenantDash = props => {
                     </Table>
                 </TableContainer>
             </section>
+            <ModalRoute className='example-modal'
+                inClassName='example-modal-in'
+                outClassName='example-modal-out'
+                backdropClassName='example-backdrop'
+                backdropInClassName='example-backdrop-in'
+                backdropOutClassName='example-backdrop-out'
+                outDelay={1500}
+                path={`/dash/workorder/:id`}
+                parentPath={'/dash'}
+                component={ManageWorkOrder} />
+            <ModalContainer />
         </div>
     )
 }

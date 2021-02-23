@@ -9,18 +9,18 @@ const ManageWorkOrder = (props) => {
     const [workOrder, setWorkOrder] = useState([]);
     const [comments, setComments] = useState([]);
 
-    console.log('workorder', props)
+
     useEffect(() => {
         getWorkOrder();
     }, [])
 
     const getWorkOrder = () => {
-        let id = + props.match.params.id;
+        const { id } = props.location;
         axios.get(`/api/workorder/${id}`)
             .then(res => setWorkOrder(res.data[0]))
             .catch(err => console.log(`Error: ${err.message}`));
     }
-    console.log('w', workOrder)
+
     const displayWorkOrder = () => {
         const { title, datecompleted, datecreated, lastupdated, description, id, status } = workOrder;
         return (
@@ -51,15 +51,15 @@ const ManageWorkOrder = (props) => {
             </>
         )
     }
-
+    console.log('workorder', props)
     return (
         <section className='workorder-container'>
-
+            <button onClick={() => props.closeModal()}>close</button>
             {displayWorkOrder()}
             <section className='comment-container'>
                 <div className='comments'>
                     <p className='comment-header'>Comments:</p>
-                    <p className='comment'>this is a test comment lorem iipsu lthe lord of the rings the return of the king</p>
+                    <p className='comment'>this is a test comment lorem iipsu lthe lord of the rings the retun of the king</p>
                 </div>
             </section>
         </section>
