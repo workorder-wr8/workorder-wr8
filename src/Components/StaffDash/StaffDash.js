@@ -23,17 +23,17 @@ function StaffDash(props) {
     const [scheduled, setScheduled] = useState([])
 
     useEffect(() => {
-        axios.get(`/api/staff/workorders/${props.user.staffid}`)
-            .then(res => {
-                setAssignments(res.data)
-            })
-            .catch(err => console.log(err))
+        if(props.user.staffid)
+        {
+            axios.get(`/api/staff/workorders/${props.user.staffid}`)
+                .then(res => {
+                    setAssignments(res.data)
+                })
+                .catch(err => console.log(err))
+        }
     }, [scheduled, props])
 
     const handleSelectChange = (e, id) => {
-        // console.log('e:', e)
-        // console.log('id:', id)
-        // console.log('staffid:', props.user.staffid)
         axios.put(`/api/staff/workorders`, { id, status: e, staffid: props.user.staffid })
             .then(res => {
                 console.log(res.data)

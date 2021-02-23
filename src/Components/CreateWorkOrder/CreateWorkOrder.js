@@ -12,7 +12,7 @@ const CreateWorkOrder = (props) => {
             title: title,
             description: description
         }).then(res => {
-            props.history.push('/tenantdash');
+            props.history.push('/dash');
         })
     }
 

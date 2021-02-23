@@ -49,5 +49,24 @@ module.exports = {
   },
   getManager: async (req, res) => {
     return res.status(200);
+  },
+  getStaffMembers: async(req,res) => {
+    if(req.session.user) {
+      const {managerid} = req.session.user;
+      console.log('BEFORE GET STAFF SQL: ', managerid)
+      const db = req.app.get('db');
+      const staff = await db.manager.get_staff_by_manager(managerid)
+      if(!staff[0]) {
+        return res.status(404).send('No Staff Found')
+      }
+      console.log('AFTER GET STAFF SQL: ', staff)
+      return res.status(200).send(staff);
+    }
+  },
+  assignWorkOrder: async(req,res) => {
+    const {id, staffid} = req.body;
+    const db = req.app.get('db');
+    const member = await db.manager.update_staff_id(id, staffid)
+    return res.status(200).send(member);
   }
 }
