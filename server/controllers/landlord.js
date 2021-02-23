@@ -40,10 +40,6 @@ module.exports = {
     req.session.user = landlordSesh
     return res.status(201).send(req.session.user)
   },
-  logout: async (req, res) => {
-    req.session.destroy();
-    return res.sendStatus(200)
-  },
   getLandlord: async (req, res) => {
     if (req.session.user) {
       return res.send(req.ression.user)
@@ -52,12 +48,17 @@ module.exports = {
     return res.status(404).send('No user found');
   },
   getProperties: async (req, res) => {
-    console.log('hit controllerfor getProperties/landlordid')
     const { id } = req.params
     const db = req.app.get('db')
-
     const properties = await db.landlord.get_properties(id)
-    console.log(properties)
     return res.status(200).send(properties)
+  },
+  addProperty: async (req, res) => {
+    const db = req.app.get('db')
+    const { landlordid, name, address1, address2, city, state, zip, email, phone, passcode } = req.body;
+
+    const newProperty = await db.landlord.add_property(landlordid, name, address1, address2, city, state, zip, email, phone, passcode)
+
+    return res.status(201).send(newProperty)
   }
 }
