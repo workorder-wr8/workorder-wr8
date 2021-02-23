@@ -35,7 +35,6 @@ function LandlordDash(props) {
         setSearch(e.target.value)
     }
 
-    console.log(properties)
     return (
         <div>
             LandlordDash

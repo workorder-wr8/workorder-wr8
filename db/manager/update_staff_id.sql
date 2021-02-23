@@ -1,1 +1,1 @@
-update workorders set staffid=$2, status='unread' where id=$1
+update workorders set staffid=$2, status='Unread' where id=$1

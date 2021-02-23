@@ -119,7 +119,6 @@ const LandingAdmin = (props) => {
     const toggleLandlordForm = () => {
         setLLForm(true);
     }
-    // console.log(properties)
     return (
         <div >
             <section id='landingadmin'>
