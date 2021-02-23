@@ -12,5 +12,5 @@ m.id AS manager_id,
 CONCAT(l.firstname,' ', l.lastname) AS landlord,
 l.id AS landlord_id
 FROM properties p
-JOIN managers m ON m.id = p.managerid
+JOIN managers m ON m.propertyid = p.id
 JOIN landlords l ON l.id = p.landlordid;

@@ -1,7 +1,6 @@
 module.exports = {
     getProperties: async (req, res) => {
         const db = req.app.get('db');
-        if (req.session.user) {
             const properties = await db.properties.get_properties();
 
             if (!properties[0]) {
@@ -9,7 +8,6 @@ module.exports = {
             }
 
             res.status(200).send(properties);
-        }
     },
 
     getProperty: async (req, res) => {
