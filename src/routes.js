@@ -7,6 +7,7 @@ import TenantDash from './Components/TenantDash/TenantDash'
 import StaffDash from './Components/StaffDash/StaffDash'
 import ManagerDash from './Components/ManagerDash/ManagerDash'
 import LandlordDash from './Components/LandlordDash/LandlordDash'
+import LandlordDashManagerView from './Components/LandlordDashManagerView/LandlordDashManagerView'
 
 export default (
     <Switch>
@@ -17,6 +18,7 @@ export default (
         <Route path='/dash' component={TenantDash} />
         <Route path='/staffdash' component={StaffDash} />
         <Route path='/landlorddash' component={LandlordDash} />
+        <Route path='/landlorddash/managerview' component={LandlordDashManagerView} />
         <Route path='/managerdash' component={ManagerDash} />
     </Switch>
 )
