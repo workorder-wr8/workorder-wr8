@@ -44,11 +44,14 @@ app.put('/api/staff/workorders', staffCtrl.updateworkorders)
 app.post('/api/manager/login', managerCtrl.login);
 app.post('/api/manager/register', managerCtrl.register);
 app.get('/api/manager/me', managerCtrl.getManager);
+app.get('/api/manager/staffmembers', managerCtrl.getStaffMembers);
+app.put('/api/manager/workorders', managerCtrl.assignWorkOrder);
 
 //landlord endpoints
 app.post('/api/landlord/login', landlordCtrl.login);
 app.post('/api/landlord/register', landlordCtrl.register);
 app.get('/api/landlord/me', landlordCtrl.getLandlord);
+app.get('/api/landlord/properties/:id', landlordCtrl.getProperties)
 
 //property endpoints
 app.get('/api/properties', propertyCtrl.getProperties);
