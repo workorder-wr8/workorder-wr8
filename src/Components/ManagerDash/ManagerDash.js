@@ -10,6 +10,7 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Select from 'react-select';
+import dayjs from 'dayjs'
 
 // USES withStyles from material-UI for table cells and rows
 const StyledTableCell = withStyles((theme) => ({
@@ -141,7 +142,7 @@ function ManagerDash(props) {
                                 <StyledTableCell align='right' >{wo.title}</StyledTableCell>
                                 <StyledTableCell align='right' >{wo.description}</StyledTableCell>
                                 <StyledTableCell align='right' >{wo.status}</StyledTableCell>
-                                <StyledTableCell align='right' >{wo.datecreated}</StyledTableCell>
+                                <StyledTableCell align='right' >{dayjs(wo.datecreated).format('MMMM D, YYYY h:mm A')}</StyledTableCell>
                                 <TableCell align="right" onClick={e => e.stopPropagation()}>{
                                     <div onClick={e => e.stopPropagation()}>Assign to <span onClick={e => e.stopPropagation()}>
                                         <Select
@@ -182,9 +183,9 @@ function ManagerDash(props) {
                                 <StyledTableCell align='right'>{wo.title}</StyledTableCell>
                                 <StyledTableCell align='right'>{wo.description}</StyledTableCell>
                                 <StyledTableCell align='right'>{wo.status}</StyledTableCell>
-                                <StyledTableCell align='right'>{wo.datecreated}</StyledTableCell>
-                                <StyledTableCell align='right'>{wo.lastupdated ? wo.lastupdtated : '-'}</StyledTableCell>
-                                <StyledTableCell align='right'>{wo.datecompleted ? wo.datecompleted : '-'}</StyledTableCell>
+                                <StyledTableCell align='right'>{dayjs(wo.datecreated).format('MMMM D, YYYY h:mm A')}</StyledTableCell>
+                                <StyledTableCell align='right'>{wo.lastupdated ? dayjs(wo.lastupdated).format('MMMM D, YYYY h:mm A') : '-'}</StyledTableCell>
+                                <StyledTableCell align='right'>{wo.datecompleted ? dayjs(wo.datecompleted).format('MMMM D, YYYY h:mm A') : '-'}</StyledTableCell>
                                 <StyledTableCell align="right">{wo.stafffirst} {wo.stafflast}</StyledTableCell>
                             </StyledTableRow>
                         ))}

@@ -8,8 +8,13 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
+import TextField from '@material-ui/core/TextField';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import dayjs from 'dayjs';
+import { Link } from 'react-router-dom';
+import { ModalRoute, ModalContainer } from 'react-router-modal';
+import ManageWorkOrder from '../ManageWorkOrder/ManageWorkOrder';
 
 const useStyles = makeStyles({
     table: {
@@ -19,7 +24,7 @@ const useStyles = makeStyles({
 
 function StaffDash(props) {
     const classes = useStyles();
-    const [assignments, setAssignments] = useState([])
+    const [workorders, setWorkorders] = useState([])
     const [scheduled, setScheduled] = useState([])
     const [search, setSearch] = useState('')
 
@@ -27,7 +32,7 @@ function StaffDash(props) {
         if (props.user.staffid) {
             axios.get(`/api/staff/workorders/${props.user.staffid}`)
                 .then(res => {
-                    setAssignments(res.data)
+                    setWorkorders(res.data)
                 })
                 .catch(err => console.log(err))
         }
@@ -42,19 +47,18 @@ function StaffDash(props) {
             .catch(err => console.log(err))
     }
 
-    const filterassignments = e => {
+    const searchwo = e => {
         setSearch(e.target.value)
     }
-    // console.log(assignments)
+    // console.log(workorders)
     return (
         <div id='staffDash'>
 
-            <br />
-            <label>Search:</label>
-            <input type='search' onChange={e => filterassignments(e)} value={search} />
+
 
             <h1>Unread</h1>
             <TableContainer component={Paper}>
+                <TextField onChange={e => searchwo(e)} className='search-workorder-field' id="outlined-basic" label="Search" variant="outlined" value={search} />
                 <Table className={classes.table} aria-label="simple table">
                     <TableHead>
                         <TableRow>
@@ -63,29 +67,29 @@ function StaffDash(props) {
                             <TableCell align="right">Title</TableCell>
                             <TableCell align="right">Description</TableCell>
                             <TableCell align="right">Date Created</TableCell>
-                            {/* <TableCell align="right">Last Updated</TableCell> */}
+                            <TableCell align="right">Last Updated</TableCell>
                             <TableCell align="right">Status</TableCell>
                             <TableCell align="right">Action</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {assignments
+                        {workorders
                             .filter(e => e.status === 'Unread' && (e.description.toLowerCase().includes(search.toLocaleLowerCase()) || e.title.toLowerCase().includes(search.toLowerCase())))
-                            .map((assignment) => (
-                                <TableRow key={assignment.id}>
+                            .map(wo => (
+                                <TableRow key={wo.id}>
                                     <TableCell component="th" scope="row">
-                                        {assignment.id}
+                                        {wo.id}
                                     </TableCell>
-                                    <TableCell align="right">{assignment.firstname} {assignment.lastname}</TableCell>
-                                    <TableCell align="right">{assignment.title}</TableCell>
-                                    <TableCell align="right">{assignment.description}</TableCell>
-                                    <TableCell align="right">{assignment.datecreated}</TableCell>
-                                    {/* <TableCell align="right">{assignment.lastupdated}</TableCell> */}
-                                    <TableCell align="right">{assignment.status}</TableCell>
+                                    <TableCell align="right">{wo.firstname} {wo.lastname}</TableCell>
+                                    <TableCell align="right">{wo.title}</TableCell>
+                                    <TableCell align="right">{wo.description}</TableCell>
+                                    <TableCell align="right">{dayjs(wo.datecreated).format('MMMM D, YYYY h:mm A')}</TableCell>
+                                    <TableCell align="right">{wo.lastupdated ? dayjs(wo.lastupdated).format('MMMM D, YYYY h:mm A') : '-'}</TableCell>
+                                    <TableCell align="right">{wo.status}</TableCell>
                                     <TableCell align="right">{
                                         <div >Mark as <span>{
                                             <>
-                                                <select defaultValue={assignment.status} name='statusoptions' id='statusoptions' onChange={e => handleSelectChange(e.target.value, assignment.id)}>
+                                                <select defaultValue={wo.status} name='statusoptions' id='statusoptions' onChange={e => handleSelectChange(e.target.value, wo.id)}>
                                                     <option value='Unread' >Unread</option>
                                                     <option value='In Progress'>In Progress</option>
                                                     <option value='Completed'>Completed</option>
@@ -99,7 +103,7 @@ function StaffDash(props) {
                 </Table>
             </TableContainer>
 
-            <br />
+            <br /> <br />
 
             <h1>In Progress</h1>
             <TableContainer component={Paper}>
@@ -117,21 +121,21 @@ function StaffDash(props) {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {assignments.filter(e => e.status === 'In Progress' && (e.description.includes(search) || e.title.includes(search))).map((assignment) => (
-                            <TableRow key={assignment.id}>
+                        {workorders.filter(e => e.status === 'In Progress' && (e.description.includes(search) || e.title.includes(search))).map(wo => (
+                            <TableRow key={wo.id}>
                                 <TableCell component="th" scope="row">
-                                    {assignment.id}
+                                    {wo.id}
                                 </TableCell>
-                                <TableCell align="right">{assignment.firstname} {assignment.lastname}</TableCell>
-                                <TableCell align="right">{assignment.title}</TableCell>
-                                <TableCell align="right">{assignment.description}</TableCell>
-                                <TableCell align="right">{assignment.datecreated}</TableCell>
-                                <TableCell align="right">{assignment.lastupdated}</TableCell>
-                                <TableCell align="right">{assignment.status}</TableCell>
+                                <TableCell align="right">{wo.firstname} {wo.lastname}</TableCell>
+                                <TableCell align="right">{wo.title}</TableCell>
+                                <TableCell align="right">{wo.description}</TableCell>
+                                <TableCell align="right">{dayjs(wo.datecreated).format('MMMM D, YYYY h:mm A')}</TableCell>
+                                <TableCell align="right">{wo.lastupdated ? dayjs(wo.lastupdated).format('MMMM D, YYYY h:mm A') : '-'}</TableCell>
+                                <TableCell align="right">{wo.status}</TableCell>
                                 <TableCell align="right">{
                                     <div >Mark as <span>{
                                         <>
-                                            <select defaultValue={assignment.status} name='statusoptions' id='statusoptions' onChange={e => handleSelectChange(e.target.value, assignment.id)}>
+                                            <select defaultValue={wo.status} name='statusoptions' id='statusoptions' onChange={e => handleSelectChange(e.target.value, wo.id)}>
                                                 <option value='Unread' >Unread</option>
                                                 <option value='In Progress'>In Progress</option>
                                                 <option value='Completed'>Completed</option>
