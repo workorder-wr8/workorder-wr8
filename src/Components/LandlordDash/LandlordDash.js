@@ -53,6 +53,11 @@ function LandlordDash(props) {
         setSearch(e.target.value)
     }
 
+    function openPropertyView(e) {
+        let propertyid = +e.target.innerHTML
+        props.history.push(`/landlord/property/${propertyid}`)
+    }
+
     const addProperty = (e) => {
         e.preventDefault();
         let landlordid = props.user.id;
@@ -90,7 +95,7 @@ function LandlordDash(props) {
             {/* List of Properties landlord tied to with ability to click on one which renders the manager view */}
 
             <div id="overlay" onClick={off}>
-                <p class='closebtn' onClick={off} title="Close overlay">✕</p>
+                <p className='closebtn' onClick={off} title="Close overlay">✕</p>
                 <div id="text" onClick={e => e.stopPropagation()}>
                     <form id='addProperty' onSubmit={addProperty}>
                         <label>Property Name:</label>
@@ -167,24 +172,12 @@ function LandlordDash(props) {
                             .map(property => (
                                 <TableRow key={property.id}>
                                     <TableCell component="th" scope="row">
-                                        {property.id}
+                                        <span className='workorderId' onClick={openPropertyView} title='Open Property View'>{property.id}</span>
                                     </TableCell>
                                     <TableCell align="right">{property.name}</TableCell>
                                     <TableCell align="right">{property.address1}</TableCell>
                                     <TableCell align="right">{property.email}</TableCell>
                                     <TableCell align="right">{property.phone}</TableCell>
-                                    {/* <TableCell align="right">{property.status}</TableCell> */}
-                                    {/* <TableCell align="right">{
-                                    <div >Mark as <span>{
-                                        <>
-                                            <select defaultValue={assignment.status} name='statusoptions' id='statusoptions' onChange={e => handleSelectChange(e.target.value, assignment.id)}>
-                                                <option value='Unread' >Unread</option>
-                                                <option value='In Progress'>In Progress</option>
-                                                <option value='Completed'>Completed</option>
-                                            </select>
-                                        </>
-                                    }</span></div>
-                                }</TableCell> */}
                                 </TableRow>
                             ))}
                     </TableBody>

@@ -53,6 +53,7 @@ app.post('/api/landlord/register', landlordCtrl.register);
 app.get('/api/landlord/me', landlordCtrl.getLandlord);
 app.get('/api/landlord/properties/:id', landlordCtrl.getProperties)
 app.post('/api/property/new', landlordCtrl.addProperty)
+app.get('/api/landlord/properties/workorders/:id', landlordCtrl.getWorkorders)
 
 //property endpoints
 app.get('/api/properties', propertyCtrl.getProperties);
@@ -62,6 +63,7 @@ app.get('/api/properties/:id', propertyCtrl.getProperty);
 app.post('/api/workorder/create', workorderCtrl.create)
 app.get('/api/workorder/manager', workorderCtrl.getManager)
 app.get('/api/workorder/tenant', workorderCtrl.getWorkOrderByTenant);
+app.get('/api/workorder/:id', workorderCtrl.getWorkOrderById);
 
 //logout
 app.get('/api/logout', (req, res) => {
