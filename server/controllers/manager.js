@@ -17,10 +17,10 @@ module.exports = {
     delete manager.password;
 
     req.session.user = manager;
-    console.log(manager)
 
     return res.send(req.session.user);
   },
+  
   register: async (req, res) => {
     const { landlordid, propertyid, firstname, lastname, password, email, phone } = req.body;
     const db = req.app.get('db');

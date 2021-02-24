@@ -8,13 +8,17 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import TextField from '@material-ui/core/TextField';
+import { Link } from 'react-router-dom';
+import { ModalRoute, ModalContainer } from 'react-router-modal';
+import ManageWorkOrder from '../ManageWorkOrder/ManageWorkOrder';
 import dayjs from 'dayjs';
 import './TenantDash.css';
 
 const TenantDash = props => {
+
     const [workOrders, setWorkOrders] = useState([]);
     const [search, setSearch] = useState('');
-    const columns = [{ id: 'title', label: 'Title' }, { id: 'short-desc', label: 'Short Description' }, { id: 'date', label: 'Date Created' }, { id: 'status', label: 'Status' }];
+    const columns = [{ id: 'number', label: 'Work Order #' }, { id: 'title', label: 'Title' }, { id: 'short-desc', label: 'Short Description' }, { id: 'date', label: 'Date Created' }, { id: 'status', label: 'Status' }];
     useEffect(() => {
         getWorkOrders();
     }, []);
@@ -26,7 +30,6 @@ const TenantDash = props => {
                 setWorkOrders(wo.data);
             })
             .catch(err => console.log(`Error: ${err.message}`));
-
     }
 
     const searchWorkOrders = e => {
@@ -39,20 +42,23 @@ const TenantDash = props => {
                 <TableContainer className='table-container' component={Paper} >
                     <TextField onChange={e => searchWorkOrders(e)} className='search-workorder-field' id="outlined-basic" label="Search" variant="outlined" value={search} />
                     <Table stickyHeader aria-label="sticky table">
-                        <TableHead>
+                        <TableHead style={{ backgroundColor: 'red' }}>
                             <TableRow>
                                 {columns.map(column => (
                                     <TableCell key={column.id}>{column.label}</TableCell>
                                 ))}
                             </TableRow>
                         </TableHead>
-                        <TableBody>
+                        <TableBody className='workorder-tenant-table'>
                             {workOrders.filter(wo => (
                                 wo.status.toLowerCase().includes(search.toLowerCase()) || wo.title.toLowerCase().includes(search.toLowerCase())
                             )).map(wo => (
                                 <TableRow key={wo.id}>
+                                    <TableCell>{wo.id}</TableCell>
                                     <TableCell component="th" scope="row">
-                                        {wo.title}
+                                        <Link to={{ pathname: `/dash/workorder/${wo.id}`, id: wo.id }}>
+                                            {wo.title}
+                                        </Link>
                                     </TableCell>
                                     <TableCell align="right" className='tenant-wo-description'>{wo.description}</TableCell>
                                     <TableCell>{dayjs(wo.datecreated).format('DD/MM/YYYY')}</TableCell>
@@ -67,13 +73,24 @@ const TenantDash = props => {
                                             <TableCell>In Progress</TableCell>
                                         )
                                     }
-
                                 </TableRow>
                             ))}
                         </TableBody>
                     </Table>
                 </TableContainer>
+
             </section>
+            <ModalRoute className='example-modal'
+                inClassName='example-modal-in'
+                outClassName='example-modal-out'
+                backdropClassName='example-backdrop'
+                backdropInClassName='example-backdrop-in'
+                backdropOutClassName='example-backdrop-out'
+                outDelay={1500}
+                path={`/dash/workorder/:id`}
+                parentPath={'/dash'}
+                component={ManageWorkOrder} />
+            <ModalContainer />
         </div>
     )
 }

@@ -63,6 +63,7 @@ app.get('/api/properties/:id', propertyCtrl.getProperty);
 app.post('/api/workorder/create', workorderCtrl.create)
 app.get('/api/workorder/manager', workorderCtrl.getManager)
 app.get('/api/workorder/tenant', workorderCtrl.getWorkOrderByTenant);
+app.get('/api/workorder/:id', workorderCtrl.getWorkOrderById);
 
 //logout
 app.get('/api/logout', (req, res) => {
