@@ -124,7 +124,9 @@ const LandingAdmin = (props) => {
         <div >
             <section id='landingadmin'>
                 <div id='landingToggle'>
-                    <button onClick={toggleStaff}>Staff</button><button onClick={toggleManager}>Manager</button><button onClick={toggleLandlord}>Landlord</button>
+                    <button id='staffBtn' onClick={toggleStaff}>Staff</button>
+                    <button id='managerBtn' onClick={toggleManager} >Manager</button>
+                    <button id='landlordBtn' onClick={toggleLandlord} >Landlord</button>
                 </div>
                 <form id='landingContent' onSubmit={registerView ? register : login}>
 
