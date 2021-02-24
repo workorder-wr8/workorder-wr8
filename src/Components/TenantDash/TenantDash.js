@@ -12,11 +12,10 @@ import { Link } from 'react-router-dom';
 import { ModalRoute, ModalContainer } from 'react-router-modal';
 import ManageWorkOrder from '../ManageWorkOrder/ManageWorkOrder';
 import dayjs from 'dayjs';
-
-
 import './TenantDash.css';
 
 const TenantDash = props => {
+
     const [workOrders, setWorkOrders] = useState([]);
     const [search, setSearch] = useState('');
     const columns = [{ id: 'number', label: 'Work Order #' }, { id: 'title', label: 'Title' }, { id: 'short-desc', label: 'Short Description' }, { id: 'date', label: 'Date Created' }, { id: 'status', label: 'Status' }];
@@ -39,20 +38,18 @@ const TenantDash = props => {
 
     return (
         <div>
-
-
             <section className='open'>
                 <TableContainer className='table-container' component={Paper} >
                     <TextField onChange={e => searchWorkOrders(e)} className='search-workorder-field' id="outlined-basic" label="Search" variant="outlined" value={search} />
                     <Table stickyHeader aria-label="sticky table">
-                        <TableHead  style={{backgroundColor:'red'}}>
-                            <TableRow className='wo-table'> 
+                        <TableHead style={{ backgroundColor: 'red' }}>
+                            <TableRow>
                                 {columns.map(column => (
                                     <TableCell key={column.id}>{column.label}</TableCell>
                                 ))}
                             </TableRow>
                         </TableHead>
-                        <TableBody>
+                        <TableBody className='workorder-tenant-table'>
                             {workOrders.filter(wo => (
                                 wo.status.toLowerCase().includes(search.toLowerCase()) || wo.title.toLowerCase().includes(search.toLowerCase())
                             )).map(wo => (
@@ -81,6 +78,7 @@ const TenantDash = props => {
                         </TableBody>
                     </Table>
                 </TableContainer>
+
             </section>
             <ModalRoute className='example-modal'
                 inClassName='example-modal-in'

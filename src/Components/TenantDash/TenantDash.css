@@ -4,9 +4,8 @@
     margin: 0 auto;
 }
 
-.wo-table {
-    background-color: black!important;
-    color: white;
+.workorder-tenant-table {
+  z-index: 1;
 }
 
 .search-workorder-field {
@@ -37,7 +36,8 @@
 
   .example-modal-in  {
     transition: opacity 0.5s ease-in;
-    opacity: 1 
+    opacity: 1 ;
+    z-index: 6;
   }
 
   .example-modal-out {
@@ -49,6 +49,7 @@
     background-color: black;
     opacity: 0;
     position: fixed;
+    z-index: 5 !important;
     top: 0;
     left: 0;
     width: 100%;
@@ -58,6 +59,7 @@
   .example-backdrop-in  {
     transition: opacity 0.3s ease-in;
     opacity: 0.5;
+    
   }
 
   .example-backdrop-out  {

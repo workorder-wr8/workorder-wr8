@@ -1,14 +1,11 @@
 import { useState, useEffect } from 'react'
 import './ManageWorkOrder.css';
-import { useParams } from 'react-router-dom';
 import { withRouter } from 'react-router-dom';
 import axios from 'axios';
 import dayjs from 'dayjs';
 const ManageWorkOrder = (props) => {
 
     const [workOrder, setWorkOrder] = useState([]);
-    const [comments, setComments] = useState([]);
-
 
     useEffect(() => {
         getWorkOrder();
@@ -51,10 +48,10 @@ const ManageWorkOrder = (props) => {
             </>
         )
     }
-    console.log('workorder', props)
+ 
     return (
         <section className='workorder-container'>
-            <button onClick={() => props.closeModal()}>close</button>
+            <button onClick={() => props.closeModal()} className='close-workorder-btn'>close</button>
             {displayWorkOrder()}
             <section className='comment-container'>
                 <div className='comments'>
