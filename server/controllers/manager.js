@@ -22,12 +22,17 @@ module.exports = {
   },
   
   register: async (req, res) => {
-    const { landlordid, propertyid, firstname, lastname, password, email, phone } = req.body;
+    const { landlordid, propertyid, firstname, lastname, password, email, phone, passcode } = req.body;
     const db = req.app.get('db');
     const check = await db.manager.get_manager_by_email([email]);
     const manager = check[0];
     if (manager)
       return res.status(409).send('email taken')
+
+    const [property] = await db.properties.get_property_for_passcode(propertyid)  
+    const isAuthenticated = bcrypt.compareSync(passcode, property.passcode);
+    if(!isAuthenticated)
+      return res.status(401).send('Invalid Property Passcode'); 
 
     const salt = bcrypt.genSaltSync(10);
     const hash = bcrypt.hashSync(password, salt);

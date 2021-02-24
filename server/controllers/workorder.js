@@ -15,8 +15,8 @@ module.exports = {
   },
   getManager: async (req,res) => {
     if(req.session.user) {
-      const {managerid} = req.session.user;
-      const workorders = await req.app.get('db').workorder.get_workorders_by_manager(managerid);
+      const {propertyid} = req.session.user;
+      const workorders = await req.app.get('db').workorder.get_workorders_by_manager(propertyid);
 
       if (!workorders[0]) {
         return res.status(404).send(`No workorders to display`);

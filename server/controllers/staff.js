@@ -22,13 +22,19 @@ module.exports = {
     return res.status(202).send(req.session.user)
   },
   register: async (req, res) => {
-    const { firstname, lastname, email, password, phone, propertyid } = req.body;
+    const { firstname, lastname, email, password, phone, propertyid, passcode } = req.body;
     const db = req.app.get('db')
 
     const [userExists] = await db.staff.get_staff(email)
     if (userExists) {
       return res.status(400).send('User already exists. Please log in')
     }
+
+    const [property] = await db.properties.get_property_for_passcode(propertyid)
+    const isAuthenticated = bcrypt.compareSync(passcode, property.passcode);
+    if(!isAuthenticated)
+      return res.status(401).send('Invalid Property Passcode');
+
 
     const salt = bcrypt.genSaltSync(10)
     const hash = bcrypt.hashSync(password, salt)
