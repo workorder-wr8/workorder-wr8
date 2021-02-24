@@ -40,3 +40,8 @@
     font-size: 30px;
     color: white
   }
+
+.workorderId {
+    color: rgb(6,69,173);
+    cursor: pointer;
+}

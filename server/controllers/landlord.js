@@ -44,14 +44,15 @@ module.exports = {
     if (req.session.user) {
       return res.send(req.ression.user)
     }
-
     return res.status(404).send('No user found');
   },
   getProperties: async (req, res) => {
-    const { id } = req.params
-    const db = req.app.get('db')
-    const properties = await db.landlord.get_properties(id)
-    return res.status(200).send(properties)
+    if (req.session.user) {
+      const { id } = req.params
+      const db = req.app.get('db')
+      const properties = await db.landlord.get_properties(id)
+      return res.status(200).send(properties)
+    }
   },
   addProperty: async (req, res) => {
     const db = req.app.get('db')
@@ -60,5 +61,15 @@ module.exports = {
     const newProperty = await db.landlord.add_property(landlordid, name, address1, address2, city, state, zip, email, phone, passcode)
 
     return res.status(201).send(newProperty)
+  },
+  getWorkorders: async (req, res) => {
+    if (req.session.user) {
+      const { id } = req.params;
+      const db = req.app.get('db')
+
+      const workorders = await db.landlord.get_workorders(id)
+
+      return res.status(200).send(workorders)
+    }
   }
 }
