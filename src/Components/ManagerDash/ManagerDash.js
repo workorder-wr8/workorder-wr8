@@ -37,7 +37,36 @@ const StyledTableCell = withStyles((theme) => ({
     const [staffMembers, setStaffMembers] = useState([]);
     const [staffOptions, setStaffOptions] = useState([]);
     const [selectedStaff, setSelectedStaff] = useState([]);
+    const [toggleOverlay, setToggleOverlay] = useState([]);
+    const [overlayData, setOverlayData] = useState([{
+        overlayId: '',
+        overlayName: '',
+        overlayTitle: '',
+        overlayDescription: '',
+        overlayStatus: '',
+        overlayDateCreated: '',
+        overlayLastUpdated: '',
+        overlayDateCompleted: ''
+    }])
+
+    const overlayOff = () => {document.getElementById('overlay').style.display = 'none'}
+    const overlayOn = () => {document.getElementById('overlay').style.display = 'block'}
     
+    const changeOverlay = (event) => {
+        console.log('This is a row ')
+        let id=event.target.parentNode.cells[0].textContent;
+        let name = event.target.parentNode.cells[1].textContent;
+        let title = event.target.parentNode.cells[2].textContent;
+        let description = event.target.parentNode.cells[3].textContent;
+        let status = event.target.parentNode.cells[4].textContent;
+        let datecreated = event.target.parentNode.cells[5].textContent;
+        let lastupdated = event.target.parentNode.cells[6].textContent;
+        let datecompleted = event.target.parentNode.cells[7].textContent;
+        setOverlayData({overlayId: id, overlayName: name, overlayTitle: title, overlayDescription: description, overlayStatus: status, overlayDateCreated: datecreated, overlayLastUpdated: lastupdated, overlayDateCompleted: datecompleted});
+        console.log(overlayData)
+        overlayOn();
+    }
+
     useEffect(()=>{
         getWorkOrders();
         getStaffMembers();
@@ -50,7 +79,7 @@ const StyledTableCell = withStyles((theme) => ({
 
     const mapStaff = () => {
         if(staffMembers) 
-            setStaffOptions(staffMembers.map((member)=>({value: member.id, label: `${member.lastname}, ${member.firstname}`})))
+            setStaffOptions(staffMembers.map((member)=>({value: member.id, label: `${member.lastname}, ${member.firstname}`, onClick: '{e => e.stopPropagation()}'})))
     }
 
     const getWorkOrders = async () => {
@@ -82,7 +111,15 @@ const StyledTableCell = withStyles((theme) => ({
 
     return (
         <div>
-            ManagerDash
+            <div id='overlay' onClick={overlayOff}>
+                <p>Work Order # : {overlayData.overlayId}   Tenant Name: {overlayData.overlayLastName}, {overlayData.overlayFirstName}  </p>
+                <p> Title {overlayData.overlayTitle}</p>
+                <p> Description: {overlayData.overlayDescription}</p>
+                <p>  status, {overlayData.overlayStatus}</p>
+                <p>  datecreated, {overlayData.overlayDateCreated}</p>
+                <p>  lastupdated, {overlayData.overlayLastUpdated}</p>
+                <p>  datecompleted {overlayData.overlayDateCompleted}</p>
+            </div>
             <div className='tableWrapper'>
                 <Table className='unassignedTable'>
                     <TableHead>
@@ -100,22 +137,24 @@ const StyledTableCell = withStyles((theme) => ({
                     </TableHead>
                     <TableBody>
                         {unassignedWorkOrders.map((wo)=>(
-                            <StyledTableRow key={wo.id}>
-                                <StyledTableCell align='right'>{wo.id}</StyledTableCell>
-                                <StyledTableCell align='right'>{wo.lastname},{wo.firstname}</StyledTableCell>
-                                <StyledTableCell align='right'>{wo.title}</StyledTableCell>
-                                <StyledTableCell align='right'>{wo.description}</StyledTableCell>
-                                <StyledTableCell align='right'>{wo.status}</StyledTableCell>
-                                <StyledTableCell align='right'>{wo.datecreated}</StyledTableCell>
-                                <StyledTableCell align='right'>{wo.lastupdated? wo.lastupdtated : '-'}</StyledTableCell>
-                                <StyledTableCell align='right'>{wo.datecompleted? wo.dateCompleted : '-'}</StyledTableCell>
-                                <TableCell align="right">{
-                                    <div >Assign to <span>
+                            <StyledTableRow className='row' value={wo} onClick={changeOverlay}>
+                                <StyledTableCell align='right' >{wo.id}</StyledTableCell>
+                                <StyledTableCell align='right' >{wo.lastname},{wo.firstname}</StyledTableCell>
+                                <StyledTableCell align='right' >{wo.title}</StyledTableCell>
+                                <StyledTableCell align='right' >{wo.description}</StyledTableCell>
+                                <StyledTableCell align='right' >{wo.status}</StyledTableCell>
+                                <StyledTableCell align='right' >{wo.datecreated}</StyledTableCell>
+                                <StyledTableCell align='right' >{wo.lastupdated? wo.lastupdtated : '-'}</StyledTableCell>
+                                <StyledTableCell align='right' >{wo.datecompleted? wo.dateCompleted : '-'}</StyledTableCell>
+                                <TableCell align="right" onClick={e => e.stopPropagation()}>{
+                                    <div onClick={e => e.stopPropagation()}>Assign to <span onClick={e => e.stopPropagation()}>
                                             <Select 
+    
                                             name='staffoptions' 
                                             id='staffoptions'
-                                             value={selectedStaff} 
-                                             onChange={e => handleSelectChange(e.value, wo.id)} 
+                                             value={selectedStaff}
+                                             onClick={e => e.stopPropagation()}
+                                             onChange={e => { handleSelectChange(e.value, wo.id)}} 
                                              options={staffOptions} />
                                     }</span></div>
                                 }</TableCell>
