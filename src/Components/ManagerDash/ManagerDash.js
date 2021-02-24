@@ -2,6 +2,7 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import React from 'react'
 import { connect } from 'react-redux'
+import './ManagerDash.css';
 import { withStyles, makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -50,11 +51,10 @@ function ManagerDash(props) {
         overlayDateCompleted: ''
     }])
 
-    const overlayOff = () => { document.getElementById('overlay').style.display = 'none' }
-    const overlayOn = () => { document.getElementById('overlay').style.display = 'block' }
+    const overlayOff = () => { document.getElementById('managerOverlay').style.display = 'none' }
+    const overlayOn = () => { document.getElementById('managerOverlay').style.display = 'flex' }
 
     const changeOverlay = (event) => {
-        console.log('This is a row ')
         let id = event.target.parentNode.cells[0].textContent;
         let name = event.target.parentNode.cells[1].textContent;
         let title = event.target.parentNode.cells[2].textContent;
@@ -64,7 +64,6 @@ function ManagerDash(props) {
         let lastupdated = event.target.parentNode.cells[6].textContent;
         let datecompleted = event.target.parentNode.cells[7].textContent;
         setOverlayData({ overlayId: id, overlayName: name, overlayTitle: title, overlayDescription: description, overlayStatus: status, overlayDateCreated: datecreated, overlayLastUpdated: lastupdated, overlayDateCompleted: datecompleted });
-        console.log(overlayData)
         overlayOn();
     }
 
@@ -94,7 +93,6 @@ function ManagerDash(props) {
         let unassignedFiltered, assignedFiltered;
         unassignedFiltered = workorders.filter((wo) => { return wo.status === 'Open' })
         assignedFiltered = workorders.filter((wo) => { return wo.status !== 'Open' })
-        console.log('MAPPED: ', unassignedFiltered, assignedFiltered)
         setUnassigned(unassignedFiltered);
         setAssigned(assignedFiltered);
     }
@@ -112,14 +110,19 @@ function ManagerDash(props) {
 
     return (
         <div>
-            <div id='overlay' onClick={overlayOff}>
-                <p>Work Order # : {overlayData.overlayId}   Tenant Name: {overlayData.overlayLastName}, {overlayData.overlayFirstName}  </p>
-                <p> Title {overlayData.overlayTitle}</p>
-                <p> Description: {overlayData.overlayDescription}</p>
-                <p>  status, {overlayData.overlayStatus}</p>
-                <p>  datecreated, {overlayData.overlayDateCreated}</p>
-                <p>  lastupdated, {overlayData.overlayLastUpdated}</p>
-                <p>  datecompleted {overlayData.overlayDateCompleted}</p>
+            <div id='managerOverlay' onClick={overlayOff}>
+                <div id='managerOverlayInfo'>
+                    <p>Work Order #{overlayData.overlayId}   Tenant Name: {overlayData.overlayName}  </p>
+                    <p> Title: {overlayData.overlayTitle}</p>
+                    <p> Description: {overlayData.overlayDescription}</p>
+                    <p>  Status: {overlayData.overlayStatus}</p>
+                    <p>  Date Created: {overlayData.overlayDateCreated}</p>
+                    <p>  Last Updated: {overlayData.overlayLastUpdated}</p>
+                    <p>  Date Completed: {overlayData.overlayDateCompleted}</p>
+                </div>
+                <div id='managerOverlayMessages'>
+                    Messages Placeholder
+                </div>
             </div>
             <div className='tableWrapper'>
                 <Table className='unassignedTable'>
@@ -177,7 +180,7 @@ function ManagerDash(props) {
                     </TableHead>
                     <TableBody>
                         {assignedWorkOrders.map((wo) => (
-                            <StyledTableRow key={wo.id}>
+                            <StyledTableRow value={wo} onClick={changeOverlay}>
                                 <StyledTableCell align='right'>{wo.id}</StyledTableCell>
                                 <StyledTableCell align='right'>{wo.lastname},{wo.firstname}</StyledTableCell>
                                 <StyledTableCell align='right'>{wo.title}</StyledTableCell>
