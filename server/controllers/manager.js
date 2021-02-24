@@ -20,7 +20,7 @@ module.exports = {
 
     return res.send(req.session.user);
   },
-  
+
   register: async (req, res) => {
     const { landlordid, propertyid, firstname, lastname, password, email, phone } = req.body;
     const db = req.app.get('db');
@@ -49,15 +49,9 @@ module.exports = {
   getManager: async (req, res) => {
     return res.status(200);
   },
-<<<<<<< HEAD
   getStaffMembers: async (req, res) => {
     if (req.session.user) {
       const { propertyid } = req.session.user;
-=======
-  getStaffMembers: async(req,res) => {
-    if(req.session.user) {
-      const {propertyid} = req.session.user;
->>>>>>> main
       const db = req.app.get('db');
       const staff = await db.manager.get_staff_by_property(propertyid)
       if (!staff[0]) {

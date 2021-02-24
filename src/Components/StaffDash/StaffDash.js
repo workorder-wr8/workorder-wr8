@@ -53,9 +53,6 @@ function StaffDash(props) {
     // console.log(workorders)
     return (
         <div id='staffDash'>
-
-
-
             <h1>Unread</h1>
             <TableContainer component={Paper}>
                 <TextField onChange={e => searchwo(e)} className='search-workorder-field' id="outlined-basic" label="Search" variant="outlined" value={search} />
