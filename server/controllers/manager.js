@@ -17,7 +17,6 @@ module.exports = {
     delete manager.password;
 
     req.session.user = manager;
-    console.log(manager)
 
     return res.send(req.session.user);
   },
@@ -49,20 +48,19 @@ module.exports = {
   getManager: async (req, res) => {
     return res.status(200);
   },
-  getStaffMembers: async(req,res) => {
-    if(req.session.user) {
-      const {propertyid} = req.session.user;
-      console.log(req.session.user)
+  getStaffMembers: async (req, res) => {
+    if (req.session.user) {
+      const { propertyid } = req.session.user;
       const db = req.app.get('db');
       const staff = await db.manager.get_staff_by_property(propertyid)
-      if(!staff[0]) {
+      if (!staff[0]) {
         return res.status(404).send('No Staff Found')
       }
       return res.status(200).send(staff);
     }
   },
-  assignWorkOrder: async(req,res) => {
-    const {id, staffid} = req.body;
+  assignWorkOrder: async (req, res) => {
+    const { id, staffid } = req.body;
     const db = req.app.get('db');
     const member = await db.manager.update_staff_id(id, staffid)
     return res.status(200).send(member);

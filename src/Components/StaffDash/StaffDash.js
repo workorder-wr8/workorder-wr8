@@ -45,7 +45,7 @@ function StaffDash(props) {
     const filterassignments = e => {
         setSearch(e.target.value)
     }
-
+    // console.log(assignments)
     return (
         <div id='staffDash'>
 

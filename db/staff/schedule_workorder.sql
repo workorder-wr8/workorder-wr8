@@ -2,6 +2,10 @@ update workorders
 set status = $2
 where id = $1;
 
+update workorders
+set datecompleted = NOW()
+where id = $1;
+
 select 
 t.firstname, 
 t.lastname, 

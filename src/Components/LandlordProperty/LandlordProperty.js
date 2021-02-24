@@ -50,6 +50,7 @@ export default function LandlordProperty(props) {
                             <TableCell align="right">Title</TableCell>
                             <TableCell align="right">Description</TableCell>
                             <TableCell align="right">Date Created</TableCell>
+                            <TableCell align="right">Date Completed</TableCell>
                             <TableCell align="right">Status</TableCell>
                         </TableRow>
                     </TableHead>
@@ -64,6 +65,7 @@ export default function LandlordProperty(props) {
                                     <TableCell align="right">{workorder.title}</TableCell>
                                     <TableCell align="right">{workorder.description}</TableCell>
                                     <TableCell align="right">{workorder.datecreated}</TableCell>
+                                    <TableCell align="right">{workorder.datecompleted}</TableCell>
                                     <TableCell align="right">{workorder.status}</TableCell>
                                 </TableRow>
                             ))}

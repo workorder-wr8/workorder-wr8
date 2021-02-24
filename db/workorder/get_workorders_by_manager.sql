@@ -17,4 +17,5 @@ s.lastname as stafflast
 from workorders w
 join managers m on m.id = w.managerid
 left join staff s on w.staffid = s.id
-where w.managerid = $1;
+where w.managerid = $1
+order by datecreated asc;
