@@ -39,6 +39,7 @@ function ManagerDash(props) {
     const [staffMembers, setStaffMembers] = useState([]);
     const [staffOptions, setStaffOptions] = useState([]);
     const [selectedStaff, setSelectedStaff] = useState([]);
+    const [changeAssigned, setChangeAssigned] = useState(false)
     const [toggleOverlay, setToggleOverlay] = useState([]);
     const [overlayData, setOverlayData] = useState([{
         overlayId: '',
@@ -70,7 +71,7 @@ function ManagerDash(props) {
     useEffect(() => {
         getWorkOrders();
         getStaffMembers();
-    }, [])
+    }, [selectedStaff])
 
     const getStaffMembers = async () => {
         await axios.get('/api/manager/staffmembers')
@@ -79,14 +80,20 @@ function ManagerDash(props) {
 
     const mapStaff = () => {
         if (staffMembers)
-            setStaffOptions(staffMembers.map((member) => ({ value: member.id, label: `${member.lastname}, ${member.firstname}`, onClick: '{e => e.stopPropagation()}' })))
+            setStaffOptions(staffMembers.map((member) => ({ value: member.id, label: `${member.lastname}, ${member.firstname}` })))
     }
 
     const getWorkOrders = async () => {
         await axios.get('/api/workorder/manager')
             .then(res => {
                 setWorkOrders(res.data);
+                setChangeAssigned(false)
             })
+    }
+
+    const changeAssignedStaff = (e) => {
+        e.stopPropagation()
+        setChangeAssigned(!changeAssigned)
     }
 
     const mapWorkOrders = () => {
@@ -138,8 +145,8 @@ function ManagerDash(props) {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {unassignedWorkOrders.map((wo) => (
-                            <StyledTableRow className='row' value={wo} onClick={changeOverlay}>
+                        {unassignedWorkOrders.map(wo => (
+                            <StyledTableRow className='row' key={wo.id} value={wo} onClick={changeOverlay}>
                                 <StyledTableCell align='right' >{wo.id}</StyledTableCell>
                                 <StyledTableCell align='right' >{wo.lastname},{wo.firstname}</StyledTableCell>
                                 <StyledTableCell align='right' >{wo.title}</StyledTableCell>
@@ -149,7 +156,6 @@ function ManagerDash(props) {
                                 <TableCell align="right" onClick={e => e.stopPropagation()}>{
                                     <div onClick={e => e.stopPropagation()}>Assign to <span onClick={e => e.stopPropagation()}>
                                         <Select
-
                                             name='staffoptions'
                                             id='staffoptions'
                                             value={selectedStaff}
@@ -179,8 +185,8 @@ function ManagerDash(props) {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {assignedWorkOrders.map((wo) => (
-                            <StyledTableRow value={wo} onClick={changeOverlay}>
+                        {assignedWorkOrders.map(wo => (
+                            <StyledTableRow key={wo.id} value={wo} onClick={changeOverlay}>
                                 <StyledTableCell align='right'>{wo.id}</StyledTableCell>
                                 <StyledTableCell align='right'>{wo.lastname},{wo.firstname}</StyledTableCell>
                                 <StyledTableCell align='right'>{wo.title}</StyledTableCell>
@@ -189,7 +195,30 @@ function ManagerDash(props) {
                                 <StyledTableCell align='right'>{dayjs(wo.datecreated).format('MMMM D, YYYY h:mm A')}</StyledTableCell>
                                 <StyledTableCell align='right'>{wo.lastupdated ? dayjs(wo.lastupdated).format('MMMM D, YYYY h:mm A') : '-'}</StyledTableCell>
                                 <StyledTableCell align='right'>{wo.datecompleted ? dayjs(wo.datecompleted).format('MMMM D, YYYY h:mm A') : '-'}</StyledTableCell>
-                                <StyledTableCell align="right">{wo.stafffirst} {wo.stafflast}</StyledTableCell>
+                                {!changeAssigned ? (
+                                    <StyledTableCell align="right">{wo.stafffirst} {wo.stafflast}
+                                        <br /><div className='changeStaffBtn' onClick={changeAssignedStaff}>Change Assignee</div>
+                                    </StyledTableCell>
+                                ) : (
+                                        <StyledTableCell align="right" onClick={e => e.stopPropagation()}>
+
+                                            <div onClick={e => e.stopPropagation()}>Assign to <span onClick={e => e.stopPropagation()}>
+                                                <Select
+                                                    name='staffoptions'
+                                                    id='staffoptions'
+                                                    defaultValue={wo.firstname}
+                                                    value={selectedStaff}
+                                                    onClick={e => e.stopPropagation()}
+                                                    onChange={e => { handleSelectChange(e.value, wo.id) }}
+                                                    options={staffOptions} />
+                                            </span>
+                                                <div className='changeStaffBtn' onClick={changeAssignedStaff}>Don't Change</div>
+                                            </div>
+
+
+                                        </StyledTableCell>
+                                    )}
+                                {/* <StyledTableCell align="right">{wo.stafffirst} {wo.stafflast}</StyledTableCell> */}
                             </StyledTableRow>
                         ))}
                     </TableBody>

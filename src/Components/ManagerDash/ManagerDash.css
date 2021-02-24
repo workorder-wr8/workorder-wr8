@@ -29,3 +29,8 @@
 #staffOptions {
   z-index: 2;
 }
+
+#changeStaffBtn {
+  text-decoration: underline;
+  color: blue
+}
