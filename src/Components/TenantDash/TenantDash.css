@@ -4,6 +4,10 @@
     margin: 0 auto;
 }
 
+.workorder-tenant-table {
+  z-index: 1;
+}
+
 .search-workorder-field {
     width: 100%;
 }
@@ -14,3 +18,51 @@
     overflow: hidden;
     white-space: nowrap;
 }
+
+.example-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate3d(-50%, -50%, 0);
+    background-color: white;
+    border-radius: 5px;
+    border: 1px solid #777;
+    padding: 2rem;
+    min-width: 20rem;
+    max-width: 60rem;
+    width: 90%;
+    opacity: 0;
+  }
+
+  .example-modal-in  {
+    transition: opacity 0.5s ease-in;
+    opacity: 1 ;
+    z-index: 6;
+  }
+
+  .example-modal-out {
+    transition: opacity 0.3s ease-out;
+    opacity: 0
+  }
+
+  .example-backdrop {
+    background-color: black;
+    opacity: 0;
+    position: fixed;
+    z-index: 5 !important;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .example-backdrop-in  {
+    transition: opacity 0.3s ease-in;
+    opacity: 0.5;
+    
+  }
+
+  .example-backdrop-out  {
+    transition: opacity 1.3s ease-out;
+    opacity: 0;
+  }

@@ -20,6 +20,7 @@ module.exports = {
 
     return res.send(req.session.user);
   },
+  
   register: async (req, res) => {
     const { landlordid, propertyid, firstname, lastname, password, email, phone } = req.body;
     const db = req.app.get('db');

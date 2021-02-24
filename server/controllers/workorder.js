@@ -37,5 +37,14 @@ module.exports = {
     }
 
     res.status(200).send(workOrders);
+  },
+
+  getWorkOrderById: (req, res) => {
+    const { id } = req.params;
+    const db = req.app.get('db');
+
+    db.workorder.get_workorder_by_id({ id })
+      .then(wo => res.status(200).send(wo))
+      .catch(err => console.log(`Error: ${err.message}`))
   }
 }
