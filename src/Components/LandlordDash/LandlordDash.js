@@ -160,6 +160,8 @@ function LandlordDash(props) {
                             {/* <TableCell align="right">Manager</TableCell> */}
                             {/* <TableCell align="right">Total Tenants</TableCell> */}
                             {/* Total open workorders */}
+                            {/* avg time to completed (created-completed) */}
+                            {/* satisfaction rating */}
                             <TableCell align="right">Address</TableCell>
                             <TableCell align="right">Email</TableCell>
                             <TableCell align="right">Phone</TableCell>

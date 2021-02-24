@@ -20,7 +20,7 @@ const TenantDash = props => {
     const [search, setSearch] = useState('');
     const columns = [{ id: 'number', label: 'Work Order #' }, { id: 'title', label: 'Title' }, { id: 'short-desc', label: 'Short Description' }, { id: 'date', label: 'Date Created' }, { id: 'status', label: 'Status' }];
     useEffect(() => {
-        getWorkOrders();
+        getWorkOrders(); 
     }, []);
 
 
@@ -61,7 +61,7 @@ const TenantDash = props => {
                                         </Link>
                                     </TableCell>
                                     <TableCell align="right" className='tenant-wo-description'>{wo.description}</TableCell>
-                                    <TableCell>{dayjs(wo.datecreated).format('DD/MM/YYYY')}</TableCell>
+                                    <TableCell>{dayjs(wo.datecreated).format('MMMM D, YYYY h:mm A')}</TableCell>
                                     {(wo.status === 'Open' || wo.status === 'Completed')
                                         ?
                                         (
