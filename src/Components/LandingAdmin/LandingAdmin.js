@@ -16,6 +16,7 @@ const LandingAdmin = (props) => {
     const [phone, setPhone] = useState('')
     const [role, setRole] = useState('staff');
     const [properties, setProperties] = useState([]);
+    const [passcode, setPasscode] = useState([]);
     // const [landlordid, setlandlordid] = useState(0)
     const [LLForm, setLLForm] = useState(false);
 
@@ -32,7 +33,7 @@ const LandingAdmin = (props) => {
             if (role === 'staff') {
                 axios.post('/api/staff/register',
                     {
-                        firstname, lastname, email, password, phone, propertyid
+                        firstname, lastname, email, password, phone, propertyid, passcode
                     })
                     .then(res => {
                         props.history.push('/staffdash')
@@ -42,7 +43,7 @@ const LandingAdmin = (props) => {
             } else if (role === 'manager') {
                 axios.post('/api/manager/register',
                     {
-                        landlordid: 1, propertyid, firstname, lastname, email, password, phone
+                        landlordid: 1, propertyid, firstname, lastname, email, password, phone, passcode
                     })
                     .then(res => {
                         props.history.push('/managerdash')
@@ -155,7 +156,7 @@ const LandingAdmin = (props) => {
                                             <option key={index} value={property.id}>{property.name}</option>
                                         ))}
                                     </select>
-                                    <input type='password' placeholder='Property Passcode' />
+                                    <input type='password' placeholder='Property Passcode' onChange={e=>setPasscode(e.target.value)}/>
                                 </>
                             ) : null}
 

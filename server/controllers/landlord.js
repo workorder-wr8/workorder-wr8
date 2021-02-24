@@ -56,9 +56,13 @@ module.exports = {
   },
   addProperty: async (req, res) => {
     const db = req.app.get('db')
+
     const { landlordid, name, address1, address2, city, state, zip, email, phone, passcode } = req.body;
 
-    const newProperty = await db.landlord.add_property(landlordid, name, address1, address2, city, state, zip, email, phone, passcode)
+    const salt = bcrypt.genSaltSync(10)
+    const hash = bcrypt.hashSync(passcode, salt)
+
+    const newProperty = await db.landlord.add_property(landlordid, name, address1, address2, city, state, zip, email, phone, hash)
 
     return res.status(201).send(newProperty)
   },
