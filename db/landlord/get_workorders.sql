@@ -1,2 +1,3 @@
 select * from workorders
-where propertyid = $1;
+where propertyid = $1
+order by datecreated asc;
