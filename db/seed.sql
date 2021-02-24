@@ -94,6 +94,7 @@ datecompleted timestamp
 );
 
 create table messages (
+message_id SERIAL PRIMARY KEY,
 landlordid int,
 foreign key (landlordid) references landlords(id),
 managerid int,

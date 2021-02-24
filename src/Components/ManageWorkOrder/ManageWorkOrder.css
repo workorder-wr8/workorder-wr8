@@ -32,13 +32,3 @@
     
 }
 
-.comments {
-    text-align: start;
-}
-
-.comment {
-    background-color: rgb(72, 255, 0);
-    border-radius: 100px;
-    padding: 3px 8px;
-    display: inline-block;
-}
