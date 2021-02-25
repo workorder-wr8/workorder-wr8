@@ -35,7 +35,7 @@ const Comments = props => {
     }
 
     return (
-        <section className='className='>
+        <section className='comments'>
             <p className='comment-header'>Comments:</p>
             <AddComment workorderid={props.workorderid} getComments={getComments}/>
             {displayComments()}
