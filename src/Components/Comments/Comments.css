@@ -1,5 +1,12 @@
+.comment-container {
+    width: 100%;
+}
+
 .comments {
     text-align: start;
+    height: 500px;
+    overflow-y: scroll;
+    width: 100%;
 }
 
 .my-comment {

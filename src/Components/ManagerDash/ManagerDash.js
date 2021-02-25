@@ -57,16 +57,15 @@ function ManagerDash(props) {
 
 
     const addMessage = async(id, content) => {
-        console.log('adding: ', id, content);
         await axios.put('/api/messages/manager/create', {id, content})
         .then(res=>{
+            setOverlayData({...overlayData, overlayMessageInput: ''});
             getMessages(id);
         })
         .catch(err=>console.log(err))
     }
 
     const getMessages = async(id)=>{
-        console.log('get message from WO: ', id)
         await axios.get(`/api/messages/manager/${id}`)
         .then( res=>{
             setMessages(res.data)
@@ -75,32 +74,25 @@ function ManagerDash(props) {
     }
 
     const mapMessages = () => {
-        console.log('THESE ARE THE MESSAGES: ', messages)
         let mappedMessages = messages.map(message=>{
-            console.log('mapping: ',message)
             if(message.managerid === props.user.managerid) {
-                return <div className='managerSelfMessage' >
-                    <div className='messageInfo'>{message.managerid} :: {message.timesent}</div>
+                return <div className='managerSelfMessage' key={message.messageid}>
+                    <div className='messageInfo'>{message.managerlastname}, {message.managerfirstname} :: {message.timesent}</div>
                     <p>{message.content}</p>
                 </div>
             } else if (message.managerid) {
                 return <div className='managerOtherMessage' >
-                    <div className='messageInfo'>{message.managerid} :: {message.timesent}</div>
+                    <div className='messageInfo'>{message.managerlastname}, {message.managerfirstname} :: {message.timesent}</div>
                     <p>{message.content}</p>
                 </div>
             } else if (message.staffid) {
                 return <div className='staffMessage' >
-                    <div className='messageInfo'>{message.staffid} :: {message.timesent}</div>
+                    <div className='messageInfo'>{message.stafflastname},  {message.stafffirstname}:: {message.timesent}</div>
                     <p>{message.content}</p>
                 </div>
             } else if(message.tenantid) {
                 return <div className='tenantMessage' >
-                    <div className='messageInfo'>{message.tenantid} :: {message.timesent}</div>
-                    <p>{message.content}</p>
-                </div>
-            } else if(message.landlordid) {
-                return <div className='landlordMessage' >
-                    <div className='messageInfo'>{message.landlordid} :: {message.timesent}</div>
+                    <div className='messageInfo'>{message.tenantlastname}, {message.tenantfirstname} :: {message.timesent}</div>
                     <p>{message.content}</p>
                 </div>
             }
@@ -195,8 +187,9 @@ function ManagerDash(props) {
                     <div id='managerOverlayLoadedMessages'>
                         {overlayMessages}
                     </div>
-                    <form onSubmit={e=>addMessage(overlayData.overlayId, overlayData.overlayMessageInput)} onClick={e=>e.stopPropagation()}>
-                        <input type='text'onClick={e=>e.stopPropagation()} onChange={e=>setOverlayData({...overlayData, overlayMessageInput: e.target.value})}></input>
+                    <form onSubmit={e=>{addMessage(overlayData.overlayId, overlayData.overlayMessageInput)}} onClick={e=>e.stopPropagation()}>
+                        <input type='text'onClick={e=>e.stopPropagation()} onChange={e=>setOverlayData({...overlayData, overlayMessageInput: e.target.value})} value={overlayData.overlayMessageInput}/>
+                        <input type='button' onClick={e=>{addMessage(overlayData.overlayId, overlayData.overlayMessageInput)}} value='Send'></input>
                     </form>
                 </div>
             </div>
