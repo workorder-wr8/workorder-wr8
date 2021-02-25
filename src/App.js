@@ -4,6 +4,7 @@ import './App.css';
 import Header from './Components/Header/Header'
 
 function App() {
+  console.warn = () => {}
   return (
     <div className="App">
       <Header />

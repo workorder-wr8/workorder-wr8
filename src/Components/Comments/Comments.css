@@ -2,8 +2,15 @@
     text-align: start;
 }
 
-.comment {
+.my-comment {
     background-color: rgb(72, 255, 0);
+    border-radius: 100px;
+    padding: 3px 8px;
+    display: inline-block;
+}
+
+.their-comment {
+    background-color: rgb(0, 162, 255);
     border-radius: 100px;
     padding: 3px 8px;
     display: inline-block;

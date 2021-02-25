@@ -1,11 +1,11 @@
 module.exports = {
-    addMessage: (req, res) => {
-        // const { tenantid: sender_id } = req.session.user;
-        // const { id: work_order_id } = req.params;
-        const { sender_name, message, id: work_order_id} = req.body;
+    addCommentByTenant: (req, res) => {
+
+        const { } = req.body;
         const db = req.app.get('db');
-        console.log(`sender_id: ${sender_id} sender: ${sender_name} work id: ${work_order_id}`)
-        db.messages.add_message({ work_order_id, sender_id, sender_name, message })
+        const { tenantid } = req.session.user;
+        const { workorderid, content } = req.body;
+        db.comments.add_comment_tenant({ tenantid, workorderid, content, sender_id: tenantid })
             .then(() => res.sendStatus(201))
             .catch(err => {
                 res.status(500).send(err);
@@ -13,7 +13,17 @@ module.exports = {
             });
     },
 
-    getMessagesById: (req, res) => {
+    getCommentsById: async (req, res) => {
+        const { id } = req.body;
+        const db = req.app.get('db');
+
+        const comments = await db.comments.get_comments_by_id_tenant({ id });
+
+        if (!comments[0]) {
+            return res.status(404).send('No comments to display');
+        }
+
+        res.status(200).send(comments);
 
     }
 }

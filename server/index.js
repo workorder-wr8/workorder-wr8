@@ -67,7 +67,8 @@ app.get('/api/workorder/tenant', workorderCtrl.getWorkOrderByTenant);
 app.get('/api/workorder/:id', workorderCtrl.getWorkOrderById);
 
 //message endpoints
-app.post('/api/messages', messageCtrl.addMessage);
+app.post('/api/addcomment/tenant', messageCtrl.addCommentByTenant);
+app.post('/api/commentsById', messageCtrl.getCommentsById);
 
 //logout
 app.get('/api/logout', (req, res) => {
