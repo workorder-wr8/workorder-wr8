@@ -48,7 +48,7 @@ const ManageWorkOrder = (props) => {
             </>
         )
     }
- 
+
     return (
         <section className='workorder-container'>
             <button onClick={() => props.closeModal()} className='close-workorder-btn'>close</button>
@@ -57,6 +57,7 @@ const ManageWorkOrder = (props) => {
                 <div className='comments'>
                     <p className='comment-header'>Comments:</p>
                     <p className='comment'>this is a test comment lorem iipsu lthe lord of the rings the retun of the king</p>
+                    <input />
                 </div>
             </section>
         </section>
