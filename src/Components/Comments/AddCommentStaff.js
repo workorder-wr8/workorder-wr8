@@ -2,7 +2,7 @@ import { useState } from 'react';
 import axios from 'axios';
 import './AddComment.css';
 
-const AddComment = props => {
+const AddCommentStaff = props => {
     const [input, setInput] = useState('');
 
     const handleInput = e => {
@@ -12,12 +12,13 @@ const AddComment = props => {
     const addComment = () => {
         const content = input;
         const { workorderid } = props;
-        axios.post('/api/addcomment/tenant', { workorderid, content })
+        axios.post('/api/addcomment/staff', { workorderid, content })
             .then(() => props.getComments())
     }
 
     return (
         <section className='add-comment-container'>
+            Staff add comment
             <input
                 onChange={e => handleInput(e)}
                 value={input}
@@ -29,4 +30,4 @@ const AddComment = props => {
     )
 }
 
-export default AddComment;
+export default AddCommentStaff;

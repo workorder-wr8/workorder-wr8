@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import AddComment from './AddComment';
+import AddCommentTenant from './AddCommentTenant';
+import AddCommentStaff from './AddCommentStaff';
+import { connect } from 'react-redux';
 import './Comments.css';
 
 const Comments = props => {
@@ -19,9 +21,17 @@ const Comments = props => {
     }
 
     const displayComments = () => {
+        let id;
+        if (props.user.tenantid) {
+            id = props.user.tenantid;
+        } else if (props.user.staffid) {
+            id = props.user.staffid;
+        } else {
+            id = props.user.managerid;
+        }
         const workOrderComments = comments.map(comment => (
             <article key={comment.message_id} className='comment-container'>
-                {comment.sender_id === comment.staffid || comment.sender_id === comment.managerid || comment.sender_id === comment.tenantid
+                {comment.sender_id === id
                     ?
                     <p className='my-comment'>{comment.content}</p>
 
@@ -34,13 +44,29 @@ const Comments = props => {
         return workOrderComments;
     }
 
+    let addComment;
+    if (props.user.tenantid) {
+        addComment = <AddCommentTenant workorderid={props.workorderid} getComments={getComments} />
+    } else if (props.user.staffid) {
+        addComment = <AddCommentStaff workorderid={props.workorderid} getComments={getComments} />
+    } else {
+        <p>manager stuff here</p>
+    }
+    console.log('comments', comments)
     return (
         <section className='comments'>
             <p className='comment-header'>Comments:</p>
-            <AddComment workorderid={props.workorderid} getComments={getComments}/>
-            {displayComments()}
+            {addComment}
+            <section className='comments'>
+                {displayComments()}
+            </section>
         </section>
     )
 }
 
-export default Comments;
+const mapStateToProps = reduxState => {
+    return {
+        user: reduxState.userReducer.user
+    }
+}
+export default connect(mapStateToProps)(Comments);
