@@ -76,6 +76,14 @@ module.exports = {
       return res.status(200).send(workorders)
     }
   },
+  getStatsTimeAndDateCreated: async(req,res)=>{
+    if(req.session.user) {
+      const db=req.app.get('db');
+      const {propertyid} = req.params;
+      const data = await db.landlord.get_dc_stats_time(propertyid)
+      return res.status(200).send(data);
+    }
+  },
   getStats: async (req, res) => {
     if (req.session.user) {
       const db = req.app.get('db')

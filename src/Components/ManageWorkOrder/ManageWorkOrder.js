@@ -16,7 +16,9 @@ const ManageWorkOrder = (props) => {
     const getWorkOrder = () => {
         const { id } = props.location;
         axios.get(`/api/workorder/${id}`)
-            .then(res => setWorkOrder(res.data[0]))
+            .then(res => {
+                setWorkOrder(res.data[0]);
+            })
             .catch(err => console.log(`Error: ${err.message}`));
     }
 
@@ -53,8 +55,7 @@ const ManageWorkOrder = (props) => {
 
     return (
         <section className='workorder-container'>
-            <button onClick={() => props.closeModal()} className='close-workorder-btn'>close</button>
-            {displayWorkOrder()}
+                {displayWorkOrder()}
             <section className='comment-container'>
                 <Comments workorderid={props.location.id} />
             </section>

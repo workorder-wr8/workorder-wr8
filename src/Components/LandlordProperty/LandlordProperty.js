@@ -28,29 +28,40 @@ function LandlordProperty(props) {
 
     useEffect(() => {
         let propertyid = +props.match.params.id
-        axios.get(`/api/landlord/property/stats/${propertyid}`)
-            .then(res => setCount(res.data))
-            .catch(err => console.log(err))
+        // axios.get(`/api/landlord/property/stats/${propertyid}`)
+        //     .then(res => setCount(res.data))
+        //     .catch(err => console.log(err))
 
-        axios.get(`/api/landlord/property/time/${propertyid}`)
-            .then(res => setTime(res.data))
-            .catch(err => console.log(err))
+        // axios.get(`/api/landlord/property/time/${propertyid}`)
+        //     .then(res => setTime(res.data))
+        //     .catch(err => console.log(err))
 
-        axios.get(`/api/landlord/property/datecreated/${propertyid}`)
-            .then(res => {
-                setCreated(res.data)
+        // axios.get(`/api/landlord/property/datecreated/${propertyid}`)
+        //     .then(res => {
+        //         setCreated(res.data)
+        //     })
+        //     .catch(err => console.log(err))
+        axios.get(`/api/landlord/property/data/${[propertyid]}`)
+            .then(res=>{
+                let receivedDates = res.data.filter((row, index)=>((index+1)%4===0)).map(row=>({labels: row.ddc, datasets: row.dc}));
+                console.log('RECEIVED: ', receivedDates);
+                setCreated(receivedDates)
+                let receivedData = res.data.filter((row, index)=>(index<4)).map(row=>({count: row.c, status: row.ws}))
+                setCount(receivedData);
+                setTime(res.data[0].attc);
+                
             })
-            .catch(err => console.log(err))
     }, [])
 
     useEffect(() => {
         if (created[0]) {
+            console.log('beforeSetData: ',created)
             setData({
-                labels: [created[0].date.substring(0, 10), created[1].date.substring(0, 10), created[2].date.substring(0, 10), created[3].date.substring(0, 10)],
+                labels: created.map(row=>row.labels),
                 datasets: [
                     {
                         label: 'Workorder Requests Past 7 days',
-                        data: [created[0].count, created[1].count, created[2].count, created[3].count],
+                        data: created.map(row=>row.datasets),
                         fill: true,
                         backgroundColor: "rgba(75,192,192,0.2)",
                         borderColor: "rgba(75,192,192,1)"
@@ -94,12 +105,13 @@ function LandlordProperty(props) {
                         </TableHead>
                         <TableBody>
                             {count
-                                .map((wo, i) => (
-                                    <TableRow key={i}>
+                                .map((wo, i) => {
+                                    console.log('this is count: ', count)
+                                    return <TableRow key={i}>
                                         <TableCell align="right">{wo.status}</TableCell>
                                         <TableCell align="right">{wo.count}</TableCell>
                                     </TableRow>
-                                ))}
+})}
                         </TableBody>
                     </Table>
                 </TableContainer>
