@@ -13,7 +13,10 @@ const AddComment = props => {
         const content = input;
         const { workorderid } = props;
         axios.post('/api/addcomment/tenant', { workorderid, content })
-            .then(() => props.getComments())
+            .then(() => {
+                props.getComments();
+                setInput('');
+            })
     }
 
     return (

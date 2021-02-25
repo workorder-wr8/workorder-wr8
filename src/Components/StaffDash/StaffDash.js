@@ -18,6 +18,18 @@ import ManageWorkOrder from '../ManageWorkOrder/ManageWorkOrder';
 import SpinnerContainer from '../Spinner/SpinnerContainer';
 
 const useStyles = makeStyles({
+    tablehead: {
+        background: 'pink'
+    },
+    tablehead2: {
+        background: 'lightgreen'
+    },
+    red: {
+        color: 'red'
+    },
+    green: {
+        color: 'green'
+    },
     table: {
         minWidth: 650,
     },
@@ -53,7 +65,7 @@ function StaffDash(props) {
     const searchwo = e => {
         setSearch(e.target.value)
     }
-    console.log(props)
+    // console.log(workorders)
     return (
         <div id='staffDash'>
 

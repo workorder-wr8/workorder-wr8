@@ -88,7 +88,7 @@ function LandlordDash(props) {
         setToggleAdd(!toggleAdd)
     }
 
-    console.log(properties)
+    // console.log(properties)
     return (
         <div>
 
@@ -139,15 +139,10 @@ function LandlordDash(props) {
                         <input type='submit' onClick={addProperty} />
                     </form>
                 </div>
-
-
             </div>
-
             <div style={{ padding: 20 }}>
                 <button onClick={on}>Add a new property</button>
             </div>
-
-
             <br />
 
             <TableContainer component={Paper}>
