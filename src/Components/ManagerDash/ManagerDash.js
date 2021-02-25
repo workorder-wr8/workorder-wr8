@@ -41,6 +41,7 @@ function ManagerDash(props) {
     const [selectedStaff, setSelectedStaff] = useState([]);
     const [changeAssigned, setChangeAssigned] = useState(false)
     const [toggleOverlay, setToggleOverlay] = useState([]);
+    const [messages, setMessages] = useState([])
     const [overlayData, setOverlayData] = useState([{
         overlayId: '',
         overlayName: '',
@@ -49,8 +50,65 @@ function ManagerDash(props) {
         overlayStatus: '',
         overlayDateCreated: '',
         overlayLastUpdated: '',
-        overlayDateCompleted: ''
+        overlayDateCompleted: '',
+        overlayMessageinput: ''
     }])
+    const [overlayMessages, setOverlayMessages] = useState([])
+
+
+    const addMessage = async(id, content) => {
+        console.log('adding: ', id, content);
+        await axios.put('/api/messages/manager/create', {id, content})
+        .then(res=>{
+            getMessages(id);
+        })
+        .catch(err=>console.log(err))
+    }
+
+    const getMessages = async(id)=>{
+        console.log('get message from WO: ', id)
+        await axios.get(`/api/messages/manager/${id}`)
+        .then( res=>{
+            setMessages(res.data)
+        })
+        .catch(err=>console.log(err))
+    }
+
+    const mapMessages = () => {
+        console.log('THESE ARE THE MESSAGES: ', messages)
+        let mappedMessages = messages.map(message=>{
+            console.log('mapping: ',message)
+            if(message.managerid === props.user.managerid) {
+                return <div className='managerSelfMessage' >
+                    <div className='messageInfo'>{message.managerid} :: {message.timesent}</div>
+                    <p>{message.content}</p>
+                </div>
+            } else if (message.managerid) {
+                return <div className='managerOtherMessage' >
+                    <div className='messageInfo'>{message.managerid} :: {message.timesent}</div>
+                    <p>{message.content}</p>
+                </div>
+            } else if (message.staffid) {
+                return <div className='staffMessage' >
+                    <div className='messageInfo'>{message.staffid} :: {message.timesent}</div>
+                    <p>{message.content}</p>
+                </div>
+            } else if(message.tenantid) {
+                return <div className='tenantMessage' >
+                    <div className='messageInfo'>{message.tenantid} :: {message.timesent}</div>
+                    <p>{message.content}</p>
+                </div>
+            } else if(message.landlordid) {
+                return <div className='landlordMessage' >
+                    <div className='messageInfo'>{message.landlordid} :: {message.timesent}</div>
+                    <p>{message.content}</p>
+                </div>
+            }
+        })
+        setOverlayMessages(<div>{mappedMessages}</div>)
+    }
+
+    useEffect(mapMessages,[messages])
 
     const overlayOff = () => { document.getElementById('managerOverlay').style.display = 'none' }
     const overlayOn = () => { document.getElementById('managerOverlay').style.display = 'flex' }
@@ -62,9 +120,15 @@ function ManagerDash(props) {
         let description = event.target.parentNode.cells[3].textContent;
         let status = event.target.parentNode.cells[4].textContent;
         let datecreated = event.target.parentNode.cells[5].textContent;
-        let lastupdated = event.target.parentNode.cells[6].textContent;
-        let datecompleted = event.target.parentNode.cells[7].textContent;
-        setOverlayData({ overlayId: id, overlayName: name, overlayTitle: title, overlayDescription: description, overlayStatus: status, overlayDateCreated: datecreated, overlayLastUpdated: lastupdated, overlayDateCompleted: datecompleted });
+        let lastupdated, datecompleted;
+        if(event.target.parentNode.cells[7]) {
+            lastupdated = event.target.parentNode.cells[6].textContent;
+            datecompleted = event.target.parentNode.cells[7].textContent;
+        }
+
+        getMessages(id);
+
+        setOverlayData({...overlayData, overlayId: id, overlayName: name, overlayTitle: title, overlayDescription: description, overlayStatus: status, overlayDateCreated: datecreated, overlayLastUpdated: lastupdated, overlayDateCompleted: datecompleted });
         overlayOn();
     }
 
@@ -127,8 +191,13 @@ function ManagerDash(props) {
                     <p>  Last Updated: {overlayData.overlayLastUpdated}</p>
                     <p>  Date Completed: {overlayData.overlayDateCompleted}</p>
                 </div>
-                <div id='managerOverlayMessages'>
-                    Messages Placeholder
+                <div id='managerOverlayMessages' onClick={e=>e.stopPropagation()}>
+                    <div id='managerOverlayLoadedMessages'>
+                        {overlayMessages}
+                    </div>
+                    <form onSubmit={e=>addMessage(overlayData.overlayId, overlayData.overlayMessageInput)} onClick={e=>e.stopPropagation()}>
+                        <input type='text'onClick={e=>e.stopPropagation()} onChange={e=>setOverlayData({...overlayData, overlayMessageInput: e.target.value})}></input>
+                    </form>
                 </div>
             </div>
             <div className='tableWrapper'>

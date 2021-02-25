@@ -13,5 +13,5 @@ s.lastname as stafflast
 from workorders w
 join properties p on p.id = w.propertyid
 left join staff s on w.staffid = s.id
-where w.propertyid = $1;
+where w.propertyid = $1
 order by datecreated asc;

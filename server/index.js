@@ -8,6 +8,7 @@ const staffCtrl = require('./controllers/staff');
 const tenantCtrl = require('./controllers/tenant');
 const workorderCtrl = require('./controllers/workorder');
 const propertyCtrl = require('./controllers/properties');
+const messageCtrl = require('./controllers/messages')
 const { CONNECTION_STRING, SERVER_PORT, SESSION_SECRET } = process.env;
 const app = express();
 
@@ -64,6 +65,10 @@ app.post('/api/workorder/create', workorderCtrl.create)
 app.get('/api/workorder/manager', workorderCtrl.getManager)
 app.get('/api/workorder/tenant', workorderCtrl.getWorkOrderByTenant);
 app.get('/api/workorder/:id', workorderCtrl.getWorkOrderById);
+
+//messages endpoints
+app.get('/api/messages/manager/:id', messageCtrl.getMessagesFromManager)
+app.put('/api/messages/manager/create', messageCtrl.addMessageFromManager)
 
 //logout
 app.get('/api/logout', (req, res) => {
