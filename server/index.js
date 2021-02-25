@@ -66,6 +66,9 @@ app.get('/api/workorder/manager', workorderCtrl.getManager)
 app.get('/api/workorder/tenant', workorderCtrl.getWorkOrderByTenant);
 app.get('/api/workorder/:id', workorderCtrl.getWorkOrderById);
 
+//messages endpoints
+app.get('/api/messages/manager/:id', messageCtrl.getMessagesFromManager)
+app.put('/api/messages/manager/create', messageCtrl.addMessageFromManager)
 //message endpoints
 app.post('/api/addcomment/tenant', messageCtrl.addCommentByTenant);
 app.post('/api/commentsById', messageCtrl.getCommentsById);
