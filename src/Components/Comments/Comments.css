@@ -1,3 +1,7 @@
+.comment-container {
+    width: 100%;
+}
+
 .comments {
     text-align: start;
     overflow-y: auto;

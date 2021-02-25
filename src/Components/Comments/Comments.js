@@ -54,7 +54,7 @@ const Comments = props => {
     }
     console.log('comments', comments)
     return (
-        <section>
+        <section className='comments'>
             <p className='comment-header'>Comments:</p>
             {addComment}
             <section className='comments'>
