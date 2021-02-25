@@ -71,6 +71,7 @@ app.get('/api/messages/manager/:id', messageCtrl.getMessagesFromManager)
 app.put('/api/messages/manager/create', messageCtrl.addMessageFromManager)
 //message endpoints
 app.post('/api/addcomment/tenant', messageCtrl.addCommentByTenant);
+app.post('/api/addcomment/staff', messageCtrl.addCommentByStaff);
 app.post('/api/commentsById', messageCtrl.getCommentsById);
 
 //logout

@@ -10,3 +10,4 @@ FROM workorders w
 -- JOIN managers m ON m.id = w.managerid
 -- JOIN tenants t ON t.id = w.tenantid
 WHERE tenantid = $1;
+

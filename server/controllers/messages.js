@@ -13,8 +13,6 @@ module.exports = {
     res.sendStatus(200);
  },
   addCommentByTenant: (req, res) => {
-
-      const { } = req.body;
       const db = req.app.get('db');
       const { tenantid } = req.session.user;
       const { workorderid, content } = req.body;
@@ -25,6 +23,18 @@ module.exports = {
               console.log(`Error: ${err.message}`)
           });
   },
+
+  addCommentByStaff: (req, res) => {
+    const db = req.app.get('db');
+    const { staffid } = req.session.user;
+    const { workorderid, content } = req.body;
+    db.comments.add_comment_staff({ staffid, workorderid, content, sender_id: staffid })
+        .then(() => res.sendStatus(201))
+        .catch(err => {
+            res.status(500).send(err);
+            console.log(`Error: ${err.message}`)
+        });
+},
 
   getCommentsById: async (req, res) => {
       const { id } = req.body;

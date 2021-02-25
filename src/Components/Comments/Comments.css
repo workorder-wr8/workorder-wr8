@@ -1,5 +1,7 @@
 .comments {
     text-align: start;
+    overflow-y: auto;
+    height: 250px;
 }
 
 .my-comment {
