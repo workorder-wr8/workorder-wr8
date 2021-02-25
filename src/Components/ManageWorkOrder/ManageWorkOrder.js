@@ -56,7 +56,7 @@ const ManageWorkOrder = (props) => {
             <button onClick={() => props.closeModal()} className='close-workorder-btn'>close</button>
             {displayWorkOrder()}
             <section className='comment-container'>
-                <Comments workorderid={props.location.id}/>
+                <Comments workorderid={props.location.id} />
             </section>
         </section>
     )

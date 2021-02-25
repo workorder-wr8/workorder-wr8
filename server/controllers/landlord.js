@@ -75,5 +75,29 @@ module.exports = {
 
       return res.status(200).send(workorders)
     }
+  },
+  getStats: async (req, res) => {
+    if (req.session.user) {
+      const db = req.app.get('db')
+      const { propertyid } = req.params
+      const count = await db.landlord.get_stats(propertyid)
+      return res.status(200).send(count)
+    }
+  },
+  getTime: async (req, res) => {
+    if (req.session.user) {
+      const db = req.app.get('db')
+      const { propertyid } = req.params
+      const [time] = await db.landlord.get_time(propertyid)
+      return res.status(200).send(time)
+    }
+  },
+  getdatecreated: async (req, res) => {
+    if (req.session.user) {
+      const db = req.app.get('db')
+      const { propertyid } = req.params
+      const results = await db.landlord.get_datecreated(propertyid)
+      return res.status(200).send(results)
+    }
   }
 }

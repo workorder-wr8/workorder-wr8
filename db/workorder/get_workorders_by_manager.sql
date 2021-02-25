@@ -14,4 +14,8 @@ from workorders w
 join properties p on p.id = w.propertyid
 left join staff s on w.staffid = s.id
 where w.propertyid = $1
+<<<<<<< HEAD
+order by w.datecreated asc;
+=======
 order by datecreated asc;
+>>>>>>> main

@@ -1,6 +1,8 @@
-// This component is for when a landlord clicks on one of his properties
 import React, { useState, useEffect } from 'react'
+import { connect } from 'react-redux'
 import axios from 'axios'
+import './LandlordProperty.css'
+import { Bar, Line } from 'react-chartjs-2'
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -9,69 +11,93 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-import './LandlordProperty.css'
 
 const useStyles = makeStyles({
     table: {
-        minWidth: 650,
-    },
+        width: 400,
+        margin: 'auto'
+    }
 });
 
-export default function LandlordProperty(props) {
+function LandlordProperty(props) {
     const classes = useStyles();
-    const [workorders, setWorkorders] = useState([])
-    const [search, setSearch] = useState('')
+    const [time, setTime] = useState([])
+    const [count, setCount] = useState([])
+    const [created, setCreated] = useState([])
+    const [data, setData] = useState([])
 
     useEffect(() => {
-        axios.get(`/api/landlord/properties/workorders/${+props.match.params.id}`)
-            .then(res => setWorkorders(res.data))
+        let propertyid = +props.match.params.id
+        axios.get(`/api/landlord/property/stats/${propertyid}`)
+            .then(res => setCount(res.data))
+            .catch(err => console.log(err))
+
+        axios.get(`/api/landlord/property/time/${propertyid}`)
+            .then(res => setTime(res.data))
+            .catch(err => console.log(err))
+
+        axios.get(`/api/landlord/property/datecreated/${propertyid}`)
+            .then(res => {
+                setCreated(res.data)
+            })
             .catch(err => console.log(err))
     }, [])
 
-    const filterassignments = e => {
-        setSearch(e.target.value)
-    }
+    useEffect(() => {
+        if (created[0]) {
+            setData({
+                labels: [created[0].date.substring(0, 10), created[1].date.substring(0, 10), created[2].date.substring(0, 10), created[3].date.substring(0, 10)],
+                datasets: [
+                    {
+                        label: 'Workorder Requests Past 7 days',
+                        data: [created[0].count, created[1].count, created[2].count, created[3].count],
+                        fill: true,
+                        backgroundColor: "rgba(75,192,192,0.2)",
+                        borderColor: "rgba(75,192,192,1)"
+                    }
+                ]
+            })
+        }
 
-    console.log(workorders)
+    }, [created])
+
     return (
         <div>
-            LandlordProperty
-
-            <br />
-            <label>Search:</label>
-            <input type='search' onChange={e => filterassignments(e)} value={search} />
-
-            <h2>All Workorders</h2>
-            <TableContainer component={Paper}>
-                <Table className={classes.table} aria-label="simple table">
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>ID#</TableCell>
-                            <TableCell align="right">Title</TableCell>
-                            <TableCell align="right">Description</TableCell>
-                            <TableCell align="right">Date Created</TableCell>
-                            <TableCell align="right">Date Completed</TableCell>
-                            <TableCell align="right">Status</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {workorders
-                            .filter(e => (e.description.toLowerCase().includes(search.toLocaleLowerCase()) || e.title.toLowerCase().includes(search.toLowerCase())))
-                            .map((workorder) => (
-                                <TableRow key={workorder.id}>
-                                    <TableCell component="th" scope="row">
-                                        {workorder.id}
-                                    </TableCell>
-                                    <TableCell align="right">{workorder.title}</TableCell>
-                                    <TableCell align="right">{workorder.description}</TableCell>
-                                    <TableCell align="right">{workorder.datecreated}</TableCell>
-                                    <TableCell align="right">{workorder.datecompleted}</TableCell>
-                                    <TableCell align="right">{workorder.status}</TableCell>
-                                </TableRow>
-                            ))}
-                    </TableBody>
-                </Table>
-            </TableContainer>
+            <h2>Average Time to Completion: {time.avgtimetocompletion ? (
+                <>
+                    <span>{time.avgtimetocompletion.days} Days {time.avgtimetocompletion.hours} Hours and {time.avgtimetocompletion.minutes} Minutes</span>
+                </>
+            ) : null}
+            </h2>
+            {created[0] ? <Line data={data} /> : null}
+            <h2>Current Workorders Status</h2>
+            <div style={{ width: '100%' }}>
+                <TableContainer component={Paper}>
+                    <Table className={classes.table} aria-label="simple table">
+                        <TableHead>
+                            <TableRow>
+                                <TableCell align="right">Status</TableCell>
+                                <TableCell align="right">Count</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {count
+                                .map((wo, i) => (
+                                    <TableRow key={i}>
+                                        <TableCell align="right">{wo.status}</TableCell>
+                                        <TableCell align="right">{wo.count}</TableCell>
+                                    </TableRow>
+                                ))}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+            </div>
         </div>
     )
 }
+
+const mapStateToProps = reduxState => ({
+    user: reduxState.userReducer.user
+})
+
+export default connect(mapStateToProps)(LandlordProperty);

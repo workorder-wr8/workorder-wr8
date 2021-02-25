@@ -17,6 +17,18 @@ import { ModalRoute, ModalContainer } from 'react-router-modal';
 import ManageWorkOrder from '../ManageWorkOrder/ManageWorkOrder';
 
 const useStyles = makeStyles({
+    tablehead: {
+        background: 'pink'
+    },
+    tablehead2: {
+        background: 'lightgreen'
+    },
+    red: {
+        color: 'red'
+    },
+    green: {
+        color: 'green'
+    },
     table: {
         minWidth: 650,
     },
@@ -50,42 +62,92 @@ function StaffDash(props) {
     const searchwo = e => {
         setSearch(e.target.value)
     }
-    console.log(props)
+    // console.log(workorders)
     return (
         <div id='staffDash'>
-            <h1>Unread</h1>
-            <TableContainer component={Paper}>
-                <TextField onChange={e => searchwo(e)} className='search-workorder-field' id="outlined-basic" label="Search" variant="outlined" value={search} />
-                <Table className={classes.table} aria-label="simple table">
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>ID#</TableCell>
-                            <TableCell align="right">Name</TableCell>
-                            <TableCell align="right">Title</TableCell>
-                            <TableCell align="right">Description</TableCell>
-                            <TableCell align="right">Date Created</TableCell>
-                            <TableCell align="right">Last Updated</TableCell>
-                            <TableCell align="right">Status</TableCell>
-                            <TableCell align="right">Action</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {workorders
-                            .filter(e => e.status === 'Unread' && (e.description.toLowerCase().includes(search.toLocaleLowerCase()) || e.title.toLowerCase().includes(search.toLowerCase())))
-                            .map(wo => (
+            <section>
+                <TableContainer component={Paper}>
+                    <TextField onChange={e => searchwo(e)} className='search-workorder-field' id="outlined-basic" label="Search" variant="outlined" value={search} />
+                    <Table className={classes.table} aria-label="simple table">
+                        <TableHead className={classes.tablehead}>
+                            <TableRow>
+                                <TableCell>ID#</TableCell>
+                                <TableCell align="right">Name</TableCell>
+                                <TableCell align="right">Title</TableCell>
+                                <TableCell align="right">Short Description</TableCell>
+                                <TableCell align="right">Date Created</TableCell>
+                                <TableCell align="right">Last Updated</TableCell>
+                                <TableCell align="right">Status</TableCell>
+                                <TableCell align="right">Action</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {workorders
+                                .filter(e => e.status === 'Unread' && (e.description.toLowerCase().includes(search.toLocaleLowerCase()) || e.title.toLowerCase().includes(search.toLowerCase())))
+                                .map(wo => (
+                                    <TableRow key={wo.id}>
+                                        <TableCell component="th" scope="row">
+                                            {wo.id}
+                                        </TableCell>
+                                        <TableCell align="right">{wo.firstname} {wo.lastname}</TableCell>
+                                        <TableCell align="right">
+                                            <Link to={{ pathname: `${props.match.url}/workorder/${wo.id}`, id: wo.id }}>
+                                                {wo.title}
+                                            </Link></TableCell>
+                                        <TableCell align="right">{wo.description.length > 100 ? wo.description.substring(0, 80).concat('...') : wo.description}</TableCell>
+                                        <TableCell align="right">{dayjs(wo.datecreated).format('MMMM D, YYYY h:mm A')}</TableCell>
+                                        <TableCell align="right">{wo.lastupdated ? dayjs(wo.lastupdated).format('MMMM D, YYYY h:mm A') : '-'}</TableCell>
+                                        <TableCell className={classes.red} align="right">{wo.status}</TableCell>
+                                        <TableCell align="right">{
+                                            <div >Mark as <span>{
+                                                <>
+                                                    <select defaultValue={wo.status} name='statusoptions' id='statusoptions' onChange={e => handleSelectChange(e.target.value, wo.id)}>
+                                                        <option value='Unread' >Unread</option>
+                                                        <option value='In Progress'>In Progress</option>
+                                                        <option value='Completed'>Completed</option>
+                                                    </select>
+                                                </>
+                                            }</span></div>
+                                        }</TableCell>
+                                    </TableRow>
+                                ))}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+            </section>
+
+            <section>
+
+                <TableContainer component={Paper}>
+                    <Table className={classes.table} aria-label="simple table">
+                        <TableHead className={classes.tablehead2}>
+                            <TableRow>
+                                <TableCell>ID#</TableCell>
+                                <TableCell align="right">Name</TableCell>
+                                <TableCell align="right">Title</TableCell>
+                                <TableCell align="right">Description</TableCell>
+                                <TableCell align="right">Date Created</TableCell>
+                                <TableCell align="right">Last Updated</TableCell>
+                                <TableCell align="right">Status</TableCell>
+                                <TableCell align="right">Action</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {workorders.filter(e => e.status === 'In Progress' && (e.description.includes(search) || e.title.includes(search))).map(wo => (
                                 <TableRow key={wo.id}>
                                     <TableCell component="th" scope="row">
                                         {wo.id}
                                     </TableCell>
                                     <TableCell align="right">{wo.firstname} {wo.lastname}</TableCell>
                                     <TableCell align="right">
-                                        <Link to={{ pathname: `${props.match.url}/workorder/${wo.id}`, id: wo.id }}>
+                                        <Link to={{ pathname: `/staffdash/workorder/${wo.id}`, id: wo.id }}>
                                             {wo.title}
-                                        </Link></TableCell>
-                                    <TableCell align="right">{wo.description}</TableCell>
+                                        </Link>
+                                    </TableCell>
+                                    <TableCell align="right">{wo.description.length > 100 ? wo.description.substring(0, 80).concat('...') : wo.description}</TableCell>
                                     <TableCell align="right">{dayjs(wo.datecreated).format('MMMM D, YYYY h:mm A')}</TableCell>
                                     <TableCell align="right">{wo.lastupdated ? dayjs(wo.lastupdated).format('MMMM D, YYYY h:mm A') : '-'}</TableCell>
-                                    <TableCell align="right">{wo.status}</TableCell>
+                                    <TableCell className={classes.green} align="right">{wo.status}</TableCell>
                                     <TableCell align="right">{
                                         <div >Mark as <span>{
                                             <>
@@ -99,55 +161,10 @@ function StaffDash(props) {
                                     }</TableCell>
                                 </TableRow>
                             ))}
-                    </TableBody>
-                </Table>
-            </TableContainer>
-
-            <br /> <br />
-
-            <h1>In Progress</h1>
-            <TableContainer component={Paper}>
-                <Table className={classes.table} aria-label="simple table">
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>ID#</TableCell>
-                            <TableCell align="right">Name</TableCell>
-                            <TableCell align="right">Title</TableCell>
-                            <TableCell align="right">Description</TableCell>
-                            <TableCell align="right">Date Created</TableCell>
-                            <TableCell align="right">Last Updated</TableCell>
-                            <TableCell align="right">Status</TableCell>
-                            <TableCell align="right">Action</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {workorders.filter(e => e.status === 'In Progress' && (e.description.includes(search) || e.title.includes(search))).map(wo => (
-                            <TableRow key={wo.id}>
-                                <TableCell component="th" scope="row">
-                                    {wo.id}
-                                </TableCell>
-                                <TableCell align="right">{wo.firstname} {wo.lastname}</TableCell>
-                                <TableCell align="right">{wo.title}</TableCell>
-                                <TableCell align="right">{wo.description}</TableCell>
-                                <TableCell align="right">{dayjs(wo.datecreated).format('MMMM D, YYYY h:mm A')}</TableCell>
-                                <TableCell align="right">{wo.lastupdated ? dayjs(wo.lastupdated).format('MMMM D, YYYY h:mm A') : '-'}</TableCell>
-                                <TableCell align="right">{wo.status}</TableCell>
-                                <TableCell align="right">{
-                                    <div >Mark as <span>{
-                                        <>
-                                            <select defaultValue={wo.status} name='statusoptions' id='statusoptions' onChange={e => handleSelectChange(e.target.value, wo.id)}>
-                                                <option value='Unread' >Unread</option>
-                                                <option value='In Progress'>In Progress</option>
-                                                <option value='Completed'>Completed</option>
-                                            </select>
-                                        </>
-                                    }</span></div>
-                                }</TableCell>
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </TableContainer>
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+            </section>
             {/* Status = completed will not show unless filtered to that */}
             <ModalRoute className='example-modal'
                 inClassName='example-modal-in'

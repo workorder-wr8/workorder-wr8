@@ -21,7 +21,7 @@ const StyledTableCell = withStyles((theme) => ({
     },
     body: {
         fontSize: 14,
-    },
+    }
 }))(TableCell);
 
 const StyledTableRow = withStyles((theme) => ({
@@ -215,7 +215,7 @@ function ManagerDash(props) {
                                 <StyledTableCell align='right' >{wo.description}</StyledTableCell>
                                 <StyledTableCell align='right' >{wo.status}</StyledTableCell>
                                 <StyledTableCell align='right' >{dayjs(wo.datecreated).format('MMMM D, YYYY h:mm A')}</StyledTableCell>
-                                <TableCell align="right" onClick={e => e.stopPropagation()}>{
+                                <StyledTableCell align="right" onClick={e => e.stopPropagation()}>{
                                     <div onClick={e => e.stopPropagation()}>Assign to <span onClick={e => e.stopPropagation()}>
                                         <Select
                                             name='staffoptions'
@@ -225,7 +225,7 @@ function ManagerDash(props) {
                                             onChange={e => { handleSelectChange(e.value, wo.id) }}
                                             options={staffOptions} />
                                     </span></div>
-                                }</TableCell>
+                                }</StyledTableCell>
                             </StyledTableRow>
                         ))}
                     </TableBody>
@@ -259,16 +259,15 @@ function ManagerDash(props) {
                                 <StyledTableCell align='right'>{wo.datecompleted ? dayjs(wo.datecompleted).format('MMMM D, YYYY h:mm A') : '-'}</StyledTableCell>
                                 {!changeAssigned ? (
                                     <StyledTableCell align="right">{wo.stafffirst} {wo.stafflast}
-                                        <br /><div className='changeStaffBtn' onClick={changeAssignedStaff}>Change Assignee</div>
+                                        <br /><div className='changeStaffBtn' onClick={changeAssignedStaff}>Change</div>
                                     </StyledTableCell>
                                 ) : (
                                         <StyledTableCell align="right" onClick={e => e.stopPropagation()}>
-
                                             <div onClick={e => e.stopPropagation()}>Assign to <span onClick={e => e.stopPropagation()}>
                                                 <Select
                                                     name='staffoptions'
                                                     id='staffoptions'
-                                                    defaultValue={wo.firstname}
+                                                    placeholder={wo.stafffirst}
                                                     value={selectedStaff}
                                                     onClick={e => e.stopPropagation()}
                                                     onChange={e => { handleSelectChange(e.value, wo.id) }}
@@ -276,11 +275,8 @@ function ManagerDash(props) {
                                             </span>
                                                 <div className='changeStaffBtn' onClick={changeAssignedStaff}>Don't Change</div>
                                             </div>
-
-
                                         </StyledTableCell>
                                     )}
-                                {/* <StyledTableCell align="right">{wo.stafffirst} {wo.stafflast}</StyledTableCell> */}
                             </StyledTableRow>
                         ))}
                     </TableBody>
