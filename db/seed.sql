@@ -94,8 +94,7 @@ datecompleted timestamp
 );
 
 create table messages (
-landlordid int,
-foreign key (landlordid) references landlords(id),
+message_id SERIAL PRIMARY KEY,
 managerid int,
 foreign key (managerid) references managers(id),
 tenantid int,
@@ -105,5 +104,6 @@ foreign key (staffid) references staff(id),
 workorderid int,
 foreign key (workorderid) references workorders(id),
 content varchar,
-timesent timestamp
+timesent timestamp,
+sender_id INT
 )

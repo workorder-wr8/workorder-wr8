@@ -20,6 +20,5 @@ export default (
         <Route path='/landlorddash' component={LandlordDash} />
         <Route path='/landlord/property/:id' component={LandlordProperty} />
         <Route path='/managerdash' component={ManagerDash} />
-       
     </Switch>
 )
