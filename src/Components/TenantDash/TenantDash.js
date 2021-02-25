@@ -13,21 +13,24 @@ import { ModalRoute, ModalContainer } from 'react-router-modal';
 import ManageWorkOrder from '../ManageWorkOrder/ManageWorkOrder';
 import dayjs from 'dayjs';
 import './TenantDash.css';
+import SpinnerContainer from '../Spinner/SpinnerContainer';
 
 const TenantDash = props => {
 
     const [workOrders, setWorkOrders] = useState([]);
     const [search, setSearch] = useState('');
+    const [isLoading, setLoading] = useState(true);
+
     const columns = [{ id: 'number', label: 'Work Order #' }, { id: 'title', label: 'Title' }, { id: 'short-desc', label: 'Short Description' }, { id: 'date', label: 'Date Created' }, { id: 'status', label: 'Status' }];
     useEffect(() => {
-        getWorkOrders(); 
+        getWorkOrders();
     }, []);
-
 
     const getWorkOrders = () => {
         axios.get('/api/workorder/tenant')
             .then(wo => {
                 setWorkOrders(wo.data);
+                setLoading(!isLoading);
             })
             .catch(err => console.log(`Error: ${err.message}`));
     }
@@ -39,45 +42,51 @@ const TenantDash = props => {
     return (
         <div>
             <section className='open'>
-                <TableContainer className='table-container' component={Paper} >
-                    <TextField onChange={e => searchWorkOrders(e)} className='search-workorder-field' id="outlined-basic" label="Search" variant="outlined" value={search} />
-                    <Table stickyHeader aria-label="sticky table">
-                        <TableHead style={{ backgroundColor: 'red' }}>
-                            <TableRow>
-                                {columns.map(column => (
-                                    <TableCell key={column.id}>{column.label}</TableCell>
-                                ))}
-                            </TableRow>
-                        </TableHead>
-                        <TableBody className='workorder-tenant-table'>
-                            {workOrders.filter(wo => (
-                                wo.status.toLowerCase().includes(search.toLowerCase()) || wo.title.toLowerCase().includes(search.toLowerCase())
-                            )).map(wo => (
-                                <TableRow key={wo.id}>
-                                    <TableCell>{wo.id}</TableCell>
-                                    <TableCell component="th" scope="row">
-                                        <Link to={{ pathname: `/dash/workorder/${wo.id}`, id: wo.id }}>
-                                            {wo.title}
-                                        </Link>
-                                    </TableCell>
-                                    <TableCell align="right" className='tenant-wo-description'>{wo.description}</TableCell>
-                                    <TableCell>{dayjs(wo.datecreated).format('MMMM D, YYYY h:mm A')}</TableCell>
-                                    {(wo.status === 'Open' || wo.status === 'Completed')
-                                        ?
-                                        (
-                                            <TableCell>{wo.status}</TableCell>
-                                        )
-                                        :
-
-                                        (
-                                            <TableCell>In Progress</TableCell>
-                                        )
-                                    }
+                {isLoading
+                    ?
+                    <SpinnerContainer />
+                    :
+                    <TableContainer className='table-container' component={Paper} >
+                        <TextField onChange={e => searchWorkOrders(e)} className='search-workorder-field' id="outlined-basic" label="Search" variant="outlined" value={search} />
+                        <Table stickyHeader aria-label="sticky table">
+                            <TableHead style={{ backgroundColor: 'red' }}>
+                                <TableRow>
+                                    {columns.map(column => (
+                                        <TableCell key={column.id}>{column.label}</TableCell>
+                                    ))}
                                 </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
+                            </TableHead>
+                            <TableBody className='workorder-tenant-table'>
+                                {workOrders.filter(wo => (
+                                    wo.status.toLowerCase().includes(search.toLowerCase()) || wo.title.toLowerCase().includes(search.toLowerCase())
+                                )).map(wo => (
+                                    <TableRow key={wo.id}>
+                                        <TableCell>{wo.id}</TableCell>
+                                        <TableCell component="th" scope="row">
+                                            <Link to={{ pathname: `/dash/workorder/${wo.id}`, id: wo.id }}>
+                                                {wo.title}
+                                            </Link>
+                                        </TableCell>
+                                        <TableCell align="right" className='tenant-wo-description'>{wo.description}</TableCell>
+                                        <TableCell>{dayjs(wo.datecreated).format('MMMM D, YYYY h:mm A')}</TableCell>
+                                        {(wo.status === 'Open' || wo.status === 'Completed')
+                                            ?
+                                            (
+                                                <TableCell>{wo.status}</TableCell>
+                                            )
+                                            :
+
+                                            (
+                                                <TableCell>In Progress</TableCell>
+                                            )
+                                        }
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                }
+
 
             </section>
             <ModalRoute className='example-modal'
