@@ -91,10 +91,9 @@ function StaffDash(props) {
                                         </TableCell>
                                         <TableCell align="right">{wo.firstname} {wo.lastname}</TableCell>
                                         <TableCell align="right">
-                                            <Link to={{ pathname: `/staffdash/workorder/${wo.id}`, id: wo.id }}>
+                                            <Link to={{ pathname: `${props.match.url}/workorder/${wo.id}`, id: wo.id }}>
                                                 {wo.title}
-                                            </Link>
-                                        </TableCell>
+                                            </Link></TableCell>
                                         <TableCell align="right">{wo.description.length > 100 ? wo.description.substring(0, 80).concat('...') : wo.description}</TableCell>
                                         <TableCell align="right">{dayjs(wo.datecreated).format('MMMM D, YYYY h:mm A')}</TableCell>
                                         <TableCell align="right">{wo.lastupdated ? dayjs(wo.lastupdated).format('MMMM D, YYYY h:mm A') : '-'}</TableCell>
@@ -166,6 +165,7 @@ function StaffDash(props) {
                     </Table>
                 </TableContainer>
             </section>
+            {/* Status = completed will not show unless filtered to that */}
             <ModalRoute className='example-modal'
                 inClassName='example-modal-in'
                 outClassName='example-modal-out'
@@ -173,8 +173,8 @@ function StaffDash(props) {
                 backdropInClassName='example-backdrop-in'
                 backdropOutClassName='example-backdrop-out'
                 outDelay={1500}
-                path={`/staffdash/workorder/:id`}
-                parentPath={'/staffdash'}
+                path={`${props.match.url}/workorder/:id`}
+                parentPath={`${props.match.url}`}
                 component={ManageWorkOrder} />
             <ModalContainer />
         </div >

@@ -2,7 +2,9 @@
     border: 3px solid black;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: space-between;
+    align-items: center;
+    height: 85vh;
     width: 50%;
     margin: 0 auto;
 }
@@ -32,13 +34,3 @@
     
 }
 
-.comments {
-    text-align: start;
-}
-
-.comment {
-    background-color: rgb(72, 255, 0);
-    border-radius: 100px;
-    padding: 3px 8px;
-    display: inline-block;
-}

@@ -1,0 +1,13 @@
+.add-comment-container {
+    border: 2px solid blue;
+    display: flex;
+    flex-direction: row;
+
+}
+
+.add-comment-container input {
+    width: 75%;
+}
+.add-comment-container button {
+    width: 25%
+}

@@ -3,6 +3,8 @@ import './ManageWorkOrder.css';
 import { withRouter } from 'react-router-dom';
 import axios from 'axios';
 import dayjs from 'dayjs';
+import Comments from '../Comments/Comments';
+
 const ManageWorkOrder = (props) => {
 
     const [workOrder, setWorkOrder] = useState([]);
@@ -54,11 +56,7 @@ const ManageWorkOrder = (props) => {
             <button onClick={() => props.closeModal()} className='close-workorder-btn'>close</button>
             {displayWorkOrder()}
             <section className='comment-container'>
-                <div className='comments'>
-                    <p className='comment-header'>Comments:</p>
-                    <p className='comment'>this is a test comment lorem iipsu lthe lord of the rings the retun of the king</p>
-                    <input />
-                </div>
+                <Comments workorderid={props.location.id} />
             </section>
         </section>
     )
