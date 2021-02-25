@@ -12,7 +12,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Select from 'react-select';
 import dayjs from 'dayjs'
-
+import SpinnerContainer from '../Spinner/SpinnerContainer';
 // USES withStyles from material-UI for table cells and rows
 const StyledTableCell = withStyles((theme) => ({
     head: {
@@ -54,28 +54,28 @@ function ManagerDash(props) {
         overlayMessageinput: ''
     }])
     const [overlayMessages, setOverlayMessages] = useState([])
+    const [isLoading, setLoading] = useState(true);
 
-
-    const addMessage = async(id, content) => {
-        await axios.put('/api/messages/manager/create', {id, content})
-        .then(res=>{
-            setOverlayData({...overlayData, overlayMessageInput: ''});
-            getMessages(id);
-        })
-        .catch(err=>console.log(err))
+    const addMessage =  (id, content) => {
+         axios.put('/api/messages/manager/create', { id, content })
+            .then(() => {
+                setOverlayData({ ...overlayData, overlayMessageInput: '' });
+                getMessages(id);
+            })
+            .catch(err => console.log(err))
     }
 
-    const getMessages = async(id)=>{
+    const getMessages = async (id) => {
         await axios.get(`/api/messages/manager/${id}`)
-        .then( res=>{
-            setMessages(res.data)
-        })
-        .catch(err=>console.log(err))
+            .then(res => {
+                setMessages(res.data)
+            })
+            .catch(err => console.log(err))
     }
 
     const mapMessages = () => {
-        let mappedMessages = messages.map(message=>{
-            if(message.managerid === props.user.managerid) {
+        let mappedMessages = messages.map(message => {
+            if (message.managerid === props.user.managerid) {
                 return <div className='managerSelfMessage' key={message.messageid}>
                     <div className='messageInfo'>{message.managerlastname}, {message.managerfirstname} :: {message.timesent}</div>
                     <p>{message.content}</p>
@@ -90,7 +90,7 @@ function ManagerDash(props) {
                     <div className='messageInfo'>{message.stafflastname},  {message.stafffirstname}:: {message.timesent}</div>
                     <p>{message.content}</p>
                 </div>
-            } else if(message.tenantid) {
+            } else if (message.tenantid) {
                 return <div className='tenantMessage' >
                     <div className='messageInfo'>{message.tenantlastname}, {message.tenantfirstname} :: {message.timesent}</div>
                     <p>{message.content}</p>
@@ -100,7 +100,7 @@ function ManagerDash(props) {
         setOverlayMessages(<div>{mappedMessages}</div>)
     }
 
-    useEffect(mapMessages,[messages])
+    useEffect(mapMessages, [messages])
 
     const overlayOff = () => { document.getElementById('managerOverlay').style.display = 'none' }
     const overlayOn = () => { document.getElementById('managerOverlay').style.display = 'flex' }
@@ -113,14 +113,14 @@ function ManagerDash(props) {
         let status = event.target.parentNode.cells[4].textContent;
         let datecreated = event.target.parentNode.cells[5].textContent;
         let lastupdated, datecompleted;
-        if(event.target.parentNode.cells[7]) {
+        if (event.target.parentNode.cells[7]) {
             lastupdated = event.target.parentNode.cells[6].textContent;
             datecompleted = event.target.parentNode.cells[7].textContent;
         }
 
         getMessages(id);
 
-        setOverlayData({...overlayData, overlayId: id, overlayName: name, overlayTitle: title, overlayDescription: description, overlayStatus: status, overlayDateCreated: datecreated, overlayLastUpdated: lastupdated, overlayDateCompleted: datecompleted });
+        setOverlayData({ ...overlayData, overlayId: id, overlayName: name, overlayTitle: title, overlayDescription: description, overlayStatus: status, overlayDateCreated: datecreated, overlayLastUpdated: lastupdated, overlayDateCompleted: datecompleted });
         overlayOn();
     }
 
@@ -143,7 +143,8 @@ function ManagerDash(props) {
         await axios.get('/api/workorder/manager')
             .then(res => {
                 setWorkOrders(res.data);
-                setChangeAssigned(false)
+                setChangeAssigned(false);
+                setLoading(false);
             })
     }
 
@@ -183,109 +184,114 @@ function ManagerDash(props) {
                     <p>  Last Updated: {overlayData.overlayLastUpdated}</p>
                     <p>  Date Completed: {overlayData.overlayDateCompleted}</p>
                 </div>
-                <div id='managerOverlayMessages' onClick={e=>e.stopPropagation()}>
+                <div id='managerOverlayMessages' onClick={e => e.stopPropagation()}>
                     <div id='managerOverlayLoadedMessages'>
                         {overlayMessages}
                     </div>
-                    <form onSubmit={e=>{addMessage(overlayData.overlayId, overlayData.overlayMessageInput)}} onClick={e=>e.stopPropagation()}>
-                        <input type='text'onClick={e=>e.stopPropagation()} onChange={e=>setOverlayData({...overlayData, overlayMessageInput: e.target.value})} value={overlayData.overlayMessageInput}/>
-                        <input type='button' onClick={e=>{addMessage(overlayData.overlayId, overlayData.overlayMessageInput)}} value='Send'></input>
+                    <form onSubmit={e => { addMessage(overlayData.overlayId, overlayData.overlayMessageInput) }} onClick={e => e.stopPropagation()}>
+                        <input type='text' onClick={e => e.stopPropagation()} onChange={e => setOverlayData({ ...overlayData, overlayMessageInput: e.target.value })} value={overlayData.overlayMessageInput} />
+                        <input type='button' onClick={e => { addMessage(overlayData.overlayId, overlayData.overlayMessageInput) }} value='Send'></input>
                     </form>
                 </div>
             </div>
-            <div className='tableWrapper'>
-                <Table className='unassignedTable'>
-                    <TableHead>
-                        <TableRow>
-                            <StyledTableCell align='right'>ID</StyledTableCell>
-                            <StyledTableCell align='right'>Tenant</StyledTableCell>
-                            <StyledTableCell align='right'>Title</StyledTableCell>
-                            <StyledTableCell align='right'>Description</StyledTableCell>
-                            <StyledTableCell align='right'>Status</StyledTableCell>
-                            <StyledTableCell align='right'>Created</StyledTableCell>
-                            <StyledTableCell align='right' width='100px'>Assign</StyledTableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {unassignedWorkOrders.map(wo => (
-                            <StyledTableRow className='row' key={wo.id} value={wo} onClick={changeOverlay}>
-                                <StyledTableCell align='right' >{wo.id}</StyledTableCell>
-                                <StyledTableCell align='right' >{wo.lastname},{wo.firstname}</StyledTableCell>
-                                <StyledTableCell align='right' >{wo.title}</StyledTableCell>
-                                <StyledTableCell align='right' >{wo.description}</StyledTableCell>
-                                <StyledTableCell align='right' >{wo.status}</StyledTableCell>
-                                <StyledTableCell align='right' >{dayjs(wo.datecreated).format('MMMM D, YYYY h:mm A')}</StyledTableCell>
-                                <TableCell align="right" onClick={e => e.stopPropagation()}>{
-                                    <div onClick={e => e.stopPropagation()}>Assign to <span onClick={e => e.stopPropagation()}>
-                                        <Select
-                                            name='staffoptions'
-                                            id='staffoptions'
-                                            value={selectedStaff}
-                                            onClick={e => e.stopPropagation()}
-                                            onChange={e => { handleSelectChange(e.value, wo.id) }}
-                                            options={staffOptions} />
-                                    </span></div>
-                                }</TableCell>
-                            </StyledTableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </div>
-            <div className='tableWrapper'>
-                <Table className='assignedTable'>
-                    <TableHead>
-                        <TableRow>
-                            <StyledTableCell align='right'>ID</StyledTableCell>
-                            <StyledTableCell align='right'>Tenant</StyledTableCell>
-                            <StyledTableCell align='right'>Title</StyledTableCell>
-                            <StyledTableCell align='right'>Description</StyledTableCell>
-                            <StyledTableCell align='right'>Status</StyledTableCell>
-                            <StyledTableCell align='right'>Created</StyledTableCell>
-                            <StyledTableCell align='right'>Last Updated</StyledTableCell>
-                            <StyledTableCell align='right'>Completed</StyledTableCell>
-                            <StyledTableCell align='right' width='100px'>Assigned To</StyledTableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {assignedWorkOrders.map(wo => (
-                            <StyledTableRow key={wo.id} value={wo} onClick={changeOverlay}>
-                                <StyledTableCell align='right'>{wo.id}</StyledTableCell>
-                                <StyledTableCell align='right'>{wo.lastname},{wo.firstname}</StyledTableCell>
-                                <StyledTableCell align='right'>{wo.title}</StyledTableCell>
-                                <StyledTableCell align='right'>{wo.description}</StyledTableCell>
-                                <StyledTableCell align='right'>{wo.status}</StyledTableCell>
-                                <StyledTableCell align='right'>{dayjs(wo.datecreated).format('MMMM D, YYYY h:mm A')}</StyledTableCell>
-                                <StyledTableCell align='right'>{wo.lastupdated ? dayjs(wo.lastupdated).format('MMMM D, YYYY h:mm A') : '-'}</StyledTableCell>
-                                <StyledTableCell align='right'>{wo.datecompleted ? dayjs(wo.datecompleted).format('MMMM D, YYYY h:mm A') : '-'}</StyledTableCell>
-                                {!changeAssigned ? (
-                                    <StyledTableCell align="right">{wo.stafffirst} {wo.stafflast}
-                                        <br /><div className='changeStaffBtn' onClick={changeAssignedStaff}>Change Assignee</div>
-                                    </StyledTableCell>
-                                ) : (
-                                        <StyledTableCell align="right" onClick={e => e.stopPropagation()}>
-
+            {isLoading
+                ? <SpinnerContainer />
+                : <>
+                    <div className='tableWrapper'>
+                        <Table className='unassignedTable'>
+                            <TableHead>
+                                <TableRow>
+                                    <StyledTableCell align='right'>ID</StyledTableCell>
+                                    <StyledTableCell align='right'>Tenant</StyledTableCell>
+                                    <StyledTableCell align='right'>Title</StyledTableCell>
+                                    <StyledTableCell align='right'>Description</StyledTableCell>
+                                    <StyledTableCell align='right'>Status</StyledTableCell>
+                                    <StyledTableCell align='right'>Created</StyledTableCell>
+                                    <StyledTableCell align='right' width='100px'>Assign</StyledTableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {unassignedWorkOrders.map(wo => (
+                                    <StyledTableRow className='row' key={wo.id} value={wo} onClick={changeOverlay}>
+                                        <StyledTableCell align='right' >{wo.id}</StyledTableCell>
+                                        <StyledTableCell align='right' >{wo.lastname},{wo.firstname}</StyledTableCell>
+                                        <StyledTableCell align='right' >{wo.title}</StyledTableCell>
+                                        <StyledTableCell align='right' >{wo.description}</StyledTableCell>
+                                        <StyledTableCell align='right' >{wo.status}</StyledTableCell>
+                                        <StyledTableCell align='right' >{dayjs(wo.datecreated).format('MMMM D, YYYY h:mm A')}</StyledTableCell>
+                                        <TableCell align="right" onClick={e => e.stopPropagation()}>{
                                             <div onClick={e => e.stopPropagation()}>Assign to <span onClick={e => e.stopPropagation()}>
                                                 <Select
                                                     name='staffoptions'
                                                     id='staffoptions'
-                                                    defaultValue={wo.firstname}
                                                     value={selectedStaff}
                                                     onClick={e => e.stopPropagation()}
                                                     onChange={e => { handleSelectChange(e.value, wo.id) }}
                                                     options={staffOptions} />
-                                            </span>
-                                                <div className='changeStaffBtn' onClick={changeAssignedStaff}>Don't Change</div>
-                                            </div>
+                                            </span></div>
+                                        }</TableCell>
+                                    </StyledTableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    </div>
+                    <div className='tableWrapper'>
+                        <Table className='assignedTable'>
+                            <TableHead>
+                                <TableRow>
+                                    <StyledTableCell align='right'>ID</StyledTableCell>
+                                    <StyledTableCell align='right'>Tenant</StyledTableCell>
+                                    <StyledTableCell align='right'>Title</StyledTableCell>
+                                    <StyledTableCell align='right'>Description</StyledTableCell>
+                                    <StyledTableCell align='right'>Status</StyledTableCell>
+                                    <StyledTableCell align='right'>Created</StyledTableCell>
+                                    <StyledTableCell align='right'>Last Updated</StyledTableCell>
+                                    <StyledTableCell align='right'>Completed</StyledTableCell>
+                                    <StyledTableCell align='right' width='100px'>Assigned To</StyledTableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {assignedWorkOrders.map(wo => (
+                                    <StyledTableRow key={wo.id} value={wo} onClick={changeOverlay}>
+                                        <StyledTableCell align='right'>{wo.id}</StyledTableCell>
+                                        <StyledTableCell align='right'>{wo.lastname},{wo.firstname}</StyledTableCell>
+                                        <StyledTableCell align='right'>{wo.title}</StyledTableCell>
+                                        <StyledTableCell align='right'>{wo.description}</StyledTableCell>
+                                        <StyledTableCell align='right'>{wo.status}</StyledTableCell>
+                                        <StyledTableCell align='right'>{dayjs(wo.datecreated).format('MMMM D, YYYY h:mm A')}</StyledTableCell>
+                                        <StyledTableCell align='right'>{wo.lastupdated ? dayjs(wo.lastupdated).format('MMMM D, YYYY h:mm A') : '-'}</StyledTableCell>
+                                        <StyledTableCell align='right'>{wo.datecompleted ? dayjs(wo.datecompleted).format('MMMM D, YYYY h:mm A') : '-'}</StyledTableCell>
+                                        {!changeAssigned ? (
+                                            <StyledTableCell align="right">{wo.stafffirst} {wo.stafflast}
+                                                <br /><div className='changeStaffBtn' onClick={changeAssignedStaff}>Change Assignee</div>
+                                            </StyledTableCell>
+                                        ) : (
+                                                <StyledTableCell align="right" onClick={e => e.stopPropagation()}>
+
+                                                    <div onClick={e => e.stopPropagation()}>Assign to <span onClick={e => e.stopPropagation()}>
+                                                        <Select
+                                                            name='staffoptions'
+                                                            id='staffoptions'
+                                                            defaultValue={wo.firstname}
+                                                            value={selectedStaff}
+                                                            onClick={e => e.stopPropagation()}
+                                                            onChange={e => { handleSelectChange(e.value, wo.id) }}
+                                                            options={staffOptions} />
+                                                    </span>
+                                                        <div className='changeStaffBtn' onClick={changeAssignedStaff}>Don't Change</div>
+                                                    </div>
 
 
-                                        </StyledTableCell>
-                                    )}
-                                {/* <StyledTableCell align="right">{wo.stafffirst} {wo.stafflast}</StyledTableCell> */}
-                            </StyledTableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </div>
+                                                </StyledTableCell>
+                                            )}
+                                        {/* <StyledTableCell align="right">{wo.stafffirst} {wo.stafflast}</StyledTableCell> */}
+                                    </StyledTableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    </div>
+                </>
+            }
         </div>
     )
 }
