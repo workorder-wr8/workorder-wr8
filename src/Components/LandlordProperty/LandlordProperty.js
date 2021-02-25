@@ -9,14 +9,14 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
-import TextField from '@material-ui/core/TextField';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 
 const useStyles = makeStyles({
     table: {
-        maxWidth: 500,
-    },
+        width: 400,
+        margin: 'auto'
+    }
 });
 
 function LandlordProperty(props) {
@@ -61,7 +61,6 @@ function LandlordProperty(props) {
 
     }, [created])
 
-    console.log(count)
     return (
         <div>
             <h2>Average Time to Completion: {time.avgtimetocompletion ? (
@@ -72,25 +71,27 @@ function LandlordProperty(props) {
             </h2>
             {created[0] ? <Line data={data} /> : null}
             <h2>Current Workorders Status</h2>
-            <TableContainer component={Paper}>
-                <Table className={classes.table} aria-label="simple table">
-                    <TableHead>
-                        <TableRow>
-                            <TableCell align="right">Status</TableCell>
-                            <TableCell align="right">Count</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {count
-                            .map((wo, i) => (
-                                <TableRow key={i}>
-                                    <TableCell align="right">{wo.status}</TableCell>
-                                    <TableCell align="right">{wo.count}</TableCell>
-                                </TableRow>
-                            ))}
-                    </TableBody>
-                </Table>
-            </TableContainer>
+            <div style={{ width: '100%' }}>
+                <TableContainer component={Paper}>
+                    <Table className={classes.table} aria-label="simple table">
+                        <TableHead>
+                            <TableRow>
+                                <TableCell align="right">Status</TableCell>
+                                <TableCell align="right">Count</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {count
+                                .map((wo, i) => (
+                                    <TableRow key={i}>
+                                        <TableCell align="right">{wo.status}</TableCell>
+                                        <TableCell align="right">{wo.count}</TableCell>
+                                    </TableRow>
+                                ))}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+            </div>
         </div>
     )
 }
