@@ -61,15 +61,27 @@ function LandlordProperty(props) {
 
     }, [created])
 
+    const goBack = () => {
+        props.history.goBack()
+    }
+
     return (
         <div>
+            <div onClick={goBack}>Go Back</div>
             <h2>Average Time to Completion: {time.avgtimetocompletion ? (
                 <>
                     <span>{time.avgtimetocompletion.days} Days {time.avgtimetocompletion.hours} Hours and {time.avgtimetocompletion.minutes} Minutes</span>
                 </>
             ) : null}
             </h2>
-            {created[0] ? <Line data={data} /> : null}
+            {created[0] ? (
+                <div >
+                    <Line
+                        data={data}
+                    />
+                </div>
+            )
+                : null}
             <h2>Current Workorders Status</h2>
             <div style={{ width: '100%' }}>
                 <TableContainer component={Paper}>
