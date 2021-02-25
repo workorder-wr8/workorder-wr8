@@ -3,6 +3,7 @@ import axios from 'axios';
 import AddCommentTenant from './AddCommentTenant';
 import AddCommentStaff from './AddCommentStaff';
 import { connect } from 'react-redux';
+import dayjs from 'dayjs';
 import './Comments.css';
 
 const Comments = props => {
@@ -33,10 +34,10 @@ const Comments = props => {
             <article key={comment.message_id} className='comment-container'>
                 {comment.sender_id === id
                     ?
-                    <p className='my-comment'>{comment.content}</p>
+                    <p className='my-comment'>{comment.content}@<span className='comment-timestamp'>{dayjs(comment.timesent).format('MMMM D, YYYY h:mm A')}</span></p>
 
                     :
-                    <p className='their-comment'>{comment.content}</p>
+                    <p className='their-comment'>{comment.content}@<span className='comment-timestamp'>{dayjs(comment.timesent).format('MMMM D, YYYY h:mm A')}</span></p>
 
                 }
             </article>
@@ -54,7 +55,7 @@ const Comments = props => {
     }
     console.log('comments', comments)
     return (
-        <section className='comments'>
+        <section>
             <p className='comment-header'>Comments:</p>
             {addComment}
             <section className='comments'>

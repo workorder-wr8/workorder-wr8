@@ -21,3 +21,7 @@
     padding: 3px 8px;
     display: inline-block;
 }
+
+.comment-timestamp {
+    font-size: 10px;
+}
