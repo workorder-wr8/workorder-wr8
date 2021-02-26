@@ -47,7 +47,7 @@ function StaffDash(props) {
             axios.get(`/api/staff/workorders/${props.user.staffid}`)
                 .then(res => {
                     setWorkorders(res.data);
-                    setLoading(!isLoading);
+                    setLoading(false);
                 })
                 .catch(err => console.log(err))
         }
@@ -56,9 +56,8 @@ function StaffDash(props) {
     const handleSelectChange = (e, id) => {
         axios.put(`/api/staff/workorders`, { id, status: e, staffid: props.user.staffid })
             .then(res => {
-                setScheduled(res.data)
+                setScheduled(res.data);
             })
-
             .catch(err => console.log(err))
     }
 
@@ -80,7 +79,7 @@ function StaffDash(props) {
                         <TableHead>
                             <TableRow>
                                 <TableCell>ID#</TableCell>
-                                <TableCell align="right">Name</TableCell>
+                                <TableCell align="right">Tenant Name</TableCell>
                                 <TableCell align="right">Title</TableCell>
                                 <TableCell align="right">Description</TableCell>
                                 <TableCell align="right">Date Created</TableCell>
@@ -133,7 +132,7 @@ function StaffDash(props) {
                     <TableHead>
                         <TableRow>
                             <TableCell>ID#</TableCell>
-                            <TableCell align="right">Name</TableCell>
+                            <TableCell align="right">Tenant Name</TableCell>
                             <TableCell align="right">Title</TableCell>
                             <TableCell align="right">Description</TableCell>
                             <TableCell align="right">Date Created</TableCell>
