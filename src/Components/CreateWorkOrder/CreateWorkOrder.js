@@ -1,10 +1,14 @@
 import axios from 'axios'
 import React, { useState } from 'react';
-import './CreateWorkOrder.css'
+import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
+import './CreateWorkOrder.css';
 
 const CreateWorkOrder = (props) => {
-    const [title, setTitle] = useState('')
-    const [description, setDescription] = useState('')
+    const [title, setTitle] = useState('');
+    const [description, setDescription] = useState('');
 
     const createWO = () => {
         axios.post('/api/workorder/create', {
@@ -16,14 +20,30 @@ const CreateWorkOrder = (props) => {
     }
 
     return (
-        <div>
-            CreateWorkOrder
-            <form >
-                <label for='title'>Title: </label>
-                <input type='text' id='title' onChange={e => setTitle(e.target.value)} />
-                <label for='description'>Description: </label>
-                <input type='text' id='description' onChange={e => setDescription(e.target.value)} />
-                <button type='button' onClick={createWO}>Submit</button>
+        <div className='workorder-form-container'>
+            <h1>Create a Workorder here</h1>
+            <form className='workorder-form'>
+
+                <TextField
+                    className='workorder-text-field'
+                    onChange={e => setTitle(e.target.value)}
+                    id="outlined-basic"
+                    label="Title"
+                    variant="outlined"
+                />
+
+
+                <TextField
+                    className='workorder-text-field'
+                    onChange={e => setDescription(e.target.value)}
+                    id="outlined-basic"
+                    label="Description"
+                    multiline
+                    rows={6}
+                    variant="outlined"
+                />
+
+                <Button className='submit-workorder-btn' variant="contained" onClick={createWO}>Submit<FontAwesomeIcon icon={faPaperPlane} /></Button>
             </form>
         </div>
     )
