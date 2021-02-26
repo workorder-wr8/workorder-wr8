@@ -9,3 +9,5 @@ VALUES(
     CURRENT_TIMESTAMP,
     ${sender_id}
 );
+
+update workorders set lastupdated=CURRENT_TIMESTAMP where id=${workorderid};

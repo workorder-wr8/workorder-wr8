@@ -180,9 +180,9 @@ function ManagerDash(props) {
                     <p> Title: {overlayData.overlayTitle}</p>
                     <p> Description: {overlayData.overlayDescription}</p>
                     <p>  Status: {overlayData.overlayStatus}</p>
-                    <p>  Date Created: {overlayData.overlayDateCreated}</p>
-                    <p>  Last Updated: {overlayData.overlayLastUpdated}</p>
-                    <p>  Date Completed: {overlayData.overlayDateCompleted}</p>
+                <p>  Date Created: {dayjs(overlayData.datecreated).format('MMMM D, YYYY h:mm A')}</p>
+                    <p>  Last Updated: {dayjs(overlayData.overlayLastUpdated).format('MMMM D, YYYY h:mm A')}</p>
+                    <p>  Date Completed: {dayjs(overlayData.overlayDateCompleted).format('MMMM D, YYYY h:mm A')}</p>
                 </div>
                 <div id='managerOverlayMessages' onClick={e => e.stopPropagation()}>
                     <div id='managerOverlayLoadedMessages'>
@@ -214,7 +214,7 @@ function ManagerDash(props) {
                                 {unassignedWorkOrders.map(wo => (
                                     <StyledTableRow className='row' key={wo.id} value={wo} onClick={changeOverlay}>
                                         <StyledTableCell align='right' >{wo.id}</StyledTableCell>
-                                        <StyledTableCell align='right' >{wo.lastname},{wo.firstname}</StyledTableCell>
+                                        <StyledTableCell align='right' >{wo.tenantlastname},{wo.tenantfirstname}</StyledTableCell>
                                         <StyledTableCell align='right' >{wo.title}</StyledTableCell>
                                         <StyledTableCell align='right' >{wo.description}</StyledTableCell>
                                         <StyledTableCell align='right' >{wo.status}</StyledTableCell>
@@ -254,7 +254,7 @@ function ManagerDash(props) {
                                 {assignedWorkOrders.map(wo => (
                                     <StyledTableRow key={wo.id} value={wo} onClick={changeOverlay}>
                                         <StyledTableCell align='right'>{wo.id}</StyledTableCell>
-                                        <StyledTableCell align='right'>{wo.lastname},{wo.firstname}</StyledTableCell>
+                                        <StyledTableCell align='right'>{wo.tenantlastname},{wo.tenantfirstname}</StyledTableCell>
                                         <StyledTableCell align='right'>{wo.title}</StyledTableCell>
                                         <StyledTableCell align='right'>{wo.description}</StyledTableCell>
                                         <StyledTableCell align='right'>{wo.status}</StyledTableCell>
