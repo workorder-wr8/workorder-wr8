@@ -35,18 +35,18 @@ const ManageWorkOrder = (props) => {
                 </div>
                 <div className='workorder-details'>
                     <span>Status: {status}</span>
-                    <span>Created at: {dayjs(datecreated).format('DD/MM/YYYY')}</span>
+                    <span>Created at: {dayjs(datecreated).format('MMMM D, YYYY h:mm A')}</span>
                     {lastupdated === null
                         ?
                         null
                         :
-                        <span>Updated at: {lastupdated}</span>
+                        <span>Updated at: {dayjs(lastupdated).format('MMMM D, YYYY h:mm A')}</span>
                     }
                     {datecompleted === null
                         ?
                         null
                         :
-                        <span>{datecompleted}</span>
+                        <span>{dayjs(datecompleted).format('MMMM D, YYYY h:mm A')}</span>
                     }
                 </div>
             </>
@@ -55,7 +55,8 @@ const ManageWorkOrder = (props) => {
 
     return (
         <section className='workorder-container'>
-                {displayWorkOrder()}
+            <button className='close-workorder-btn' onClick={() => props.closeModal()}>Close</button>
+            {displayWorkOrder()}
             <section className='comment-container'>
                 <Comments workorderid={props.location.id} />
             </section>
