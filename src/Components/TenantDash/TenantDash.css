@@ -1,7 +1,12 @@
+.workorder-table-container {
+  margin: 10px;
+}
+
 .table-container {
     margin-top: 10px!important;
     width:60%!important;
     margin: 0 auto;
+    height: 600px;
 }
 
 .workorder-tenant-table {
@@ -9,7 +14,7 @@
 }
 
 .search-workorder-field {
-    width: 100%;
+  width:60%;
 }
 
 .tenant-wo-description {

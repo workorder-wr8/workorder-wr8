@@ -33,8 +33,8 @@ function Header(props) {
                 (
                     <nav>
                         <ul className='nav-links'>
-                            <li>{props.user.firstname}, {props.user.lastname}</li>
-                            <li>{props.user.name}</li>
+                            <li className='header-props'>{props.user.firstname}, {props.user.lastname}</li>
+                            <li className='header-props'>{props.user.name}</li>
                             {props.location.pathname === '/dash' ? <Link to='/create/workorder'><button>Create Work Order</button></Link> : null}
                             <li><button onClick={logout}>Logout</button></li>
                         </ul>

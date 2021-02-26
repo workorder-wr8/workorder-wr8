@@ -46,45 +46,49 @@ const TenantDash = props => {
                     ?
                     <SpinnerContainer />
                     :
-                    <TableContainer className='table-container' component={Paper} >
+                    <section className='workorder-table-container'>
                         <TextField onChange={e => searchWorkOrders(e)} className='search-workorder-field' id="outlined-basic" label="Search" variant="outlined" value={search} />
-                        <Table stickyHeader aria-label="sticky table">
-                            <TableHead style={{ backgroundColor: 'red' }}>
-                                <TableRow>
-                                    {columns.map(column => (
-                                        <TableCell key={column.id}>{column.label}</TableCell>
-                                    ))}
-                                </TableRow>
-                            </TableHead>
-                            <TableBody className='workorder-tenant-table'>
-                                {workOrders.filter(wo => (
-                                    wo.status.toLowerCase().includes(search.toLowerCase()) || wo.title.toLowerCase().includes(search.toLowerCase())
-                                )).map(wo => (
-                                    <TableRow key={wo.id}>
-                                        <TableCell>{wo.id}</TableCell>
-                                        <TableCell component="th" scope="row">
-                                            <Link to={{ pathname: `/dash/workorder/${wo.id}`, id: wo.id }}>
-                                                {wo.title}
-                                            </Link>
-                                        </TableCell>
-                                        <TableCell align="right" className='tenant-wo-description'>{wo.description}</TableCell>
-                                        <TableCell>{dayjs(wo.datecreated).format('MMMM D, YYYY h:mm A')}</TableCell>
-                                        {(wo.status === 'Open' || wo.status === 'Completed')
-                                            ?
-                                            (
-                                                <TableCell>{wo.status}</TableCell>
-                                            )
-                                            :
+                        <TableContainer className='table-container' component={Paper} >
 
-                                            (
-                                                <TableCell>In Progress</TableCell>
-                                            )
-                                        }
+                            <Table stickyHeader aria-label="sticky table">
+                                <TableHead style={{ backgroundColor: 'red' }}>
+                                    <TableRow>
+                                        {columns.map(column => (
+                                            <TableCell key={column.id}>{column.label}</TableCell>
+                                        ))}
                                     </TableRow>
-                                ))}
-                            </TableBody>
-                        </Table>
-                    </TableContainer>
+                                </TableHead>
+                                <TableBody className='workorder-tenant-table'>
+                                    {workOrders.filter(wo => (
+                                        wo.status.toLowerCase().includes(search.toLowerCase()) || wo.title.toLowerCase().includes(search.toLowerCase())
+                                    )).map(wo => (
+                                        <TableRow key={wo.id}>
+                                            <TableCell>{wo.id}</TableCell>
+                                            <TableCell component="th" scope="row">
+                                                <Link to={{ pathname: `/dash/workorder/${wo.id}`, id: wo.id }}>
+                                                    {wo.title}
+                                                </Link>
+                                            </TableCell>
+                                            <TableCell align="right" className='tenant-wo-description'>{wo.description}</TableCell>
+                                            <TableCell>{dayjs(wo.datecreated).format('MMMM D, YYYY h:mm A')}</TableCell>
+                                            {(wo.status === 'Open' || wo.status === 'Completed')
+                                                ?
+                                                (
+                                                    <TableCell>{wo.status}</TableCell>
+                                                )
+                                                :
+
+                                                (
+                                                    <TableCell>In Progress</TableCell>
+                                                )
+                                            }
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                    </section>
+
                 }
             </section>
             <ModalRoute className='example-modal'
