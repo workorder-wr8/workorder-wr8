@@ -57,6 +57,7 @@ app.post('/api/property/new', landlordCtrl.addProperty)
 app.get('/api/landlord/property/stats/:propertyid', landlordCtrl.getStats)
 app.get('/api/landlord/property/time/:propertyid', landlordCtrl.getTime)
 app.get('/api/landlord/property/datecreated/:propertyid', landlordCtrl.getdatecreated)
+app.get('/api/landlord/property/data/:propertyid', landlordCtrl.getStatsTimeAndDateCreated)
 
 //property endpoints
 app.get('/api/properties', propertyCtrl.getProperties);
