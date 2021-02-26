@@ -47,19 +47,27 @@ function StaffDash(props) {
             axios.get(`/api/staff/workorders/${props.user.staffid}`)
                 .then(res => {
                     setWorkorders(res.data);
-                    setLoading(!isLoading);
+                    setLoading(false);
                 })
-                .catch(err => console.log(err))
+                .catch(err => {
+                    console.log(err);
+                    setLoading(false)
+                })
         }
     }, [scheduled, props])
 
     const handleSelectChange = (e, id) => {
+        setLoading(true);
         axios.put(`/api/staff/workorders`, { id, status: e, staffid: props.user.staffid })
             .then(res => {
                 setScheduled(res.data)
+                setLoading(false)
             })
 
-            .catch(err => console.log(err))
+            .catch(err => {
+                console.log(err);
+                setLoading(false);
+            })
     }
 
     const searchwo = e => {
@@ -68,7 +76,6 @@ function StaffDash(props) {
     // console.log(workorders)
     return (
         <div id='staffDash'>
-
             <h1>Unread</h1>
             {isLoading
                 ?
