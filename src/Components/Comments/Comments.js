@@ -30,7 +30,7 @@ const Comments = props => {
         } else {
             id = props.user.managerid;
         }
-        const workOrderComments = comments.map(comment => (
+        const workOrderComments = comments.map(comment => {
             <article key={comment.message_id} className='comment-container'>
                 {comment.sender_id === id
                     ?
@@ -41,7 +41,7 @@ const Comments = props => {
 
                 }
             </article>
-        ))
+        })
         return workOrderComments;
     }
 
@@ -53,14 +53,15 @@ const Comments = props => {
     } else {
         <p>manager stuff here</p>
     }
-    console.log('comments', comments)
+
     return (
         <section>
             <p className='comment-header'>Comments:</p>
-            {addComment}
+            
             <section className='comments'>
                 {displayComments()}
             </section>
+            {addComment}
         </section>
     )
 }

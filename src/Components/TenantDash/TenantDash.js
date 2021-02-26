@@ -86,8 +86,6 @@ const TenantDash = props => {
                         </Table>
                     </TableContainer>
                 }
-
-
             </section>
             <ModalRoute className='example-modal'
                 inClassName='example-modal-in'

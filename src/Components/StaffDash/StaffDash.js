@@ -87,7 +87,7 @@ function StaffDash(props) {
                         <TableHead>
                             <TableRow>
                                 <TableCell>ID#</TableCell>
-                                <TableCell align="right">Name</TableCell>
+                                <TableCell align="right">Tenant Name</TableCell>
                                 <TableCell align="right">Title</TableCell>
                                 <TableCell align="right">Description</TableCell>
                                 <TableCell align="right">Date Created</TableCell>
@@ -140,7 +140,7 @@ function StaffDash(props) {
                     <TableHead>
                         <TableRow>
                             <TableCell>ID#</TableCell>
-                            <TableCell align="right">Name</TableCell>
+                            <TableCell align="right">Tenant Name</TableCell>
                             <TableCell align="right">Title</TableCell>
                             <TableCell align="right">Description</TableCell>
                             <TableCell align="right">Date Created</TableCell>
