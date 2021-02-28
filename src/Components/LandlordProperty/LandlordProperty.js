@@ -28,40 +28,28 @@ function LandlordProperty(props) {
 
     useEffect(() => {
         let propertyid = +props.match.params.id
-        // axios.get(`/api/landlord/property/stats/${propertyid}`)
-        //     .then(res => setCount(res.data))
-        //     .catch(err => console.log(err))
-
-        // axios.get(`/api/landlord/property/time/${propertyid}`)
-        //     .then(res => setTime(res.data))
-        //     .catch(err => console.log(err))
-
-        // axios.get(`/api/landlord/property/datecreated/${propertyid}`)
-        //     .then(res => {
-        //         setCreated(res.data)
-        //     })
-        //     .catch(err => console.log(err))
         axios.get(`/api/landlord/property/data/${[propertyid]}`)
-            .then(res=>{
-                let receivedDates = res.data.filter((row, index)=>((index+1)%4===0)).map(row=>({labels: row.ddc, datasets: row.dc}));
-                console.log('RECEIVED: ', receivedDates);
-                setCreated(receivedDates)
-                let receivedData = res.data.filter((row, index)=>(index<4)).map(row=>({count: row.c, status: row.ws}))
-                setCount(receivedData);
-                setTime(res.data[0].attc);
-                
+            .then(res => {
+                if (res.data[0]) {
+                    let receivedDates = res.data.filter((row, index) => ((index + 1) % 4 === 0)).map(row => ({ labels: row.day, datasets: row.workorders }));
+
+                    setCreated(receivedDates)
+                    let receivedData = res.data.filter((row, index) => (index < 4)).map(row => ({ count: row.count, status: row.status }))
+                    setCount(receivedData);
+                    setTime(res.data[0].attc);
+                }
             })
+            .catch(err => console.log(err))
     }, [])
 
     useEffect(() => {
         if (created[0]) {
-            console.log('beforeSetData: ',created)
             setData({
-                labels: created.map(row=>row.labels),
+                labels: created.map(row => row.labels),
                 datasets: [
                     {
                         label: 'Workorder Requests Past 7 days',
-                        data: created.map(row=>row.datasets),
+                        data: created.map(row => row.datasets),
                         fill: true,
                         backgroundColor: "rgba(75,192,192,0.2)",
                         borderColor: "rgba(75,192,192,1)"
@@ -76,12 +64,13 @@ function LandlordProperty(props) {
         props.history.goBack()
     }
 
+    // console.log(time)
     return (
         <div>
             <div onClick={goBack}>Go Back</div>
-            <h2>Average Time to Completion: {time.avgtimetocompletion ? (
+            <h2>Average Time to Completion: {time.days ? (
                 <>
-                    <span>{time.avgtimetocompletion.days} Days {time.avgtimetocompletion.hours} Hours and {time.avgtimetocompletion.minutes} Minutes</span>
+                    <span>{time.days} Days {time.hours} Hours and {time.minutes} Minutes</span>
                 </>
             ) : null}
             </h2>
@@ -106,12 +95,11 @@ function LandlordProperty(props) {
                         <TableBody>
                             {count
                                 .map((wo, i) => {
-                                    console.log('this is count: ', count)
                                     return <TableRow key={i}>
                                         <TableCell align="right">{wo.status}</TableCell>
                                         <TableCell align="right">{wo.count}</TableCell>
                                     </TableRow>
-})}
+                                })}
                         </TableBody>
                     </Table>
                 </TableContainer>

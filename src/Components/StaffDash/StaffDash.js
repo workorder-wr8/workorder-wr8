@@ -77,7 +77,7 @@ function StaffDash(props) {
                 <TableContainer component={Paper}>
                     <TextField onChange={e => searchwo(e)} className='search-workorder-field' id="outlined-basic" label="Search" variant="outlined" value={search} />
                     <Table className={classes.table} aria-label="simple table">
-                        <TableHead>
+                        <TableHead className={classes.tablehead}>
                             <TableRow>
                                 <TableCell>ID#</TableCell>
                                 <TableCell align="right">Name</TableCell>
@@ -102,7 +102,7 @@ function StaffDash(props) {
                                             <Link to={{ pathname: `${props.match.url}/workorder/${wo.id}`, id: wo.id }}>
                                                 {wo.title}
                                             </Link></TableCell>
-                                        <TableCell align="right">{wo.description}</TableCell>
+                                        <TableCell align="right">{wo.description.length > 100 ? wo.description.substring(0, 80).concat('...') : wo.description}</TableCell>
                                         <TableCell align="right">{dayjs(wo.datecreated).format('MMMM D, YYYY h:mm A')}</TableCell>
                                         <TableCell align="right">{wo.lastupdated ? dayjs(wo.lastupdated).format('MMMM D, YYYY h:mm A') : '-'}</TableCell>
                                         <TableCell align="right">{wo.status}</TableCell>
@@ -130,7 +130,7 @@ function StaffDash(props) {
             <h1>In Progress</h1>
             <TableContainer component={Paper}>
                 <Table className={classes.table} aria-label="simple table">
-                    <TableHead>
+                    <TableHead className={classes.tablehead2}>
                         <TableRow>
                             <TableCell>ID#</TableCell>
                             <TableCell align="right">Name</TableCell>
@@ -149,8 +149,11 @@ function StaffDash(props) {
                                     {wo.id}
                                 </TableCell>
                                 <TableCell align="right">{wo.firstname} {wo.lastname}</TableCell>
-                                <TableCell align="right">{wo.title}</TableCell>
-                                <TableCell align="right">{wo.description}</TableCell>
+                                <TableCell align="right">
+                                    <Link to={{ pathname: `${props.match.url}/workorder/${wo.id}`, id: wo.id }}>
+                                        {wo.title}
+                                    </Link></TableCell>
+                                <TableCell align="right">{wo.description.length > 100 ? wo.description.substring(0, 80).concat('...') : wo.description}</TableCell>
                                 <TableCell align="right">{dayjs(wo.datecreated).format('MMMM D, YYYY h:mm A')}</TableCell>
                                 <TableCell align="right">{wo.lastupdated ? dayjs(wo.lastupdated).format('MMMM D, YYYY h:mm A') : '-'}</TableCell>
                                 <TableCell align="right">{wo.status}</TableCell>
