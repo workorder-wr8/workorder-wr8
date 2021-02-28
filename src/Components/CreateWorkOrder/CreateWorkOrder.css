@@ -1,0 +1,16 @@
+.workorder-form-container,
+.workorder-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.workorder-form {
+    width: 40vw;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.workorder-text-field {
+    margin: 5px!important;
+}

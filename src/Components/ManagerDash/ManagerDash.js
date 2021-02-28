@@ -181,9 +181,9 @@ function ManagerDash(props) {
                     <p> Title: {overlayData.overlayTitle}</p>
                     <p> Description: {overlayData.overlayDescription}</p>
                     <p>  Status: {overlayData.overlayStatus}</p>
-                    <p>  Date Created: {overlayData.overlayDateCreated}</p>
-                    <p>  Last Updated: {overlayData.overlayLastUpdated}</p>
-                    <p>  Date Completed: {overlayData.overlayDateCompleted}</p>
+                    <p>  Date Created: {dayjs(overlayData.datecreated).format('MMMM D, YYYY h:mm A')}</p>
+                    <p>  Last Updated: {dayjs(overlayData.overlayLastUpdated).format('MMMM D, YYYY h:mm A')}</p>
+                    <p>  Date Completed: {dayjs(overlayData.overlayDateCompleted).format('MMMM D, YYYY h:mm A')}</p>
                 </div>
                 <div id='managerOverlayMessages' onClick={e => e.stopPropagation()}>
                     <div id='managerOverlayLoadedMessages'>
@@ -241,7 +241,7 @@ function ManagerDash(props) {
                             <TableHead>
                                 <TableRow>
                                     <StyledTableCell align='right'>ID</StyledTableCell>
-                                    <StyledTableCell align='right'>Tenant</StyledTableCell>
+                                    <S4tyledTableCell align='right'>Tenant</S4tyledTableCell>
                                     <StyledTableCell align='right'>Title</StyledTableCell>
                                     <StyledTableCell align='right'>Description</StyledTableCell>
                                     <StyledTableCell align='right'>Status</StyledTableCell>
