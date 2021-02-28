@@ -241,7 +241,7 @@ function ManagerDash(props) {
                             <TableHead>
                                 <TableRow>
                                     <StyledTableCell align='right'>ID</StyledTableCell>
-                                    <S4tyledTableCell align='right'>Tenant</S4tyledTableCell>
+                                    <StyledTableCell align='right'>Tenant</StyledTableCell>
                                     <StyledTableCell align='right'>Title</StyledTableCell>
                                     <StyledTableCell align='right'>Description</StyledTableCell>
                                     <StyledTableCell align='right'>Status</StyledTableCell>
