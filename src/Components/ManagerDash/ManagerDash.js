@@ -10,25 +10,23 @@ import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import Paper from '@material-ui/core/Paper';
 import Select from 'react-select';
 import dayjs from 'dayjs'
 import SpinnerContainer from '../Spinner/SpinnerContainer';
 // USES withStyles from material-UI for table cells and rows
 const StyledTableCell = withStyles((theme) => ({
     head: {
-        backgroundColor: theme.palette.common.black,
-        color: theme.palette.common.white,
+        
     },
     body: {
-        fontSize: 14,
+        
     }
 }))(TableCell);
 
 const StyledTableRow = withStyles((theme) => ({
     root: {
-        '&:nth-of-type(odd)': {
-            backgroundColor: theme.palette.action.hover,
-        },
+        
     },
 }))(TableRow);
 
@@ -174,7 +172,7 @@ function ManagerDash(props) {
 
     console.log(unassignedWorkOrders)
     return (
-        <div>
+        <div className='managerDash'>
             <div id='managerOverlay' onClick={overlayOff}>
                 <div id='managerOverlayInfo'>
                     <p>Work Order #{overlayData.overlayId}   Tenant Name: {overlayData.overlayName}  </p>
@@ -199,97 +197,101 @@ function ManagerDash(props) {
                 ? <SpinnerContainer />
                 : <>
                     <div className='tableWrapper'>
-                        <Table className='unassignedTable'>
-                            <TableHead>
-                                <TableRow>
-                                    <StyledTableCell align='right'>ID</StyledTableCell>
-                                    <StyledTableCell align='right'>Tenant</StyledTableCell>
-                                    <StyledTableCell align='right'>Title</StyledTableCell>
-                                    <StyledTableCell align='right'>Description</StyledTableCell>
-                                    <StyledTableCell align='right'>Status</StyledTableCell>
-                                    <StyledTableCell align='right'>Created</StyledTableCell>
-                                    <StyledTableCell align='right' width='100px'>Assign</StyledTableCell>
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {unassignedWorkOrders.map(wo => (
-                                    <StyledTableRow className='row' key={wo.id} value={wo} onClick={changeOverlay}>
-                                        <StyledTableCell align='right' >{wo.id}</StyledTableCell>
-                                        <StyledTableCell align='right' >{wo.tenantlast},{wo.tenantfirst}</StyledTableCell>
-                                        <StyledTableCell align='right' >{wo.title}</StyledTableCell>
-                                        <StyledTableCell align='right' >{wo.description}</StyledTableCell>
-                                        <StyledTableCell align='right' >{wo.status}</StyledTableCell>
-                                        <StyledTableCell align='right' >{dayjs(wo.datecreated).format('MMMM D, YYYY h:mm A')}</StyledTableCell>
-                                        <TableCell align="right" onClick={e => e.stopPropagation()}>{
-                                            <div onClick={e => e.stopPropagation()}>Assign to <span onClick={e => e.stopPropagation()}>
-                                                <Select
-                                                    name='staffoptions'
-                                                    id='staffoptions'
-                                                    value={selectedStaff}
-                                                    onClick={e => e.stopPropagation()}
-                                                    onChange={e => { handleSelectChange(e.value, wo.id) }}
-                                                    options={staffOptions} />
-                                            </span></div>
-                                        }</TableCell>
-                                    </StyledTableRow>
-                                ))}
-                            </TableBody>
-                        </Table>
+                    <TableContainer className='table-container' component={Paper}>
+                            <Table className='unassignedTable'>
+                                <TableHead>
+                                    <TableRow>
+                                        <StyledTableCell align='right'>ID</StyledTableCell>
+                                        <StyledTableCell align='right'>Tenant</StyledTableCell>
+                                        <StyledTableCell align='right'>Title</StyledTableCell>
+                                        <StyledTableCell align='right'>Description</StyledTableCell>
+                                        <StyledTableCell align='right'>Status</StyledTableCell>
+                                        <StyledTableCell align='right'>Created</StyledTableCell>
+                                        <StyledTableCell align='right' width='100px'>Assign</StyledTableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {unassignedWorkOrders.map(wo => (
+                                        <StyledTableRow className='row' key={wo.id} value={wo} onClick={changeOverlay} className='unassignedRow'>
+                                            <StyledTableCell align='right' className='unassignedCell'>{wo.id}</StyledTableCell>
+                                            <StyledTableCell align='right' className='unassignedCell'>{wo.tenantlast},{wo.tenantfirst}</StyledTableCell>
+                                            <StyledTableCell align='right' className='unassignedCell'>{wo.title}</StyledTableCell>
+                                            <StyledTableCell align='right' className='unassignedCell'>{wo.description}</StyledTableCell>
+                                            <StyledTableCell align='right' className='unassignedCell'>{wo.status}</StyledTableCell>
+                                            <StyledTableCell align='right' className='unassignedCell'>{dayjs(wo.datecreated).format('MMMM D, YYYY h:mm A')}</StyledTableCell>
+                                            <TableCell align="right" onClick={e => e.stopPropagation()} >{
+                                                <div onClick={e => e.stopPropagation()}><span onClick={e => e.stopPropagation()}>
+                                                    <Select
+                                                        name='staffoptions'
+                                                        id='staffoptions'
+                                                        value={selectedStaff}
+                                                        onClick={e => e.stopPropagation()}
+                                                        onChange={e => { handleSelectChange(e.value, wo.id) }}
+                                                        options={staffOptions} />
+                                                </span></div>
+                                            }</TableCell>
+                                        </StyledTableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                         </TableContainer>           
                     </div>
                     <div className='tableWrapper'>
-                        <Table className='assignedTable'>
-                            <TableHead>
-                                <TableRow>
-                                    <StyledTableCell align='right'>ID</StyledTableCell>
-                                    <StyledTableCell align='right'>Tenant</StyledTableCell>
-                                    <StyledTableCell align='right'>Title</StyledTableCell>
-                                    <StyledTableCell align='right'>Description</StyledTableCell>
-                                    <StyledTableCell align='right'>Status</StyledTableCell>
-                                    <StyledTableCell align='right'>Created</StyledTableCell>
-                                    <StyledTableCell align='right'>Last Updated</StyledTableCell>
-                                    <StyledTableCell align='right'>Completed</StyledTableCell>
-                                    <StyledTableCell align='right' width='100px'>Assigned To</StyledTableCell>
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {assignedWorkOrders.map(wo => (
-                                    <StyledTableRow key={wo.id} value={wo} onClick={changeOverlay}>
-                                        <StyledTableCell align='right'>{wo.id}</StyledTableCell>
-                                        <StyledTableCell align='right' >{wo.tenantlast},{wo.tenantfirst}</StyledTableCell>
-                                        <StyledTableCell align='right'>{wo.title}</StyledTableCell>
-                                        <StyledTableCell align='right'>{wo.description}</StyledTableCell>
-                                        <StyledTableCell align='right'>{wo.status}</StyledTableCell>
-                                        <StyledTableCell align='right'>{dayjs(wo.datecreated).format('MMMM D, YYYY h:mm A')}</StyledTableCell>
-                                        <StyledTableCell align='right'>{wo.lastupdated ? dayjs(wo.lastupdated).format('MMMM D, YYYY h:mm A') : '-'}</StyledTableCell>
-                                        <StyledTableCell align='right'>{wo.datecompleted ? dayjs(wo.datecompleted).format('MMMM D, YYYY h:mm A') : '-'}</StyledTableCell>
-                                        {!changeAssigned ? (
-                                            <StyledTableCell align="right">{wo.stafffirst} {wo.stafflast}
-                                                <br /><div className='changeStaffBtn' onClick={changeAssignedStaff}>Change Assignee</div>
-                                            </StyledTableCell>
-                                        ) : (
-                                                <StyledTableCell align="right" onClick={e => e.stopPropagation()}>
-
-                                                    <div onClick={e => e.stopPropagation()}>Assign to <span onClick={e => e.stopPropagation()}>
-                                                        <Select
-                                                            name='staffoptions'
-                                                            id='staffoptions'
-                                                            defaultValue={wo.firstname}
-                                                            value={selectedStaff}
-                                                            onClick={e => e.stopPropagation()}
-                                                            onChange={e => { handleSelectChange(e.value, wo.id) }}
-                                                            options={staffOptions} />
-                                                    </span>
-                                                        <div className='changeStaffBtn' onClick={changeAssignedStaff}>Don't Change</div>
-                                                    </div>
-
-
+                        <TableContainer className='table-container' component={Paper}>
+                            <Table className='assignedTable'>
+                                <TableHead>
+                                    <TableRow>
+                                        <StyledTableCell align='right'>ID</StyledTableCell>
+                                        <StyledTableCell align='right'>Tenant</StyledTableCell>
+                                        <StyledTableCell align='right'>Title</StyledTableCell>
+                                        <StyledTableCell align='right'>Description</StyledTableCell>
+                                        <StyledTableCell align='right'>Status</StyledTableCell>
+                                        <StyledTableCell align='right'>Created</StyledTableCell>
+                                        <StyledTableCell align='right'>Last Updated</StyledTableCell>
+                                        <StyledTableCell align='right'>Completed</StyledTableCell>
+                                        <StyledTableCell align='right' width='100px'>Assigned To</StyledTableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {assignedWorkOrders.map(wo => (
+                                        <StyledTableRow key={wo.id} value={wo} onClick={changeOverlay} className='assignedRow'>
+                                            <StyledTableCell align='right'>{wo.id}</StyledTableCell>
+                                            <StyledTableCell align='right' >{wo.tenantlast},{wo.tenantfirst}</StyledTableCell>
+                                            <StyledTableCell align='right'>{wo.title}</StyledTableCell>
+                                            <StyledTableCell align='right'>{wo.description}</StyledTableCell>
+                                            <StyledTableCell align='right'>{wo.status}</StyledTableCell>
+                                            <StyledTableCell align='right'>{dayjs(wo.datecreated).format('MMMM D, YYYY h:mm A')}</StyledTableCell>
+                                            <StyledTableCell align='right'>{wo.lastupdated ? dayjs(wo.lastupdated).format('MMMM D, YYYY h:mm A') : '-'}</StyledTableCell>
+                                            <StyledTableCell align='right'>{wo.datecompleted ? dayjs(wo.datecompleted).format('MMMM D, YYYY h:mm A') : '-'}</StyledTableCell>
+                                            {!changeAssigned ? (
+                                                <StyledTableCell align="right">{wo.stafffirst} {wo.stafflast}
+                                                    <br /><div className='changeStaffBtn' onClick={changeAssignedStaff}>Change Assignee</div>
                                                 </StyledTableCell>
-                                            )}
-                                        {/* <StyledTableCell align="right">{wo.stafffirst} {wo.stafflast}</StyledTableCell> */}
-                                    </StyledTableRow>
-                                ))}
-                            </TableBody>
-                        </Table>
+                                            ) : (
+                                                    <StyledTableCell align="right" onClick={e => e.stopPropagation()}>
+
+                                                        <div onClick={e => e.stopPropagation()}>Assign to <span onClick={e => e.stopPropagation()}>
+                                                            <Select
+                                                                name='staffoptions'
+                                                                id='staffoptions'
+                                                                defaultValue={wo.firstname}
+                                                                value={selectedStaff}
+                                                                onClick={e => e.stopPropagation()}
+                                                                onChange={e => { handleSelectChange(e.value, wo.id) }}
+                                                                options={staffOptions} />
+                                                        </span>
+                                                            <div className='changeStaffBtn' onClick={changeAssignedStaff}>Don't Change</div>
+                                                        </div>
+
+
+                                                    </StyledTableCell>
+                                                )}
+                                            {/* <StyledTableCell align="right">{wo.stafffirst} {wo.stafflast}</StyledTableCell> */}
+                                        </StyledTableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
                     </div>
                 </>
             }
