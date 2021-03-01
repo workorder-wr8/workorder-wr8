@@ -1,7 +1,12 @@
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux'
-import { getUser } from '../../redux/reducers/userReducer'
+import { getUser } from '../../redux/reducers/userReducer';
+import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
+import ButtonGroup from '@material-ui/core/ButtonGroup';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
 import './LandingAdmin.css'
 import { Link } from 'react-router-dom';
 
@@ -19,6 +24,7 @@ const LandingAdmin = (props) => {
     const [passcode, setPasscode] = useState([]);
     // const [landlordid, setlandlordid] = useState(0)
     const [LLForm, setLLForm] = useState(false);
+
 
     useEffect(() => {
         axios.get('/api/properties')
@@ -99,81 +105,66 @@ const LandingAdmin = (props) => {
         setRegisterView(!registerView)
     }
 
-    const toggleStaff = () => {
-        setLLForm(false);
-        setRole('staff');
-        document.getElementById('landingContent').style.backgroundColor = 'grey';
-    }
-
-    const toggleManager = () => {
-        setLLForm(false);
-        setRole('manager');
-        document.getElementById('landingContent').style.backgroundColor = 'red';
-    }
-
-    const toggleLandlord = () => {
-        toggleLandlordForm();
-        setRole('landlord');
-        document.getElementById('landingContent').style.backgroundColor = 'green';
-    }
-
-    const toggleLandlordForm = () => {
-        setLLForm(true);
-    }
     return (
         <div >
+
             <section id='landingadmin'>
-                <div id='landingToggle'>
-                    <button id='staffBtn' onClick={toggleStaff}>Staff</button>
-                    <button id='managerBtn' onClick={toggleManager} >Manager</button>
-                    <button id='landlordBtn' onClick={toggleLandlord} >Landlord</button>
-                </div>
-                <form id='landingContent' onSubmit={registerView ? register : login}>
+                <h1 className='admin-landing-header'>Admin Portal</h1>
+                <section>
+                    <ButtonGroup variant='text' id='landingToggle'>
+                        <Button id='staffBtn' className={role === 'staff' ? 'active btn' : 'default btn'} onClick={() => setRole('staff')} >Staff</Button>
+                        <Button id='managerBtn' className={role === 'manager' ? 'active btn' : 'default btn'} onClick={() => setRole('manager')} >Manager</Button>
+                        <Button id='landlordBtn' className={role === 'landlord' ? 'active btn' : 'default btn'} onClick={() => setRole('landlord')}  >Landlord</Button>
+                    </ButtonGroup>
+                    <form id='landingContent' onSubmit={registerView ? register : login}>
 
 
-                    {registerView ? (
-                        <>
-                            <input placeholder='First Name' type='text' onChange={e => setFirstName(e.target.value)} />
-                            <input placeholder='Last Name' type='text' onChange={e => setLastName(e.target.value)} />
-                        </>
-                    ) : null}
-
-                    <input placeholder='Email' type='text' onChange={e => setEmail(e.target.value)} />
-                    <input placeholder='Password' type='password' onChange={e => setPassword(e.target.value)} />
-
-                    {registerView ? (
-                        <>
-                            <input placeholder='Verify Password' type='password' onChange={e => setVerPassword(e.target.value)} />
-                            <input type='number' placeholder='Phone Number' max='12' onChange={e => setPhone(e.target.value)} />
-
-                            {/* Sign up for specific property */}
-                            {!LLForm ? (
-                                <>
-                                    <label>Property:</label>
-                                    <select onChange={e => setPropertyid(e.target.value)} defaultValue='Select Property' >
-                                        <option value='Select Property' disabled >Choose here</option>
-                                        {properties.map((property, index) => (
-                                            <option key={index} value={property.id}>{property.name}</option>
-                                        ))}
-                                    </select>
-                                    <input type='password' placeholder='Property Passcode' onChange={e=>setPasscode(e.target.value)}/>
-                                </>
-                            ) : null}
-
-                            <button onClick={register}>Submit</button>
-                            <p>Already have an account <span className='toggleAuth' onClick={toggle}>Login</span> </p>
-
-
-                        </>
-                    ) : (
+                        {registerView ? (
                             <>
-                                <button onClick={login}>Login</button>
-                                <p>Don't have an account? <span className='toggleAuth' onClick={toggle}>Register</span></p>
-                                <p>To login as tenant click <Link to='/'>Here</Link></p>
+                                <TextField className='admin-fields fade-in' label='First Name' type='text' onChange={e => setFirstName(e.target.value)} />
+                                <TextField className='admin-fields fade-in' label='Last Name' type='text' onChange={e => setLastName(e.target.value)} />
                             </>
-                        )}
+                        ) : null}
 
-                </form>
+                        <TextField className='admin-fields' label='Email' type='text' onChange={e => setEmail(e.target.value)} />
+                        <TextField className='admin-fields' label='Password' type='password' onChange={e => setPassword(e.target.value)} />
+
+                        {registerView ? (
+                            <>
+                                <TextField className='admin-fields fade-in' label='Verify Password' type='password' onChange={e => setVerPassword(e.target.value)} />
+                                <TextField className='admin-fields fade-in' type='number' label='Phone Number' onChange={e => setPhone(e.target.value)} />
+
+
+                                {!LLForm ? (
+                                    <>
+                                        <Select onChange={e => setPropertyid(e.target.value)} defaultValue='Select Property' >
+                                            <MenuItem value='Select Property' disabled className='default-select'>Property</MenuItem>
+                                            {properties.map((property, index) => (
+                                                <MenuItem key={index} value={property.id}>{property.name}</MenuItem>
+                                            ))}
+                                        </Select>
+                                        <TextField className='admin-fields fade-in' type='password' label='Property Passcode' onChange={e => setPasscode(e.target.value)} />
+                                    </>
+                                ) : null}
+                                <section className='admin-controls'>
+                                    <Button className='btn signup-admin-btn' onClick={register}>Submit</Button>
+                                    <p>Already have an account <span className='toggleAuth' onClick={toggle}>Login</span> </p>
+                                </section>
+
+
+
+                            </>
+                        ) : (
+                                <section className='admin-controls'>
+                                    <Button className='btn login-admin-btn' onClick={login}>Login</Button>
+                                    <p>Don't have an account? <span className='toggleAuth' onClick={toggle}>Register</span></p>
+                                    <p>To login as tenant click <Link to='/'>Here</Link></p>
+                                </section>
+                            )}
+
+                    </form>
+                </section>
+
             </section>
         </div>
     )
