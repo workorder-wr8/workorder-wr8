@@ -17,16 +17,16 @@ import SpinnerContainer from '../Spinner/SpinnerContainer';
 // USES withStyles from material-UI for table cells and rows
 const StyledTableCell = withStyles((theme) => ({
     head: {
-        
+
     },
     body: {
-        
+
     }
 }))(TableCell);
 
 const StyledTableRow = withStyles((theme) => ({
     root: {
-        
+
     },
 }))(TableRow);
 
@@ -170,7 +170,6 @@ function ManagerDash(props) {
     useEffect(mapWorkOrders, [workorders]);
     useEffect(mapStaff, [staffMembers]);
 
-    console.log(unassignedWorkOrders)
     return (
         <div className='managerDash'>
             <div id='managerOverlay' onClick={overlayOff}>
@@ -197,7 +196,7 @@ function ManagerDash(props) {
                 ? <SpinnerContainer />
                 : <>
                     <div className='tableWrapper'>
-                    <TableContainer className='table-container' component={Paper}>
+                        <TableContainer className='table-container' component={Paper}>
                             <Table className='unassignedTable'>
                                 <TableHead>
                                     <TableRow>
@@ -234,7 +233,7 @@ function ManagerDash(props) {
                                     ))}
                                 </TableBody>
                             </Table>
-                         </TableContainer>           
+                        </TableContainer>
                     </div>
                     <div className='tableWrapper'>
                         <TableContainer className='table-container' component={Paper}>
@@ -286,7 +285,6 @@ function ManagerDash(props) {
 
                                                     </StyledTableCell>
                                                 )}
-                                            {/* <StyledTableCell align="right">{wo.stafffirst} {wo.stafflast}</StyledTableCell> */}
                                         </StyledTableRow>
                                     ))}
                                 </TableBody>
