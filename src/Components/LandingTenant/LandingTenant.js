@@ -71,6 +71,7 @@ const LandingTenant = props => {
         //error alerting twice
     }
 
+
     const register = (e) => {
         e.preventDefault();
         const {
@@ -110,8 +111,9 @@ const LandingTenant = props => {
                 props.history.push('/dash');
             })
             .catch(err => alert(err.response.data))
-    }
 
+    }
+   
     return (
         <div id='landingtenant'>
             <section className='container tenant-landing-container'>
@@ -141,7 +143,6 @@ const LandingTenant = props => {
                         {registeredView ?
                             (
                                 <>
-
                                     <label>Verify Password:</label>
                                     <input onChange={e => handleInputChange(e)} name='verPassword' value={input.verPassword} type='password' />
                                     <label>Phone Number:</label>
