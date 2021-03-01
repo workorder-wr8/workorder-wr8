@@ -1,28 +1,43 @@
+.admin-landing-header {
+    font-size: 3rem;
+    color: white;
+    margin: 0;
+}
+
 #landingadmin {
     background-image: url('https://assets.myzeki.com/33f66df0-3550-4b87-b369-5b315e6632d9/-/format/auto/-/quality/smart/-/resize/x1600/');
     background-position: center;
     height: 100vh;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: space-evenly;
     align-items: center;
+    background: url('../../assets/landing admin.jpeg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
     
 }
 
-#landingToggle {
-    margin-bottom: 15px;
-}
 
 #landingContent {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
     background-color: grey;
+    width: 500px;
+    margin: 0 auto;
+    padding: 10px;
+    border-radius: 10px;
+    background: #a4c0f5;
 }
 
-#landingContent input {
-    margin: 5px;
+#staffBtn {
+    border-bottom-left-radius: 0;
+}
+
+#landlordBtn {
+    border-bottom-right-radius: 0;
 }
 
 .toggleAuth {
@@ -30,3 +45,42 @@
     color: rgb(23, 152, 200);
     text-decoration: underline;
 }
+
+#landingContent input {
+    margin: 5px!important;
+}
+
+.default {
+    background-color:  #a4c0f5!important;
+}
+
+.active {
+    background-color: #15304C!important;
+    color: white!important;
+}
+
+.admin-controls {
+    margin-top: 5px;
+}
+
+.login-admin-btn,
+.signup-admin-btn {
+    background: #61837D!important;
+    color: white!important;
+}
+
+.fade-in {
+    opacity: 0;
+    animation: fadeIn ease-in 1;
+    animation-fill-mode: forwards;
+    animation-duration: 500ms;
+  }
+
+@keyframes fadeIn {
+    from {
+       opacity: 0;
+    }
+    to {
+       opacity: 1;
+    }
+ }

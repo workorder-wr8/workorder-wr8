@@ -1,10 +1,16 @@
 import { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { getUser } from '../../redux/reducers/userReducer';
+import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
 import './LandingTenant.css'
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import isStrongPassword from 'validator/lib/isStrongPassword';
+import isEmail from 'validator/lib/isEmail';
+
 
 const LandingTenant = props => {
     const [input, setInput] = useState({
@@ -75,6 +81,7 @@ const LandingTenant = props => {
         //error alerting twice
     }
 
+
     const register = (e) => {
         e.preventDefault();
         const {
@@ -98,17 +105,28 @@ const LandingTenant = props => {
 
         if(password!==verPassword) {
             isValidRegister = false;
+            console.log('passwords don\'t match', password, verPassword)
             setErrorStatementPasswordMatch('Passwords Do Not Match') 
         } else {
             setErrorStatementPasswordMatch('') 
             
         }
 
-        if(isStrongPassword(password)) {
+        if(!isStrongPassword(password)) {
             isValidRegister = false;
+            console.log('weak password', !isStrongPassword(password), password)
             setErrorStatementPasswordStrength('Password needs to contain at least one number, uppercase letter, lowercase letter, and symbol')
         } else {
             setErrorStatementPasswordStrength('')
+            
+        }
+
+        if(!isEmail(input.email,{domain_specific_validation: true})) {
+            isValidRegister = false;
+            console.log('not Email')
+            setErrorStatementEmail('Invalid email address')
+        } else {
+            setErrorStatementEmail('')
             
         }
         
@@ -136,14 +154,16 @@ const LandingTenant = props => {
             })
             .catch(err => alert(err.response.data))
         }
+
     }
 
     return (
         <div id='landingtenant'>
+            <h1 className='app-heading'>App Name Here</h1>
             <section className='container tenant-landing-container'>
                 <section className='input-fields'>
                     {/* id=landingcontent is on LandingAdmin.css */}
-                    <form id='landingContent' onSubmit={registeredView ? register : login}>
+                    <form id='landingContent' className='landing-form' onSubmit={registeredView ? register : login}>
                         <div id='errorStatementPasswordMatch'>{errorStatementPasswordMatch}</div>
                         <div id='errorStatementEmail'>{errorStatementEmail}</div>
                         <div id='errorStatementPasswordStrength'>{errorStatementPasswordStrength}</div>
@@ -151,44 +171,36 @@ const LandingTenant = props => {
 
                             (
                                 <>
-                                    <h1>Register</h1>
-                                    <label>First Name:</label>
-                                    <input onChange={e => handleInputChange(e)} name='firstName' value={input.firstName} type='text' />
-                                    <label>Last Name:</label>
-                                    <input onChange={e => handleInputChange(e)} name='lastName' value={input.lastName} type='text' />
+                                    <h1 className='form-heading' >Register</h1>
+                                    <TextField onChange={e => handleInputChange(e)} className='tenant-field fade-in' name='firstName' label='First Name' value={input.firstName} type='text' />
+                                    <TextField onChange={e => handleInputChange(e)} className='tenant-field fade-in' name='lastName' label='Last Name' value={input.lastName} type='text' />
                                 </>
                             )
                             : (
                                 <>
-                                    <h1>Login</h1>
+                                    <h1 className='form-heading' >Login</h1>
                                 </>
                             )}
-                        <label>Email:</label>
-                        <input onChange={e => handleInputChange(e)} name='email' value={input.email} type='text' />
-                        <label>Password:</label>
-                        <input onChange={e => handleInputChange(e)} name='password' value={input.password} type='password' />
+                        <TextField onChange={e => handleInputChange(e)} className='tenant-field' name='email' label='Email' value={input.email} type='text' />
+                        <TextField onChange={e => handleInputChange(e)} className='tenant-field' name='password' label='Password' value={input.password} type='password' />
                         {registeredView ?
                             (
                                 <>
-                                    <label>Verify Password:</label>
-                                    <input onChange={e => handleInputChange(e)} name='verPassword' value={input.verPassword} type='password' />
-                                    <label>Phone Number:</label>
-                                    <input onChange={e => handleInputChange(e)} type='tel' name='phone' value={input.phone} />
-                                    <label>Property:</label>
-                                    <select onChange={e => handleSelectChange(e)} defaultValue='Select Property' name='property'>
-                                        <option value='Select Property' disabled >Choose here</option>
+                                    <TextField onChange={e => handleInputChange(e)} className='tenant-field fade-in' name='verPassword' label='Verify Password' value={input.verPassword} type='password' />
+                                    <TextField onChange={e => handleInputChange(e)} type='tel' className='tenant-field fade-in' name='phone' label='Phone' value={input.phone} />
+                                    <Select onChange={e => handleSelectChange(e)} defaultValue='Select Property' name='property'>
+                                        <MenuItem value='Select Property' id='default-select' disabled >Property</MenuItem>
                                         {properties.map((property, index) => (
-                                            <option key={index} value={property.id}>{property.name}</option>
+                                            <MenuItem key={index} value={property.id}>{property.name}</MenuItem>
                                         ))}
-                                    </select>
-                                    <label>Unit Number:</label>
-                                    <input onChange={e => handleInputChange(e)} value={input.unitNumber} name='unitNumber' type='text' />
-                                    <button className='btn signup-btn' onClick={register}>Sign Up</button>
+                                    </Select>
+                                    <TextField onChange={e => handleInputChange(e)} value={input.unitNumber} label='Unit Number' className='tenant-field fade-in' name='unitNumber' type='text' />
+                                    <Button className='btn signup-btn' onClick={register}>Sign Up</Button>
                                     <p>Already have an account? <span className='toggleAuth' onClick={() => handleToggle()}>Login Here</span></p>
                                 </>
                             ) : (
                                 <>
-                                    <button className='btn login-btn' onClick={login}>Login</button>
+                                    <Button className='btn login-btn' onClick={login} variant="contained">Login</Button>
                                     <p>Don't have an account? <span className='toggleAuth' onClick={() => handleToggle()}>Register Here</span></p>
                                     <p>For admin access click <Link to='/admin'>Here</Link></p>
                                 </>)}
