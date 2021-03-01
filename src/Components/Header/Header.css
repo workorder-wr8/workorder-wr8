@@ -8,10 +8,34 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    align-items: center;
     padding: 21px;
     margin: 0px;
 }
 
 .header-props {
     text-transform: capitalize;
+}
+
+.property-title {
+    font-size: 2rem;
+}
+
+.link {
+    text-decoration: none;
+}
+
+.create-wo-btn {
+    text-transform: capitalize!important;
+    background-color: #61837D!important;
+    color: white!important;
+}
+
+.logout-btn {
+    background-color: #15304C!important;
+    color: white!important;
+}
+
+.logout-icon {
+    margin-left: 3px;
 }

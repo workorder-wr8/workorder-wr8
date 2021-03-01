@@ -145,8 +145,8 @@ function LandlordDash(props) {
             </div>
             <br />
 
-            <TableContainer component={Paper}>
-                <TextField onChange={e => filterproperties(e)} className='search-property-field' id="outlined-basic" label="Search" variant="outlined" value={search} />
+            <TableContainer className='table-container' component={Paper}>
+                <TextField onChange={e => filterproperties(e)} className='search-workorder-field' id="outlined-basic" label="Search" variant="outlined" value={search} />
                 <Table className={classes.table} aria-label="simple table">
                     <TableHead>
                         <TableRow>
@@ -167,9 +167,9 @@ function LandlordDash(props) {
                         {properties
                             .filter(e => e.name.toLowerCase().includes(search.toLowerCase()))
                             .map(property => (
-                                <TableRow key={property.id}>
+                                <TableRow key={property.id} className='workorderId' title='Open Property View' onClick={openPropertyView}>
                                     <TableCell component="th" scope="row">
-                                        <span className='workorderId' onClick={openPropertyView} title='Open Property View'>{property.id}</span>
+                                        {property.id}
                                     </TableCell>
                                     <TableCell align="right">{property.name}</TableCell>
                                     <TableCell align="right">{property.address1}</TableCell>

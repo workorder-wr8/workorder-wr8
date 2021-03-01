@@ -1,5 +1,8 @@
 import axios from 'axios'
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
+import Button from '@material-ui/core/Button';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import './Header.css';
 import { connect } from 'react-redux';
 import { getUser, clearUser } from '../../redux/reducers/userReducer';
@@ -33,10 +36,10 @@ function Header(props) {
                 (
                     <nav>
                         <ul className='nav-links'>
-                            <li className='header-props'>{props.user.firstname}, {props.user.lastname}</li>
-                            <li className='header-props'>{props.user.name}</li>
-                            {props.location.pathname === '/dash' ? <Link to='/create/workorder'><button>Create Work Order</button></Link> : null}
-                            <li><button onClick={logout}>Logout</button></li>
+                            <li className='header-props'>Welcome {props.user.firstname}, {props.user.lastname}</li>
+                            <li className='header-props property-title'>{props.user.name}</li>
+                            {props.location.pathname === '/dash' ? <Link className='link' to='/create/workorder'><Button className='create-wo-btn'>Create Work Order</Button></Link> : null}
+                            <li><Button className='btn logout-btn' onClick={logout}>Logout<FontAwesomeIcon className='logout-icon' icon={faSignOutAlt} /></Button></li>
                         </ul>
                     </nav>
                 )}
