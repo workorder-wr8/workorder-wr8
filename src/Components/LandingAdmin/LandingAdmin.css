@@ -1,4 +1,6 @@
 #landingadmin {
+    background-image: url('https://assets.myzeki.com/33f66df0-3550-4b87-b369-5b315e6632d9/-/format/auto/-/quality/smart/-/resize/x1600/');
+    background-position: center;
     height: 100vh;
     display: flex;
     flex-direction: column;
