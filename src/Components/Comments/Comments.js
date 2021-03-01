@@ -53,7 +53,7 @@ const Comments = props => {
     } else {
         <p>manager stuff here</p>
     }
-
+    console.log('comments', props)
     return (
         <section>
             <p className='comment-header'>Comments:</p>
