@@ -1,7 +1,67 @@
 #landingtenant {
-    height: 100vh;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: space-evenly;
+    align-content: center;
     align-items: center;
+    height: 100vh;
+    background: url('../../assets/landing.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
 }
+
+.app-heading {
+    font-size: 3rem;
+    color: white;
+}
+
+.landing-form {
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    background: #a4c0f5;
+    border-radius: 15px;
+    width: 500px;
+    padding: 5px;
+    color: white;
+}
+
+.form-heading {
+    font-size: 1.5rem;
+}
+
+.tenant-field {
+    margin: 3px!important;
+}
+
+.btn {
+    margin: auto!important;
+    width: 100px;
+}
+
+.login-btn,
+.signup-btn {
+    background-color: #61837D!important;
+    color: white!important;
+}
+
+label {
+    color: white!important;
+}
+
+.fade-in {
+    opacity: 0;
+    animation: fadeIn ease-in 1;
+    animation-fill-mode: forwards;
+    animation-duration: 500ms;
+  }
+
+@keyframes fadeIn {
+    from {
+       opacity: 0;
+    }
+    to {
+       opacity: 1;
+    }
+ }
