@@ -27,27 +27,30 @@ const ManageWorkOrder = (props) => {
         return (
             <>
                 <div className='workorder-title'>
-                    <h4>{title}</h4>
+                    <h4 id='workorder-title'>{title}</h4>
                     <span>#{id}</span>
                 </div>
-                <div className='workorder-description'>
-                    <p>{description}</p>
-                </div>
                 <div className='workorder-details'>
-                    <span>Status: {status}</span>
-                    <span>Created at: {dayjs(datecreated).format('MMMM D, YYYY h:mm A')}</span>
-                    {lastupdated === null
-                        ?
-                        null
-                        :
-                        <span>Updated at: {dayjs(lastupdated).format('MMMM D, YYYY h:mm A')}</span>
-                    }
-                    {datecompleted === null
-                        ?
-                        null
-                        :
-                        <span>{dayjs(datecompleted).format('MMMM D, YYYY h:mm A')}</span>
-                    }
+                    <h3 id='status-workorder'>Status: {status}</h3>
+                    <div className='status-updates'>
+                        <span>Created: {dayjs(datecreated).format('dddd MMMM D YYYY h:mm A')}</span>
+                        {lastupdated === null
+                            ?
+                            null
+                            :
+                            <span>Last Updated: {dayjs(lastupdated).format('dddd MMMM D, YYYY h:mm A')}</span>
+                        }
+                        {datecompleted === null
+                            ?
+                            null
+                            :
+                            <span>Date Completed: {dayjs(datecompleted).format('dddd MMMM D, YYYY h:mm A')}</span>
+                        }
+                    </div>
+                </div>
+                <div className='workorder-description'>
+                    <h3 id='description-workorder'>Workorder Description:</h3>
+                    <p>{description}</p>
                 </div>
             </>
         )

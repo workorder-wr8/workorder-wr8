@@ -145,7 +145,7 @@ function LandlordDash(props) {
             </div>
             <br />
 
-            <TableContainer component={Paper}>
+            <TableContainer className='table-container' component={Paper}>
                 <TextField onChange={e => filterproperties(e)} className='search-property-field' id="outlined-basic" label="Search" variant="outlined" value={search} />
                 <Table className={classes.table} aria-label="simple table">
                     <TableHead>

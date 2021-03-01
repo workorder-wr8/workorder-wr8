@@ -57,7 +57,7 @@ const Comments = props => {
     return (
         <section>
             <p className='comment-header'>Comments:</p>
-            
+
             <section className='comments'>
                 {displayComments()}
             </section>

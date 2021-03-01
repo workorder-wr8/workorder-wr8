@@ -172,7 +172,6 @@ function ManagerDash(props) {
     useEffect(mapWorkOrders, [workorders]);
     useEffect(mapStaff, [staffMembers]);
 
-    console.log(unassignedWorkOrders)
     return (
         <div>
             <div id='managerOverlay' onClick={overlayOff}>
@@ -285,7 +284,6 @@ function ManagerDash(props) {
 
                                                 </StyledTableCell>
                                             )}
-                                        {/* <StyledTableCell align="right">{wo.stafffirst} {wo.stafflast}</StyledTableCell> */}
                                     </StyledTableRow>
                                 ))}
                             </TableBody>
