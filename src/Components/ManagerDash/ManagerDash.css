@@ -33,7 +33,6 @@
   height: 90%;
 }
 
-
 .row {
   z-index: 1;
 }
@@ -45,4 +44,45 @@
 #changeStaffBtn {
   text-decoration: underline;
   color: blue
+}
+
+.unassignedRow {
+  background-color: #D38A88
+}
+
+.unassignedRow:nth-of-type(odd) {
+  background-color: #B34642;
+}
+
+.unassignedRow:nth-of-type(odd) > .unassignedCell{
+  color: white;
+}
+
+.unassignedRow:nth-of-type(odd) > td > #staffOptions{
+  color: black;
+}
+
+.tableWrapper {
+  background-color: #15304C;
+  height: auto;
+}
+
+.assignedRow {
+  background-color: #61837D;
+}
+
+.assignedRow:nth-of-type(odd) {
+  background-color: #23360E;
+}
+
+.assignedRow:nth-of-type(odd) > td{
+  color: white;
+}
+
+#staffOptions{
+  color: black;
+}
+
+.MuiTableContainer-root {
+  height: 900px;
 }

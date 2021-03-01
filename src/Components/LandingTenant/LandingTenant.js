@@ -8,6 +8,8 @@ import MenuItem from '@material-ui/core/MenuItem';
 import './LandingTenant.css'
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import isStrongPassword from 'validator/lib/isStrongPassword';
+import isEmail from 'validator/lib/isEmail';
 
 
 const LandingTenant = props => {
@@ -27,6 +29,9 @@ const LandingTenant = props => {
         zip: '',
         unitNumber: ''
     });
+    const [errorStatementPasswordMatch, setErrorStatementPasswordMatch] = useState([]);
+    const [errorStatementEmail, setErrorStatementEmail] = useState([]);
+    const [errorStatementPasswordStrength, setErrorStatementPasswordStrength] = useState([])
 
     const [properties, setProperties] = useState([]);
 
@@ -85,6 +90,7 @@ const LandingTenant = props => {
             email,
             phone,
             password,
+            verPassword,
             property,
             address1,
             city,
@@ -95,27 +101,59 @@ const LandingTenant = props => {
             manager
         } = input;
 
-        axios.post('/api/tenant/register', {
-            firstName,
-            lastName,
-            email,
-            phone,
-            password,
-            property,
-            address1,
-            city,
-            state,
-            zip,
-            unitNumber,
-            landlord,
-            manager
-        })
+        let isValidRegister = true;
+
+        if(password!==verPassword) {
+            isValidRegister = false;
+            console.log('passwords don\'t match', password, verPassword)
+            setErrorStatementPasswordMatch('Passwords Do Not Match') 
+        } else {
+            setErrorStatementPasswordMatch('') 
+            
+        }
+
+        if(!isStrongPassword(password)) {
+            isValidRegister = false;
+            console.log('weak password', !isStrongPassword(password), password)
+            setErrorStatementPasswordStrength('Password needs to contain at least one number, uppercase letter, lowercase letter, and symbol')
+        } else {
+            setErrorStatementPasswordStrength('')
+            
+        }
+
+        if(!isEmail(input.email,{domain_specific_validation: true})) {
+            isValidRegister = false;
+            console.log('not Email')
+            setErrorStatementEmail('Invalid email address')
+        } else {
+            setErrorStatementEmail('')
+            
+        }
+        
+
+        if(isValidRegister) {
+            axios.post('/api/tenant/register', {
+                firstName,
+                lastName,
+                email,
+                phone,
+                password,
+                property,
+                address1,
+                city,
+                state,
+                zip,
+                unitNumber,
+                landlord,
+                manager
+            })
             .then(tenant => {
                 props.getUser(tenant.data);
                 //USE REDUX TO SET THEM ON STATE
                 props.history.push('/dash');
             })
             .catch(err => alert(err.response.data))
+        }
 
     }
 
@@ -124,7 +162,11 @@ const LandingTenant = props => {
             <h1 className='app-heading'>App Name Here</h1>
             <section className='container tenant-landing-container'>
                 <section className='input-fields'>
-                    <form className='landing-form' onSubmit={registeredView ? register : login}>
+                    {/* id=landingcontent is on LandingAdmin.css */}
+                    <form id='landingContent' className='landing-form' onSubmit={registeredView ? register : login}>
+                        <div id='errorStatementPasswordMatch'>{errorStatementPasswordMatch}</div>
+                        <div id='errorStatementEmail'>{errorStatementEmail}</div>
+                        <div id='errorStatementPasswordStrength'>{errorStatementPasswordStrength}</div>
                         {registeredView ?
 
                             (
