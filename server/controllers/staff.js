@@ -32,7 +32,7 @@ module.exports = {
 
     const [property] = await db.properties.get_property_for_passcode(propertyid)
     const isAuthenticated = bcrypt.compareSync(passcode, property.passcode);
-    if(!isAuthenticated)
+    if (!isAuthenticated)
       return res.status(401).send('Invalid Property Passcode');
 
 
@@ -52,19 +52,21 @@ module.exports = {
     return res.status(404).send('No user found');
   },
   getworkorders: async (req, res) => {
-    const { id } = req.params
-    const db = req.app.get('db')
+    if (req.session.user) {
+      const { id } = req.params
+      const db = req.app.get('db')
 
-    const workorders = await db.staff.get_workorders(id)
+      const workorders = await db.staff.get_workorders(id)
 
-    res.status(200).send(workorders)
+      res.status(200).send(workorders)
+    }
   },
   updateworkorders: async (req, res) => {
     const { id, status, staffid } = req.body
     const db = req.app.get('db')
 
     const updatedStatus = await db.staff.schedule_workorder(id, status, staffid)
-    
+
     return res.status(200).send(updatedStatus);
   }
 }
