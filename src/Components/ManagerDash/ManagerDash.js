@@ -198,7 +198,7 @@ function ManagerDash(props) {
                 : <>
                     <div className='tableWrapper'>
                     <TableContainer className='table-container' component={Paper}>
-                            <Table className='unassignedTable'>
+                            <Table className='unassignedTable' stickyHeader aria-label="sticky table">
                                 <TableHead>
                                     <TableRow>
                                         <StyledTableCell align='right'>ID</StyledTableCell>
@@ -216,7 +216,7 @@ function ManagerDash(props) {
                                             <StyledTableCell align='right' className='unassignedCell'>{wo.id}</StyledTableCell>
                                             <StyledTableCell align='right' className='unassignedCell'>{wo.tenantlast},{wo.tenantfirst}</StyledTableCell>
                                             <StyledTableCell align='right' className='unassignedCell'>{wo.title}</StyledTableCell>
-                                            <StyledTableCell align='right' className='unassignedCell'>{wo.description}</StyledTableCell>
+                                            <StyledTableCell align='right' className='unassignedCell tenant-wo-description'>{wo.description}</StyledTableCell>
                                             <StyledTableCell align='right' className='unassignedCell'>{wo.status}</StyledTableCell>
                                             <StyledTableCell align='right' className='unassignedCell'>{dayjs(wo.datecreated).format('MMMM D, YYYY h:mm A')}</StyledTableCell>
                                             <TableCell align="right" onClick={e => e.stopPropagation()} >{
@@ -238,7 +238,7 @@ function ManagerDash(props) {
                     </div>
                     <div className='tableWrapper'>
                         <TableContainer className='table-container' component={Paper}>
-                            <Table className='assignedTable'>
+                            <Table className='assignedTable' stickyHeader aria-label="sticky table">
                                 <TableHead>
                                     <TableRow>
                                         <StyledTableCell align='right'>ID</StyledTableCell>
@@ -258,7 +258,7 @@ function ManagerDash(props) {
                                             <StyledTableCell align='right'>{wo.id}</StyledTableCell>
                                             <StyledTableCell align='right' >{wo.tenantlast},{wo.tenantfirst}</StyledTableCell>
                                             <StyledTableCell align='right'>{wo.title}</StyledTableCell>
-                                            <StyledTableCell align='right'>{wo.description}</StyledTableCell>
+                                            <StyledTableCell className='tenant-wo-description' align='right'>{wo.description}</StyledTableCell>
                                             <StyledTableCell align='right'>{wo.status}</StyledTableCell>
                                             <StyledTableCell align='right'>{dayjs(wo.datecreated).format('MMMM D, YYYY h:mm A')}</StyledTableCell>
                                             <StyledTableCell align='right'>{wo.lastupdated ? dayjs(wo.lastupdated).format('MMMM D, YYYY h:mm A') : '-'}</StyledTableCell>
