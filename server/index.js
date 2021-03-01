@@ -54,9 +54,6 @@ app.post('/api/landlord/register', landlordCtrl.register);
 app.get('/api/landlord/me', landlordCtrl.getLandlord);
 app.get('/api/landlord/properties/:id', landlordCtrl.getProperties)
 app.post('/api/property/new', landlordCtrl.addProperty)
-app.get('/api/landlord/property/stats/:propertyid', landlordCtrl.getStats)
-app.get('/api/landlord/property/time/:propertyid', landlordCtrl.getTime)
-app.get('/api/landlord/property/datecreated/:propertyid', landlordCtrl.getdatecreated)
 app.get('/api/landlord/property/data/:propertyid', landlordCtrl.getStatsTimeAndDateCreated)
 
 //property endpoints

@@ -56,8 +56,8 @@ function ManagerDash(props) {
     const [overlayMessages, setOverlayMessages] = useState([])
     const [isLoading, setLoading] = useState(true);
 
-    const addMessage =  (id, content) => {
-         axios.put('/api/messages/manager/create', { id, content })
+    const addMessage = (id, content) => {
+        axios.put('/api/messages/manager/create', { id, content })
             .then(() => {
                 setOverlayData({ ...overlayData, overlayMessageInput: '' });
                 getMessages(id);
@@ -172,6 +172,7 @@ function ManagerDash(props) {
     useEffect(mapWorkOrders, [workorders]);
     useEffect(mapStaff, [staffMembers]);
 
+    console.log(unassignedWorkOrders)
     return (
         <div>
             <div id='managerOverlay' onClick={overlayOff}>
@@ -180,7 +181,7 @@ function ManagerDash(props) {
                     <p> Title: {overlayData.overlayTitle}</p>
                     <p> Description: {overlayData.overlayDescription}</p>
                     <p>  Status: {overlayData.overlayStatus}</p>
-                <p>  Date Created: {dayjs(overlayData.datecreated).format('MMMM D, YYYY h:mm A')}</p>
+                    <p>  Date Created: {dayjs(overlayData.datecreated).format('MMMM D, YYYY h:mm A')}</p>
                     <p>  Last Updated: {dayjs(overlayData.overlayLastUpdated).format('MMMM D, YYYY h:mm A')}</p>
                     <p>  Date Completed: {dayjs(overlayData.overlayDateCompleted).format('MMMM D, YYYY h:mm A')}</p>
                 </div>
@@ -214,7 +215,7 @@ function ManagerDash(props) {
                                 {unassignedWorkOrders.map(wo => (
                                     <StyledTableRow className='row' key={wo.id} value={wo} onClick={changeOverlay}>
                                         <StyledTableCell align='right' >{wo.id}</StyledTableCell>
-                                        <StyledTableCell align='right' >{wo.tenantlastname},{wo.tenantfirstname}</StyledTableCell>
+                                        <StyledTableCell align='right' >{wo.tenantlast},{wo.tenantfirst}</StyledTableCell>
                                         <StyledTableCell align='right' >{wo.title}</StyledTableCell>
                                         <StyledTableCell align='right' >{wo.description}</StyledTableCell>
                                         <StyledTableCell align='right' >{wo.status}</StyledTableCell>
@@ -254,7 +255,7 @@ function ManagerDash(props) {
                                 {assignedWorkOrders.map(wo => (
                                     <StyledTableRow key={wo.id} value={wo} onClick={changeOverlay}>
                                         <StyledTableCell align='right'>{wo.id}</StyledTableCell>
-                                        <StyledTableCell align='right'>{wo.tenantlastname},{wo.tenantfirstname}</StyledTableCell>
+                                        <StyledTableCell align='right' >{wo.tenantlast},{wo.tenantfirst}</StyledTableCell>
                                         <StyledTableCell align='right'>{wo.title}</StyledTableCell>
                                         <StyledTableCell align='right'>{wo.description}</StyledTableCell>
                                         <StyledTableCell align='right'>{wo.status}</StyledTableCell>
