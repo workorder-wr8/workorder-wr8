@@ -28,7 +28,7 @@ function LandlordProperty(props) {
 
     useEffect(() => {
         let propertyid = +props.match.params.id
-        axios.get(`/api/landlord/property/data/${[propertyid]}`)
+        axios.get(`/api/landlord/property/data/${propertyid}`)
             .then(res => {
                 if (res.data[0]) {
                     let receivedDates = res.data.filter((row, index) => ((index + 1) % 4 === 0)).map(row => ({ labels: row.day, datasets: row.workorders }));
