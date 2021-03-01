@@ -39,7 +39,9 @@ const TenantDash = props => {
         setSearch(e.target.value);
     }
 
-
+    const openWO = (id) => {
+        props.history.push(`/dash/workorder/${id}`)
+    }
 
     return (
         <div>
@@ -64,12 +66,11 @@ const TenantDash = props => {
                                     {workOrders.filter(wo => (
                                         wo.status.toLowerCase().includes(search.toLowerCase()) || wo.title.toLowerCase().includes(search.toLowerCase())
                                     )).map(wo => (
-                                        <TableRow key={wo.id} onClick={e => {
-                                            < Link to={{ pathname: `/dash/workorder/${wo.id}`, id: wo.id }}
-                                            />
-                                        }}>
+                                        <TableRow key={wo.id} onClick={e => openWO(wo.id)}>
                                             <TableCell>{wo.id}</TableCell>
-                                            <TableCell component="th" scope="row">{wo.title}</TableCell>
+                                            <TableCell component="th" scope="row">
+                                                {wo.title}
+                                            </TableCell>
                                             <TableCell align="right" className='tenant-wo-description'>{wo.description}</TableCell>
                                             <TableCell>{dayjs(wo.datecreated).format('MMMM D, YYYY h:mm A')}</TableCell>
                                             {(wo.status === 'Open' || wo.status === 'Completed')

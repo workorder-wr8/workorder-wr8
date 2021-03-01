@@ -14,7 +14,8 @@ const ManageWorkOrder = (props) => {
     }, [])
 
     const getWorkOrder = () => {
-        const { id } = props.location;
+        const id = props.location.pathname.substring(16);
+        // console.log(id)
         axios.get(`/api/workorder/${id}`)
             .then(res => {
                 setWorkOrder(res.data[0]);
