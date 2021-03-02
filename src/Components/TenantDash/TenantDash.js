@@ -32,7 +32,10 @@ const TenantDash = props => {
                 setWorkOrders(wo.data);
                 setLoading(!isLoading);
             })
-            .catch(err => console.log(`Error: ${err.message}`));
+            .catch(err => {
+                alert(`Error: ${err.response.request.response}`);
+                setLoading(!isLoading);
+            });
     }
 
     const searchWorkOrders = e => {
