@@ -1,7 +1,7 @@
 
 module.exports = {
   create: async (req, res) => {
-    if(req.session.user) {
+    if (req.session.user) {
       const landlordid = req.session.user.landlordid
       const managerid = req.session.user.managerid
       const propertyid = req.session.user.propertyid
@@ -13,9 +13,9 @@ module.exports = {
       return res.sendStatus(200);
     }
   },
-  getManager: async (req,res) => {
-    if(req.session.user) {
-      const {propertyid} = req.session.user;
+  getManager: async (req, res) => {
+    if (req.session.user) {
+      const { propertyid } = req.session.user;
       const workorders = await req.app.get('db').workorder.get_workorders_by_manager(propertyid);
 
       if (!workorders[0]) {
@@ -30,7 +30,7 @@ module.exports = {
     const { tenantid } = req.session.user;
     const db = req.app.get('db');
 
-    const workOrders = await db.workorder.get_workorders_by_tenant( tenantid );
+    const workOrders = await db.workorder.get_workorders_by_tenant(tenantid);
 
     if (!workOrders[0]) {
       return res.status(404).send(`No workorders to display`);

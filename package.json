@@ -22,6 +22,7 @@
     "express": "^4.17.1",
     "express-session": "^1.17.1",
     "massive": "^6.6.5",
+    "nodemailer": "^6.5.0",
     "react": "^17.0.1",
     "react-chart": "0.0.1",
     "react-chartjs-2": "^2.11.1",

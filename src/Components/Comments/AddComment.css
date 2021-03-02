@@ -11,3 +11,7 @@
 .add-comment-container button {
     width: 25%
 }
+
+#addBtn-comment {
+    background-color: #D5C586;;
+}

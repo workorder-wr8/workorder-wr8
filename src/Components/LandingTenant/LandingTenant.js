@@ -36,7 +36,6 @@ const LandingTenant = props => {
     const [properties, setProperties] = useState([]);
 
     const [registeredView, setRegisteredView] = useState(false);
-
     useEffect(() => {
         axios.get('/api/properties')
             .then(properties => {
@@ -78,7 +77,7 @@ const LandingTenant = props => {
                 props.history.push('/dash');
             })
             .catch(err => alert(err.response.data));
-        //error alerting twice
+
     }
 
 
@@ -103,35 +102,35 @@ const LandingTenant = props => {
 
         let isValidRegister = true;
 
-        if(password!==verPassword) {
+        if (password !== verPassword) {
             isValidRegister = false;
             console.log('passwords don\'t match', password, verPassword)
-            setErrorStatementPasswordMatch('Passwords Do Not Match') 
+            setErrorStatementPasswordMatch('Passwords Do Not Match')
         } else {
-            setErrorStatementPasswordMatch('') 
-            
+            setErrorStatementPasswordMatch('')
+
         }
 
-        if(!isStrongPassword(password)) {
+        if (!isStrongPassword(password)) {
             isValidRegister = false;
             console.log('weak password', !isStrongPassword(password), password)
             setErrorStatementPasswordStrength('Password needs to contain at least one number, uppercase letter, lowercase letter, and symbol')
         } else {
             setErrorStatementPasswordStrength('')
-            
+
         }
 
-        if(!isEmail(input.email,{domain_specific_validation: true})) {
+        if (!isEmail(input.email, { domain_specific_validation: true })) {
             isValidRegister = false;
             console.log('not Email')
             setErrorStatementEmail('Invalid email address')
         } else {
             setErrorStatementEmail('')
-            
-        }
-        
 
-        if(isValidRegister) {
+        }
+
+
+        if (isValidRegister) {
             axios.post('/api/tenant/register', {
                 firstName,
                 lastName,
@@ -147,12 +146,11 @@ const LandingTenant = props => {
                 landlord,
                 manager
             })
-            .then(tenant => {
-                props.getUser(tenant.data);
-                //USE REDUX TO SET THEM ON STATE
-                props.history.push('/dash');
-            })
-            .catch(err => alert(err.response.data))
+                .then(tenant => {
+                    props.getUser(tenant.data);
+                    props.history.push('/dash');
+                })
+                .catch(err => alert(err.response.data))
         }
 
     }
@@ -163,6 +161,7 @@ const LandingTenant = props => {
             <section className='container tenant-landing-container'>
                 <section className='input-fields'>
                     {/* id=landingcontent is on LandingAdmin.css */}
+
                     <form id='landingContent' className='landing-form' onSubmit={registeredView ? register : login}>
                         <div id='errorStatementPasswordMatch'>{errorStatementPasswordMatch}</div>
                         <div id='errorStatementEmail'>{errorStatementEmail}</div>

@@ -1,9 +1,9 @@
 .workorder-table-container {
   margin: 10px;
+  height: 100vh;
 }
 
 .table-container {
-    margin-top: 10px!important;
     width:60%!important;
     margin: 0 auto;
     height: 600px;
@@ -15,6 +15,10 @@
 
 .search-workorder-field {
   width:60%;
+}
+
+.search-workorder-field input {
+ border-color: white!important;
 }
 
 .tenant-wo-description {
