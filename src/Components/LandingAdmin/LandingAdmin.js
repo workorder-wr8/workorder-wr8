@@ -156,7 +156,7 @@ const LandingAdmin = (props) => {
                                     </>
                                 ) : null}
                                 <section className='admin-controls'>
-                                    <Button className='btn signup-admin-btn' onClick={register}>Submit</Button>
+                                    <Button className='btn signup-admin-btn' type='submit' onClick={register}>Submit</Button>
                                     <p>Already have an account <span className='toggleAuth' onClick={toggle}>Login</span> </p>
                                 </section>
 
@@ -165,7 +165,7 @@ const LandingAdmin = (props) => {
                             </>
                         ) : (
                                 <section className='admin-controls'>
-                                    <Button className='btn login-admin-btn' onClick={login}>Login</Button>
+                                    <Button className='btn login-admin-btn' type='submit' onClick={login}>Login</Button>
                                     <p>Don't have an account? <span className='toggleAuth' onClick={toggle}>Register</span></p>
                                     <p>To login as tenant click <Link to='/'>Here</Link></p>
                                 </section>

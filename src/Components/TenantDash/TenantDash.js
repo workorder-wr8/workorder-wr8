@@ -53,7 +53,11 @@ const TenantDash = props => {
                     <SpinnerContainer />
                     :
                     <section className='workorder-table-container'>
-                        <TextField onChange={e => searchWorkOrders(e)} className='search-workorder-field' id="outlined-basic" label="Search" variant="outlined" value={search} />
+
+               
+                            <TextField onChange={e => searchWorkOrders(e)} className='search-workorder-field' id="outlined-basic" label="Search" variant="outlined" value={search} />
+             
+
                         <TableContainer className='table-container' component={Paper} >
 
                             <Table stickyHeader aria-label="sticky table">
@@ -83,7 +87,7 @@ const TenantDash = props => {
                                                 :
 
                                                 (
-                                                    <TableCell>In Progress</TableCell>
+                                                    <TableCell><span className='in-progress-wo'>In Progress</span></TableCell>
                                                 )
                                             }
                                         </TableRow>
