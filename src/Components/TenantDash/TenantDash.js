@@ -20,7 +20,6 @@ const TenantDash = props => {
     const [workOrders, setWorkOrders] = useState([]);
     const [search, setSearch] = useState('');
     const [isLoading, setLoading] = useState(true);
-
     const columns = [{ id: 'number', label: 'Work Order #' }, { id: 'title', label: 'Title' }, { id: 'short-desc', label: 'Short Description' }, { id: 'date', label: 'Date Created' }, { id: 'status', label: 'Status' }];
     useEffect(() => {
         getWorkOrders();
@@ -32,11 +31,18 @@ const TenantDash = props => {
                 setWorkOrders(wo.data);
                 setLoading(!isLoading);
             })
-            .catch(err => console.log(`Error: ${err.message}`));
+            .catch(err => {
+                alert(`Error: ${err.response.request.response}`);
+                setLoading(!isLoading);
+            });
     }
 
     const searchWorkOrders = e => {
         setSearch(e.target.value);
+    }
+
+    const openWO = (id) => {
+        props.history.push(`/dash/workorder/${id}`)
     }
 
     return (
@@ -51,7 +57,7 @@ const TenantDash = props => {
                         <TableContainer className='table-container' component={Paper} >
 
                             <Table stickyHeader aria-label="sticky table">
-                                <TableHead style={{ backgroundColor: 'red' }}>
+                                <TableHead>
                                     <TableRow>
                                         {columns.map(column => (
                                             <TableCell key={column.id}>{column.label}</TableCell>
@@ -62,12 +68,10 @@ const TenantDash = props => {
                                     {workOrders.filter(wo => (
                                         wo.status.toLowerCase().includes(search.toLowerCase()) || wo.title.toLowerCase().includes(search.toLowerCase())
                                     )).map(wo => (
-                                        <TableRow key={wo.id}>
+                                        <TableRow key={wo.id} onClick={e => openWO(wo.id)}>
                                             <TableCell>{wo.id}</TableCell>
                                             <TableCell component="th" scope="row">
-                                                <Link to={{ pathname: `/dash/workorder/${wo.id}`, id: wo.id }}>
-                                                    {wo.title}
-                                                </Link>
+                                                {wo.title}
                                             </TableCell>
                                             <TableCell align="right" className='tenant-wo-description'>{wo.description}</TableCell>
                                             <TableCell>{dayjs(wo.datecreated).format('MMMM D, YYYY h:mm A')}</TableCell>

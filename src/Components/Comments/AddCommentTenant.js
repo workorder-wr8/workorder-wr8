@@ -28,7 +28,7 @@ const AddComment = props => {
                 placeholder='Comment'
                 className='comment-input'
             />
-            <button onClick={() => addComment()}>Add Comment</button>
+            <button id='addBtn-comment' onClick={() => addComment()}>Add Comment</button>
         </section>
     )
 }

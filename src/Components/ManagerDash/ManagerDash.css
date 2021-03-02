@@ -46,6 +46,10 @@
   color: blue
 }
 
+.unassignedTable {
+  height: auto!important;
+}
+
 .unassignedRow {
   background-color: #D38A88
 }

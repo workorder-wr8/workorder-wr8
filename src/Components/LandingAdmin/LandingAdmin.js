@@ -27,6 +27,11 @@ const LandingAdmin = (props) => {
 
 
     useEffect(() => {
+        if (props.location.pathname.includes('register')) {
+            setRole('manager')
+            setRegisterView(true)
+            setEmail(props.location.pathname.substring(16))
+        }
         axios.get('/api/properties')
             .then(properties => {
                 setProperties(properties.data);
@@ -105,6 +110,10 @@ const LandingAdmin = (props) => {
         setRegisterView(!registerView)
     }
 
+    const handleChange = (e) => {
+        setEmail(e.target.value)
+    }
+
     return (
         <div >
 
@@ -126,7 +135,7 @@ const LandingAdmin = (props) => {
                             </>
                         ) : null}
 
-                        <TextField className='admin-fields' label='Email' type='text' onChange={e => setEmail(e.target.value)} />
+                        <TextField className='admin-fields' label='Email' type='text' onChange={handleChange} value={email} />
                         <TextField className='admin-fields' label='Password' type='password' onChange={e => setPassword(e.target.value)} />
 
                         {registerView ? (

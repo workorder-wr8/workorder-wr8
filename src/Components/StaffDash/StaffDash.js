@@ -73,19 +73,23 @@ function StaffDash(props) {
     const searchwo = e => {
         setSearch(e.target.value)
     }
-    // console.log(workorders)
+
+    const openWO = (id) => {
+        props.history.push(`${props.match.url}/workorder/${id}`)
+    }
+
     return (
         <div id='staffDash'>
-            <h1>Unread</h1>
+            <br />
             {isLoading
                 ?
                 <SpinnerContainer />
                 :
-                <section className=''>
+                <section className='unread-workorders-staff'>
                     <TextField onChange={e => searchwo(e)} className='search-workorder-field' id="outlined-basic" label="Search" variant="outlined" value={search} />
                     <TableContainer className='table-container' component={Paper}>
-                        <Table className={classes.table} aria-label="simple table">
-                            <TableHead className={classes.tablehead}>
+                        <Table className={classes.table} aria-label="simple table" >
+                            <TableHead className={classes.tablehead} >
                                 <TableRow>
                                     <TableCell>ID#</TableCell>
                                     <TableCell align="right">Name</TableCell>
@@ -101,15 +105,14 @@ function StaffDash(props) {
                                 {workorders
                                     .filter(e => e.status === 'Unread' && (e.description.toLowerCase().includes(search.toLocaleLowerCase()) || e.title.toLowerCase().includes(search.toLowerCase())))
                                     .map(wo => (
-                                        <TableRow key={wo.id}>
+                                        <TableRow key={wo.id} onClick={e => openWO(wo.id)}>
                                             <TableCell component="th" scope="row">
                                                 {wo.id}
                                             </TableCell>
                                             <TableCell align="right">{wo.firstname} {wo.lastname}</TableCell>
                                             <TableCell align="right">
-                                                <Link to={{ pathname: `${props.match.url}/workorder/${wo.id}`, id: wo.id }}>
-                                                    {wo.title}
-                                                </Link></TableCell>
+                                                {wo.title}
+                                            </TableCell>
                                             <TableCell align="right">{wo.description.length > 100 ? wo.description.substring(0, 80).concat('...') : wo.description}</TableCell>
                                             <TableCell align="right">{dayjs(wo.datecreated).format('MMMM D, YYYY h:mm A')}</TableCell>
                                             <TableCell align="right">{wo.lastupdated ? dayjs(wo.lastupdated).format('MMMM D, YYYY h:mm A') : '-'}</TableCell>
@@ -134,9 +137,7 @@ function StaffDash(props) {
             }
 
 
-            <br /> <br />
 
-            <h1>In Progress</h1>
             <section className=''>
                 <TableContainer className='table-container' component={Paper}>
                     <Table className={classes.table} aria-label="simple table">
@@ -154,15 +155,13 @@ function StaffDash(props) {
                         </TableHead>
                         <TableBody>
                             {workorders.filter(e => e.status === 'In Progress' && (e.description.includes(search) || e.title.includes(search))).map(wo => (
-                                <TableRow key={wo.id}>
+                                <TableRow key={wo.id} onClick={e => openWO(wo.id)}>
                                     <TableCell component="th" scope="row">
                                         {wo.id}
                                     </TableCell>
                                     <TableCell align="right">{wo.firstname} {wo.lastname}</TableCell>
                                     <TableCell align="right">
-                                        <Link to={{ pathname: `${props.match.url}/workorder/${wo.id}`, id: wo.id }}>
-                                            {wo.title}
-                                        </Link></TableCell>
+                                        {wo.title}</TableCell>
                                     <TableCell align="right">{wo.description.length > 100 ? wo.description.substring(0, 80).concat('...') : wo.description}</TableCell>
                                     <TableCell align="right">{dayjs(wo.datecreated).format('MMMM D, YYYY h:mm A')}</TableCell>
                                     <TableCell align="right">{wo.lastupdated ? dayjs(wo.lastupdated).format('MMMM D, YYYY h:mm A') : '-'}</TableCell>
@@ -184,7 +183,6 @@ function StaffDash(props) {
                     </Table>
                 </TableContainer>
             </section>
-            {/* Status = completed will not show unless filtered to that */}
             <ModalRoute className='example-modal'
                 inClassName='example-modal-in'
                 outClassName='example-modal-out'
@@ -196,8 +194,6 @@ function StaffDash(props) {
                 parentPath={`${props.match.url}`}
                 component={ManageWorkOrder} />
             <ModalContainer />
-
-
         </div >
     )
 }

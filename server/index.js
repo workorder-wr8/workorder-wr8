@@ -9,6 +9,7 @@ const tenantCtrl = require('./controllers/tenant');
 const workorderCtrl = require('./controllers/workorder');
 const propertyCtrl = require('./controllers/properties');
 const messageCtrl = require('./controllers/messages');
+const emailCtrl = require('./controllers/email')
 const { CONNECTION_STRING, SERVER_PORT, SESSION_SECRET } = process.env;
 const app = express();
 
@@ -69,10 +70,12 @@ app.get('/api/workorder/:id', workorderCtrl.getWorkOrderById);
 //messages endpoints
 app.get('/api/messages/manager/:id', messageCtrl.getMessagesFromManager)
 app.put('/api/messages/manager/create', messageCtrl.addMessageFromManager)
-//message endpoints
 app.post('/api/addcomment/tenant', messageCtrl.addCommentByTenant);
 app.post('/api/addcomment/staff', messageCtrl.addCommentByStaff);
 app.post('/api/commentsById', messageCtrl.getCommentsById);
+
+//email endpoint
+app.post('/api/email', emailCtrl.inviteManager)
 
 //logout
 app.get('/api/logout', (req, res) => {

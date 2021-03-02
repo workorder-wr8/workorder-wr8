@@ -28,10 +28,11 @@ function LandlordProperty(props) {
 
     useEffect(() => {
         let propertyid = +props.match.params.id
+        console.log(propertyid)
         axios.get(`/api/landlord/property/data/${propertyid}`)
             .then(res => {
                 if (res.data[0]) {
-                    let receivedDates = res.data.filter((row, index) => ((index + 1) % 4 === 0)).map(row => ({ labels: row.day, datasets: row.workorders }));
+                    let receivedDates = res.data.filter((row, index) => ((index + 1) % 4 === 0)).map(row => ({ labels: row.day.substring(4), datasets: row.workorders }));
 
                     setCreated(receivedDates)
                     let receivedData = res.data.filter((row, index) => (index < 4)).map(row => ({ count: row.count, status: row.status }))
@@ -64,20 +65,21 @@ function LandlordProperty(props) {
         props.history.goBack()
     }
 
-    // console.log(time)
+    console.log(props)
     return (
         <div>
             <div onClick={goBack}>Go Back</div>
-            <h2>Average Time to Completion: {time.days ? (
+            <h2>Average Time to Completion: {time !== null ? (
                 <>
                     <span>{time.days} Days {time.hours} Hours and {time.minutes} Minutes</span>
                 </>
             ) : null}
             </h2>
             {created[0] ? (
-                <div >
+                <div className='chart-container'>
                     <Line
                         data={data}
+
                     />
                 </div>
             )
