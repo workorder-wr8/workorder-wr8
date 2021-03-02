@@ -2,7 +2,6 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import React from 'react'
 import { connect } from 'react-redux'
-import './ManagerDash.css';
 import { withStyles, makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -14,21 +13,38 @@ import Paper from '@material-ui/core/Paper';
 import Select from 'react-select';
 import dayjs from 'dayjs'
 import SpinnerContainer from '../Spinner/SpinnerContainer';
+import './ManagerDash.css';
+import { faEllipsisH } from '@fortawesome/free-solid-svg-icons';
 // USES withStyles from material-UI for table cells and rows
+
+
 const StyledTableCell = withStyles((theme) => ({
-    head: {
-        
-    },
-    body: {
-        
+    root: {
+        padding: '0 50px',
+        minWidth: 50,
+        maxWidth: 50,
+        height: 50,
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
     }
 }))(TableCell);
 
 const StyledTableRow = withStyles((theme) => ({
     root: {
-        
+        maxHeight: '50px',
     },
 }))(TableRow);
+
+const StyledTableContainer = withStyles((theme)=> ({
+    root: {
+        height: 'max-content',
+        marginTop: '10px',
+        width: '80%',
+        margin: '0 auto',
+        maxHeight: '600px',
+        overflow: 'visible',
+    }
+}))(TableContainer)
 
 function ManagerDash(props) {
     const [workorders, setWorkOrders] = useState([]);
@@ -196,9 +212,9 @@ function ManagerDash(props) {
             {isLoading
                 ? <SpinnerContainer />
                 : <>
-                    <div className='tableWrapper'>
-                    <TableContainer className='table-container' component={Paper}>
-                            <Table className='unassignedTable'>
+                    <div className='tableWrapper unassignedTable' >
+                    {unassignedWorkOrders[0] ? <StyledTableContainer component={Paper}>
+                            <Table stickyHeader aria-label="sticky table">
                                 <TableHead>
                                     <TableRow>
                                         <StyledTableCell align='right'>ID</StyledTableCell>
@@ -216,7 +232,7 @@ function ManagerDash(props) {
                                             <StyledTableCell align='right' className='unassignedCell'>{wo.id}</StyledTableCell>
                                             <StyledTableCell align='right' className='unassignedCell'>{wo.tenantlast},{wo.tenantfirst}</StyledTableCell>
                                             <StyledTableCell align='right' className='unassignedCell'>{wo.title}</StyledTableCell>
-                                            <StyledTableCell align='right' className='unassignedCell'>{wo.description}</StyledTableCell>
+                                            <StyledTableCell align='right' className='unassignedCell descriptionCell'>{wo.description}</StyledTableCell>
                                             <StyledTableCell align='right' className='unassignedCell'>{wo.status}</StyledTableCell>
                                             <StyledTableCell align='right' className='unassignedCell'>{dayjs(wo.datecreated).format('MMMM D, YYYY h:mm A')}</StyledTableCell>
                                             <TableCell align="right" onClick={e => e.stopPropagation()} >{
@@ -224,6 +240,7 @@ function ManagerDash(props) {
                                                     <Select
                                                         name='staffoptions'
                                                         id='staffoptions'
+                                                        menu-outer-top
                                                         value={selectedStaff}
                                                         onClick={e => e.stopPropagation()}
                                                         onChange={e => { handleSelectChange(e.value, wo.id) }}
@@ -234,11 +251,11 @@ function ManagerDash(props) {
                                     ))}
                                 </TableBody>
                             </Table>
-                         </TableContainer>           
+                         </StyledTableContainer> : <></>}          
                     </div>
-                    <div className='tableWrapper'>
-                        <TableContainer className='table-container' component={Paper}>
-                            <Table className='assignedTable'>
+                    <div className='tableWrapper assignedTable'>
+                        <StyledTableContainer component={Paper}>
+                            <Table stickyHeader aria-label="sticky table">
                                 <TableHead>
                                     <TableRow>
                                         <StyledTableCell align='right'>ID</StyledTableCell>
@@ -258,7 +275,7 @@ function ManagerDash(props) {
                                             <StyledTableCell align='right'>{wo.id}</StyledTableCell>
                                             <StyledTableCell align='right' >{wo.tenantlast},{wo.tenantfirst}</StyledTableCell>
                                             <StyledTableCell align='right'>{wo.title}</StyledTableCell>
-                                            <StyledTableCell align='right'>{wo.description}</StyledTableCell>
+                                            <StyledTableCell align='right' className='descriptionCell'>{wo.description}</StyledTableCell>
                                             <StyledTableCell align='right'>{wo.status}</StyledTableCell>
                                             <StyledTableCell align='right'>{dayjs(wo.datecreated).format('MMMM D, YYYY h:mm A')}</StyledTableCell>
                                             <StyledTableCell align='right'>{wo.lastupdated ? dayjs(wo.lastupdated).format('MMMM D, YYYY h:mm A') : '-'}</StyledTableCell>
@@ -289,9 +306,20 @@ function ManagerDash(props) {
                                             {/* <StyledTableCell align="right">{wo.stafffirst} {wo.stafflast}</StyledTableCell> */}
                                         </StyledTableRow>
                                     ))}
+                                    <StyledTableRow  key={'end'} className='extrarow assignedRow'>
+                                        <StyledTableCell align='right'>-</StyledTableCell>
+                                        <StyledTableCell align='right'>-</StyledTableCell>
+                                        <StyledTableCell align='right'>-</StyledTableCell>
+                                        <StyledTableCell align='right'>End Of Work Orders</StyledTableCell>
+                                        <StyledTableCell align='right'>-</StyledTableCell>
+                                        <StyledTableCell align='right'>-</StyledTableCell>
+                                        <StyledTableCell align='right'>-</StyledTableCell>
+                                        <StyledTableCell align='right'>-</StyledTableCell>
+                                        <StyledTableCell align='right'>-</StyledTableCell>
+                                    </StyledTableRow>
                                 </TableBody>
                             </Table>
-                        </TableContainer>
+                        </StyledTableContainer>
                     </div>
                 </>
             }

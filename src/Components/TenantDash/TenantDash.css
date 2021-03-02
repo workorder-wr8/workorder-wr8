@@ -6,7 +6,9 @@
     margin-top: 10px!important;
     width:60%!important;
     margin: 0 auto;
-    height: 600px;
+    height: auto;
+    max-height: 600px;
+    overflow:visible;
 }
 
 .workorder-tenant-table {

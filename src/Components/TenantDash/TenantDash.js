@@ -12,8 +12,8 @@ import { Link } from 'react-router-dom';
 import { ModalRoute, ModalContainer } from 'react-router-modal';
 import ManageWorkOrder from '../ManageWorkOrder/ManageWorkOrder';
 import dayjs from 'dayjs';
-import './TenantDash.css';
 import SpinnerContainer from '../Spinner/SpinnerContainer';
+import './TenantDash.css';
 
 const TenantDash = props => {
 
