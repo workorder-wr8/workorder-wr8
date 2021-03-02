@@ -5,12 +5,12 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
-import './LandingTenant.css'
+import Alert from '@material-ui/lab/Alert';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import isStrongPassword from 'validator/lib/isStrongPassword';
 import isEmail from 'validator/lib/isEmail';
-
+import './LandingTenant.css'
 
 const LandingTenant = props => {
     const [input, setInput] = useState({
@@ -36,6 +36,9 @@ const LandingTenant = props => {
     const [properties, setProperties] = useState([]);
 
     const [registeredView, setRegisteredView] = useState(false);
+
+    const [show, setShow] = useState(false);
+    const [message, setMessage] = useState('');
     useEffect(() => {
         axios.get('/api/properties')
             .then(properties => {
@@ -76,7 +79,11 @@ const LandingTenant = props => {
                 props.getUser(tenant.data);
                 props.history.push('/dash');
             })
-            .catch(err => alert(err.response.data));
+            .catch(err => {
+                setMessage(err.response.data);
+                setShow(true);
+                setTimeout(()=> setShow(false), 2000);
+            });
 
     }
 
@@ -158,6 +165,7 @@ const LandingTenant = props => {
     return (
         <div id='landingtenant'>
             <h1 className='app-heading'>App Name Here</h1>
+            {show ? <Alert className='error-alert fade-in' severity="error">{message}</Alert> : null}
             <section className='container tenant-landing-container'>
                 <section className='input-fields'>
                     {/* id=landingcontent is on LandingAdmin.css */}
@@ -199,7 +207,7 @@ const LandingTenant = props => {
                                 </>
                             ) : (
                                 <>
-                                    <Button className='btn login-btn' onClick={login} variant="contained">Login</Button>
+                                    <Button className='btn login-btn' type='submit' onClick={login} variant="contained">Login</Button>
                                     <p>Don't have an account? <span className='toggleAuth' onClick={() => handleToggle()}>Register Here</span></p>
                                     <p>For admin access click <Link to='/admin'>Here</Link></p>
                                 </>)}
