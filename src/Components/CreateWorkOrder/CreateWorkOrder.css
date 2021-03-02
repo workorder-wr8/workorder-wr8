@@ -1,17 +1,66 @@
+.workorder-form-container {
+    height: calc(100vh - 78px);
+}
 .workorder-form-container,
 .workorder-form {
     display: flex;
     flex-direction: column;
-    height: 100vh;
+}
+
+.wo-form-header {
+    color: white;
 }
 
 .workorder-form {
     width: 40vw;
     margin: 0 auto;
+    padding: 5px;
     display: flex;
     justify-content: space-evenly;
+    background-color: #a4c0f5;
+    height: auto;
+    border-radius: 10px;
 }
 
 .workorder-text-field {
     margin: 5px!important;
 }
+
+.submit-workorder-btn {
+    background-color: #61837D!important;
+    color: white!important;
+}
+
+.go-back {
+    background-color: #D5C586!important;
+    color: white!important;
+}
+
+.submit-workorder-btn,
+.go-back {
+    width: auto!important;
+}
+
+.form-controls-wo {
+    display: flex;
+    justify-content: space-between;
+}
+
+.wo-created {
+    width: auto!important;
+    margin: 10px auto;
+    font-size: 1.3rem!important;
+    opacity: 0;
+    animation: fade ease-in 1;
+    animation-fill-mode: forwards;
+    animation-duration: 500ms;
+}
+
+@keyframes fade {
+    from {
+       opacity: 0;
+    }
+    to {
+       opacity: 1;
+    }
+ }
