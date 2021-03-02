@@ -20,7 +20,6 @@ const TenantDash = props => {
     const [workOrders, setWorkOrders] = useState([]);
     const [search, setSearch] = useState('');
     const [isLoading, setLoading] = useState(true);
-
     const columns = [{ id: 'number', label: 'Work Order #' }, { id: 'title', label: 'Title' }, { id: 'short-desc', label: 'Short Description' }, { id: 'date', label: 'Date Created' }, { id: 'status', label: 'Status' }];
     useEffect(() => {
         getWorkOrders();
@@ -32,7 +31,10 @@ const TenantDash = props => {
                 setWorkOrders(wo.data);
                 setLoading(!isLoading);
             })
-            .catch(err => console.log(`Error: ${err.message}`));
+            .catch(err => {
+                alert(`Error: ${err.response.request.response}`);
+                setLoading(!isLoading);
+            });
     }
 
     const searchWorkOrders = e => {
@@ -55,7 +57,7 @@ const TenantDash = props => {
                         <TableContainer className='table-container' component={Paper} >
 
                             <Table stickyHeader aria-label="sticky table">
-                                <TableHead style={{ backgroundColor: 'red' }}>
+                                <TableHead>
                                     <TableRow>
                                         {columns.map(column => (
                                             <TableCell key={column.id}>{column.label}</TableCell>
