@@ -62,7 +62,7 @@ const ManageWorkOrder = (props) => {
             </>
         )
     }
-
+    console.log('workorder', props)
     return (
         <section className='workorder-container'>
             <button className='close-workorder-btn' onClick={() => props.closeModal()}>Close</button>
