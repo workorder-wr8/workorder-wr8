@@ -7,6 +7,7 @@
     height: 85vh;
     width: 70%;
     margin: 0 auto;
+    background-color: #A4C1F5;
 }
 
 .workorder-title {
@@ -34,13 +35,13 @@
     justify-content: space-between;
 }
 
-.status-updates{
+/* .status-updates{
     display: flex;
     text-align: start;
     flex-direction: column;
     align-items: flex-start;
     justify-content: space-between;
-}
+} */
 
 .comment-header {
     text-align: center;
@@ -65,4 +66,8 @@
     align-self: center;
     text-align: center;
     margin-top: 0px;
+}
+
+.comment-input {
+    background-color: #A4C1F5;
 }
