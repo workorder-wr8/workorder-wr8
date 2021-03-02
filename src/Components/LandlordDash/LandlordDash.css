@@ -18,7 +18,7 @@
     
   }
   #text{
-    padding: 10px;
+    padding: 100px;
     position: absolute;
     top: 50%;
     left: 50%;
@@ -26,6 +26,8 @@
     color: white;
     transform: translate(-50%,-50%);
     -ms-transform: translate(-50%,-50%);
+    background-color: #61837D;
+    height: 70vh;
   }
 
   #addProperty {
@@ -35,7 +37,7 @@
 
   .closebtn {
     position: absolute;
-    top: 15%;
+    top: 5%;
     right: 15%;
     font-size: 30px;
     color: white
@@ -43,4 +45,8 @@
 
 .workorderId {
     cursor: pointer;
+}
+
+#addManager {
+  margin-bottom: 0px;
 }

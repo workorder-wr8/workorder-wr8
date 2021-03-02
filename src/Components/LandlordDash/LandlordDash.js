@@ -60,8 +60,9 @@ function LandlordDash(props) {
 
     const addProperty = (e) => {
         e.preventDefault();
-        let landlordid = props.user.id;
-        const { name, address1, address2, city, state, zip, email, phone, passcode } = input
+        let landlordid = props.user.id
+        let landlordfirst = props.user.firstname;
+        const { name, address1, address2, city, state, zip, email, phone, passcode, managerEmail } = input
         let body = { landlordid, name, address1, address2, city, state, zip, email, phone, passcode }
         axios.post('/api/property/new', body)
             .then(res => {
@@ -69,6 +70,10 @@ function LandlordDash(props) {
                 off()
             })
             .catch(err => console.log(err))
+        if (managerEmail) {
+            axios.post('/api/email', { managerEmail, landlordfirst })
+                .catch(err => console.log(err))
+        }
     }
 
     const handleInputChange = e => {
@@ -88,12 +93,9 @@ function LandlordDash(props) {
         setToggleAdd(!toggleAdd)
     }
 
-    // console.log(properties)
+    // console.log()
     return (
         <div>
-
-            {/* List of Properties landlord tied to with ability to click on one which renders the manager view */}
-
             <div id="overlay" onClick={off}>
                 <p className='closebtn' onClick={off} title="Close overlay">✕</p>
                 <div id="text" onClick={e => e.stopPropagation()}>
@@ -131,7 +133,7 @@ function LandlordDash(props) {
                             </>
                         ) : (
                                 <>
-                                    <h3 onClick={toggleadd}>Add a Manager <span >+</span></h3>
+                                    <h3 onClick={toggleadd} id='addManager'>Add a Manager <span >+</span></h3>
                                 </>
                             )}
 
@@ -152,15 +154,9 @@ function LandlordDash(props) {
                         <TableRow>
                             <TableCell>ID#</TableCell>
                             <TableCell align="right">Property Name</TableCell>
-                            {/* <TableCell align="right">Manager</TableCell> */}
-                            {/* <TableCell align="right">Total Tenants</TableCell> */}
-                            {/* Total open workorders */}
-                            {/* avg time to completed (created-completed) */}
-                            {/* satisfaction rating */}
                             <TableCell align="right">Address</TableCell>
                             <TableCell align="right">Email</TableCell>
                             <TableCell align="right">Phone</TableCell>
-                            {/* <TableCell align="right">Action</TableCell> */}
                         </TableRow>
                     </TableHead>
                     <TableBody>

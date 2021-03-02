@@ -6,16 +6,22 @@ import dayjs from 'dayjs';
 import Comments from '../Comments/Comments';
 
 const ManageWorkOrder = (props) => {
-
+    const [id, setId] = useState('')
     const [workOrder, setWorkOrder] = useState([]);
 
     useEffect(() => {
-        getWorkOrder();
-    }, [])
+        if (id) {
+            getWorkOrder()
+        }
+
+        if (props.location.pathname.includes('/staffdash')) {
+            setId(props.location.pathname.substring(21));
+        } else if (props.location.pathname.includes('/dash')) {
+            setId(props.location.pathname.substring(16));
+        }
+    }, [id])
 
     const getWorkOrder = () => {
-        const id = props.location.pathname.substring(16);
-        // console.log(id)
         axios.get(`/api/workorder/${id}`)
             .then(res => {
                 setWorkOrder(res.data[0]);
@@ -28,13 +34,13 @@ const ManageWorkOrder = (props) => {
         return (
             <>
                 <div className='workorder-title'>
-                    <h4 id='workorder-title'>{title}</h4>
+                    <h2 id='workorder-title'>{title}</h2>
                     <span>#{id}</span>
                 </div>
                 <div className='workorder-details'>
                     <h3 id='status-workorder'>Status: {status}</h3>
                     <div className='status-updates'>
-                        <span>Created: {dayjs(datecreated).format('dddd MMMM D YYYY h:mm A')}</span>
+                        <span className='status-update-workorder'>Created: {dayjs(datecreated).format('dddd MMMM D YYYY h:mm A')}</span>
                         {lastupdated === null
                             ?
                             null
@@ -62,7 +68,7 @@ const ManageWorkOrder = (props) => {
             <button className='close-workorder-btn' onClick={() => props.closeModal()}>Close</button>
             {displayWorkOrder()}
             <section className='comment-container'>
-                <Comments workorderid={props.location.id} />
+                <Comments workorderid={id} />
             </section>
         </section>
     )
