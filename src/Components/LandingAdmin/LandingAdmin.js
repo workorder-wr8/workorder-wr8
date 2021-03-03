@@ -166,8 +166,6 @@ const LandingAdmin = (props) => {
                         <Button id='landlordBtn' className={role === 'landlord' ? 'active btn' : 'default btn'} onClick={() => setRole('landlord')}  >Landlord</Button>
                     </ButtonGroup>
                     <form id='landingContent' onSubmit={registerView ? register : login}>
-
-
                         {registerView ? (
                             <>
                                 <TextField className='admin-fields fade-in' label='First Name' type='text' onChange={e => setFirstName(e.target.value)} />
@@ -199,9 +197,6 @@ const LandingAdmin = (props) => {
                                     <Button className='btn signup-admin-btn' type='submit' onClick={register}>Submit</Button>
                                     <p>Already have an account <span className='toggleAuth' onClick={toggle}>Login</span> </p>
                                 </section>
-
-
-
                             </>
                         ) : (
                                 <section className='admin-controls'>

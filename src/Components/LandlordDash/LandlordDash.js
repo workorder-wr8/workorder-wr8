@@ -1,7 +1,6 @@
 import axios from 'axios'
 import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux'
-import './LandlordDash.css'
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -11,7 +10,8 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
-
+import Button from '@material-ui/core/Button';
+import './LandlordDash.css'
 const useStyles = makeStyles({
     table: {
         minWidth: 650,
@@ -99,56 +99,42 @@ function LandlordDash(props) {
             <div id="overlay" onClick={off}>
                 <p className='closebtn' onClick={off} title="Close overlay">✕</p>
                 <div id="text" onClick={e => e.stopPropagation()}>
-                    <form id='addProperty' onSubmit={addProperty}>
-                        <label>Property Name:</label>
-                        <input name='name' type='text' value={input.name} onChange={e => handleInputChange(e)} />
-                        <label>Address1:</label>
-                        <input name='address1' type='text' value={input.address1} onChange={e => handleInputChange(e)} />
-                        <label>Address2:</label>
-                        <input name='address2' type='text' value={input.address2} onChange={e => handleInputChange(e)} />
-
-                        <label >City:</label>
-                        <input name='city' type='text' value={input.city} onChange={e => handleInputChange(e)} />
-                        <label>State:</label>
-                        <input name='state' type='text' value={input.state} onChange={e => handleInputChange(e)} />
-                        <label>Zip:</label>
-                        <input name='zip' type='text' value={input.zip} onChange={e => handleInputChange(e)} />
-
-                        <label>Email:</label>
-                        <input name='email' type='text' value={input.email} onChange={e => handleInputChange(e)} />
-                        <label>Phone:</label>
-                        <input name='phone' type='text' value={input.phone} onChange={e => handleInputChange(e)} />
-                        <label>Passcode:</label>
-                        <input name='passcode' type='password' value={input.passcode} onChange={e => handleInputChange(e)} />
-                        <label>Confirm Passcode:</label>
-                        <input name='verpasscode' type='password' value={input.verpasscode} onChange={e => handleInputChange(e)} />
-
+                    <form id='addProperty' className='add-property-form' onSubmit={addProperty}>
+                        <TextField name='name' type='text' label='Property Name' value={input.name} onChange={e => handleInputChange(e)} />
+                        <TextField name='address1' type='text' label='Address 1' value={input.address1} onChange={e => handleInputChange(e)} />
+                        <TextField name='address2' type='text' label='Address 2' value={input.address2} onChange={e => handleInputChange(e)} />
+                        <TextField name='city' type='text' label='City' value={input.city} onChange={e => handleInputChange(e)} />
+                        <TextField name='state' type='text' label='State' value={input.state} onChange={e => handleInputChange(e)} />
+                        <TextField name='zip' type='text' label='Zip' value={input.zip} onChange={e => handleInputChange(e)} />
+                        <TextField name='email' type='text' label='Email' value={input.email} onChange={e => handleInputChange(e)} />
+                        <TextField name='phone' type='text' label='Phone' value={input.phone} onChange={e => handleInputChange(e)} />
+                        <TextField name='passcode' type='password' label='Passcode' value={input.passcode} onChange={e => handleInputChange(e)} />
+                        <TextField name='verpasscode' type='password' label='Confirm Passcode' value={input.verpasscode} onChange={e => handleInputChange(e)} />
 
                         {toggleAdd ? (
                             // implement nodemailer to send manager email to sign up with one time passcode
                             <>
                                 <span onClick={toggleadd}>-</span>
-                                <label>Manager Email:</label>
-                                <input name='managerEmail' type='text' value={input.managerEmail} onChange={e => handleInputChange(e)} />
+                                {/* <label>Manager Email:</label>
+                                <input name='managerEmail' type='text' value={input.managerEmail} onChange={e => handleInputChange(e)} /> */}
+                                <TextField name='managerEmail' type='text' label='Manager Email' value={input.managerEmail} onChange={e => handleInputChange(e)} />
                             </>
                         ) : (
                                 <>
-                                    <h3 onClick={toggleadd} id='addManager'>Add a Manager <span >+</span></h3>
+                                    <p onClick={toggleadd} id='addManager'>Add a Manager <span >+</span></p>
                                 </>
                             )}
 
-                        <br />
-                        <input type='submit' onClick={addProperty} />
+                        {/* <br /> */}
+                        <Button type='submit' className='add-btn' onClick={addProperty}>Submit</Button>
                     </form>
                 </div>
             </div>
-            <div style={{ padding: 20 }}>
-                <button onClick={on}>Add a new property</button>
+            <div className='property-controls'>
+            <Button className='add-property-btn' onClick={on}>Add a new property</Button>
+            <TextField onChange={e => filterproperties(e)} className='search-workorder-field' id="outlined-basic" label="Search" variant="outlined" value={search} />
             </div>
-            <br />
-
             <TableContainer className='table-container' component={Paper}>
-                <TextField onChange={e => filterproperties(e)} className='search-workorder-field' id="outlined-basic" label="Search" variant="outlined" value={search} />
                 <Table className={classes.table} aria-label="simple table">
                     <TableHead>
                         <TableRow>
