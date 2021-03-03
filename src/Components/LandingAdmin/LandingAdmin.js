@@ -7,25 +7,28 @@ import Button from '@material-ui/core/Button';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
+import isStrongPassword from 'validator/lib/isStrongPassword';
+import isEmail from 'validator/lib/isEmail';
+import Alert from '@material-ui/lab/Alert';
 import './LandingAdmin.css'
 import { Link } from 'react-router-dom';
 
 const LandingAdmin = (props) => {
-    const [registerView, setRegisterView] = useState(false)
-    const [firstname, setFirstName] = useState('')
-    const [lastname, setLastName] = useState('')
-    const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
-    const [verPassword, setVerPassword] = useState('')
+    const [registerView, setRegisterView] = useState(false);
+    const [firstname, setFirstName] = useState('');
+    const [lastname, setLastName] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [verPassword, setVerPassword] = useState('');
     const [propertyid, setPropertyid] = useState(0)
-    const [phone, setPhone] = useState('')
+    const [phone, setPhone] = useState('');
     const [role, setRole] = useState('staff');
     const [properties, setProperties] = useState([]);
     const [passcode, setPasscode] = useState([]);
-    // const [landlordid, setlandlordid] = useState(0)
     const [LLForm, setLLForm] = useState(false);
 
-
+    const [errorMessages, setErrorMessages] = useState([]);
+    const [show, setShow] = useState(false);
     useEffect(() => {
         if (props.location.pathname.includes('register')) {
             setRole('manager')
@@ -40,7 +43,33 @@ const LandingAdmin = (props) => {
 
     function register(e) {
         e.preventDefault();
-        if (password && password === verPassword) {
+        let isValidRegister = true;
+
+        if (password !== verPassword) {
+            isValidRegister = false;
+            console.log('passwords don\'t match', password, verPassword)
+             setErrorMessages([...errorMessages, 'Passwords Do Not Match!'])
+        }
+
+        if (!isStrongPassword(password)) {
+            isValidRegister = false;
+            console.log('weak password', !isStrongPassword(password), password)
+             setErrorMessages([...errorMessages, 'Password needs to contain at least one number, uppercase letter, lowercase letter, and symbol.'])
+        }
+
+        if (!isEmail(email, { domain_specific_validation: true })) {
+            isValidRegister = false;
+            console.log('not Email')
+             setErrorMessages([...errorMessages, 'Invalid email address!']);
+        }
+
+        setShow(true);
+        setTimeout(() => {
+            setShow(false);
+            setErrorMessages([]);
+        }, 2000);
+
+        if (isValidRegister) {
             if (role === 'staff') {
                 axios.post('/api/staff/register',
                     {
@@ -114,11 +143,22 @@ const LandingAdmin = (props) => {
         setEmail(e.target.value)
     }
 
+
+    console.log('error ms', errorMessages);
     return (
         <div >
 
             <section id='landingadmin'>
                 <h1 className='admin-landing-header'>Admin Portal</h1>
+                {show
+                    ?
+                    <Alert severity="error">{errorMessages.map((message, index) => (
+                        <p key={index}>{message}</p>
+                    ))}</Alert>
+                    :
+                    null
+                }
+
                 <section>
                     <ButtonGroup variant='text' id='landingToggle'>
                         <Button id='staffBtn' className={role === 'staff' ? 'active btn' : 'default btn'} onClick={() => setRole('staff')} >Staff</Button>
@@ -146,8 +186,8 @@ const LandingAdmin = (props) => {
 
                                 {!LLForm ? (
                                     <>
-                                        <Select onChange={e => setPropertyid(e.target.value)} defaultValue='Select Property' >
-                                            <MenuItem value='Select Property' disabled className='default-select'>Property</MenuItem>
+                                        <Select className='default-select' onChange={e => setPropertyid(e.target.value)} defaultValue='Select Property' >
+                                            <MenuItem value='Select Property' disabled >Property</MenuItem>
                                             {properties.map((property, index) => (
                                                 <MenuItem key={index} value={property.id}>{property.name}</MenuItem>
                                             ))}
