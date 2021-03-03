@@ -14,7 +14,7 @@ import './LandingAdmin.css'
 import { Link } from 'react-router-dom';
 
 const LandingAdmin = (props) => {
-    const [registerView, setRegisterView] = useState(false)
+    const [registerView, setRegisterView] = useState(false);
     const [firstname, setFirstName] = useState('')
     const [lastname, setLastName] = useState('')
     const [email, setEmail] = useState('')
