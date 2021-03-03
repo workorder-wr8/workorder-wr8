@@ -67,11 +67,11 @@ function LandlordProperty(props) {
 
     console.log(props)
     return (
-        <div>
-            <div onClick={goBack}>Go Back</div>
-            <h2>Average Time to Completion: {time !== null ? (
+        <div className='landlord-property-container'>
+            <div className='back-btn-landlord' onClick={goBack}>Go Back</div>
+            <h2 className='chart-header'>Average Time to Completion: {time !== null ? (
                 <>
-                    <span>{time.days} Days {time.hours} Hours and {time.minutes} Minutes</span>
+                    <span className='chart-header'>{time.days} Days {time.hours} Hours and {time.minutes} Minutes</span>
                 </>
             ) : null}
             </h2>
@@ -84,8 +84,8 @@ function LandlordProperty(props) {
                 </div>
             )
                 : null}
-            <h2>Current Workorders Status</h2>
-            <div style={{ width: '100%' }}>
+            <h2 className='chart-header'>Current Workorders Status</h2>
+            <div className='table-numbers-landlord'>
                 <TableContainer component={Paper}>
                     <Table className={classes.table} aria-label="simple table">
                         <TableHead>
