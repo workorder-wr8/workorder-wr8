@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux'
 import axios from 'axios'
-import './StaffDash.css'
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -16,6 +15,7 @@ import { Link } from 'react-router-dom';
 import { ModalRoute, ModalContainer } from 'react-router-modal';
 import ManageWorkOrder from '../ManageWorkOrder/ManageWorkOrder';
 import SpinnerContainer from '../Spinner/SpinnerContainer';
+import './StaffDash.css'
 
 const useStyles = makeStyles({
     tablehead: {
