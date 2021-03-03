@@ -15,17 +15,16 @@ import { Link } from 'react-router-dom';
 
 const LandingAdmin = (props) => {
     const [registerView, setRegisterView] = useState(false);
-    const [firstname, setFirstName] = useState('')
-    const [lastname, setLastName] = useState('')
-    const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
-    const [verPassword, setVerPassword] = useState('')
+    const [firstname, setFirstName] = useState('');
+    const [lastname, setLastName] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [verPassword, setVerPassword] = useState('');
     const [propertyid, setPropertyid] = useState(0)
-    const [phone, setPhone] = useState('')
+    const [phone, setPhone] = useState('');
     const [role, setRole] = useState('staff');
     const [properties, setProperties] = useState([]);
     const [passcode, setPasscode] = useState([]);
-    // const [landlordid, setlandlordid] = useState(0)
     const [LLForm, setLLForm] = useState(false);
 
     const [errorMessages, setErrorMessages] = useState([]);
