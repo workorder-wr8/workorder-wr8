@@ -132,8 +132,11 @@ const TenantDash = props => {
                                             <TableRow key={wo.id} onClick={e => openWO(wo.id)}>
                                                 <TableCell>{wo.id}</TableCell>
                                                 <TableCell component="th" scope="row">
-                                                    {wo.title}
+                                                    <Link className='link' to={{ pathname: `${props.match.url}/workorder/${wo.id}`, id: wo.id }}>
+                                                        {wo.title}
+                                                    </Link>
                                                 </TableCell>
+
                                                 <TableCell align="right" className='tenant-wo-description'>{wo.description}</TableCell>
                                                 <TableCell>{dayjs(wo.datecreated).format('MMMM D, YYYY h:mm A')}</TableCell>
                                                 {(wo.status === 'Open' || wo.status === 'Completed')
@@ -153,7 +156,6 @@ const TenantDash = props => {
                             </Table>
                         </TableContainer>
                     </section>
-
                 }
             </section>
             <ModalRoute className='example-modal'
