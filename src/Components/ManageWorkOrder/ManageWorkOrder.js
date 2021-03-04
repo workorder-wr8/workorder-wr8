@@ -40,18 +40,25 @@ const ManageWorkOrder = (props) => {
                 <div className='workorder-details'>
                     <h3 id='status-workorder'>Status: {status}</h3>
                     <div className='status-updates'>
-                        <span className='status-update-workorder'>Created: {dayjs(datecreated).format('dddd MMMM D YYYY h:mm A')}</span>
+                        <span className='status-update-workorder'>Created: {dayjs(datecreated).format('dddd MMMM D YYYY h:mm A')}</span><br />
                         {lastupdated === null
                             ?
                             null
                             :
-                            <span>Last Updated: {dayjs(lastupdated).format('dddd MMMM D, YYYY h:mm A')}</span>
+                            <>
+                                <span>Last Updated: {dayjs(lastupdated).format('dddd MMMM D, YYYY h:mm A')}</span>
+                            </>
+
                         }
                         {datecompleted === null
                             ?
                             null
                             :
-                            <span>Date Completed: {dayjs(datecompleted).format('dddd MMMM D, YYYY h:mm A')}</span>
+                            <>
+                                <br />
+                                <span>Date Completed: {dayjs(datecompleted).format('dddd MMMM D, YYYY h:mm A')}</span>
+                            </>
+
                         }
                     </div>
                 </div>
@@ -62,7 +69,7 @@ const ManageWorkOrder = (props) => {
             </>
         )
     }
-    console.log('workorder', props)
+    // console.log('workorder', props)
     return (
         <section className='workorder-container'>
             <button className='close-workorder-btn' onClick={() => props.closeModal()}>Close</button>

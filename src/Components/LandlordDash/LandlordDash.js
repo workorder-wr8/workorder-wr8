@@ -112,9 +112,8 @@ function LandlordDash(props) {
                         <TextField name='verpasscode' type='password' label='Confirm Passcode' value={input.verpasscode} onChange={e => handleInputChange(e)} />
 
                         {toggleAdd ? (
-                            // implement nodemailer to send manager email to sign up with one time passcode
                             <>
-                                <span onClick={toggleadd}>-</span>
+                                <span title='Close' onClick={toggleadd} style={{ fontSize: '20px', marginTop: '8px' }}>Close Add Manager</span>
                                 {/* <label>Manager Email:</label>
                                 <input name='managerEmail' type='text' value={input.managerEmail} onChange={e => handleInputChange(e)} /> */}
                                 <TextField name='managerEmail' type='text' label='Manager Email' value={input.managerEmail} onChange={e => handleInputChange(e)} />
@@ -125,14 +124,13 @@ function LandlordDash(props) {
                                 </>
                             )}
 
-                        {/* <br /> */}
                         <Button type='submit' className='add-btn' onClick={addProperty}>Submit</Button>
                     </form>
                 </div>
             </div>
             <div className='property-controls'>
-            <Button className='add-property-btn' onClick={on}>Add a new property</Button>
-            <TextField onChange={e => filterproperties(e)} className='search-workorder-field' id="outlined-basic" label="Search" variant="outlined" value={search} />
+                <Button className='add-property-btn' onClick={on}>Add a new property</Button>
+                <TextField onChange={e => filterproperties(e)} className='search-workorder-field' id="outlined-basic" label="Search" variant="outlined" value={search} />
             </div>
             <TableContainer className='table-container' component={Paper}>
                 <Table className={classes.table} aria-label="simple table">
