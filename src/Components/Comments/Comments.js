@@ -25,23 +25,25 @@ const Comments = props => {
         let id;
         if (props.user.tenantid) {
             id = props.user.tenantid;
-        } else if (props.user.staffid) {
-            id = props.user.staffid;
         } else {
-            id = props.user.managerid;
+            id = props.user.staffid;
         }
-        const workOrderComments = comments.map(comment => {
-            <article key={comment.message_id} className='comment-container'>
-                {comment.sender_id === id
+
+        const workOrderComments = comments.map(comment => (
+            <section key={comment.message_id}>
+                {id === comment.sender_id
                     ?
+                    <article  className='comment-container me'>
                     <p className='my-comment'>{comment.content}@<span className='comment-timestamp'>{dayjs(comment.timesent).format('MMMM D, YYYY h:mm A')}</span></p>
-
+                    </article>
                     :
+                    <article className='comment-container them'>
                     <p className='their-comment'>{comment.content}@<span className='comment-timestamp'>{dayjs(comment.timesent).format('MMMM D, YYYY h:mm A')}</span></p>
-
+                    </article>
                 }
-            </article>
-        })
+            </section>
+        ));
+
         return workOrderComments;
     }
 
@@ -53,7 +55,8 @@ const Comments = props => {
     } else {
         <p>manager stuff here</p>
     }
-    console.log('comments', props)
+    console.log('props', props)
+    console.log('comments', comments)
     return (
         <section>
             <p className='comment-header'>Comments:</p>

@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import axios from 'axios';
+import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
 import './AddComment.css';
 
 const AddComment = props => {
@@ -21,14 +23,13 @@ const AddComment = props => {
 
     return (
         <section className='add-comment-container'>
-            add comment tenant
-            <input
+            <TextField
                 onChange={e => handleInput(e)}
                 value={input}
-                placeholder='Comment'
+                label='Comment'
                 className='comment-input'
             />
-            <button id='addBtn-comment' onClick={() => addComment()}>Add Comment</button>
+            <Button class='addBtn-comment' onClick={() => addComment()}>Add Comment</Button>
         </section>
     )
 }

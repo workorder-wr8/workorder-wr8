@@ -143,8 +143,6 @@ const LandingAdmin = (props) => {
         setEmail(e.target.value)
     }
 
-
-    console.log('error ms', errorMessages);
     return (
         <div >
 

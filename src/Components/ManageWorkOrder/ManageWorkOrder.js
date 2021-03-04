@@ -1,28 +1,20 @@
 import { useState, useEffect } from 'react'
-import './ManageWorkOrder.css';
 import { withRouter } from 'react-router-dom';
 import axios from 'axios';
 import dayjs from 'dayjs';
+import Button from '@material-ui/core/Button';
 import Comments from '../Comments/Comments';
+import './ManageWorkOrder.css';
 
 const ManageWorkOrder = (props) => {
-    const [id, setId] = useState('')
     const [workOrder, setWorkOrder] = useState([]);
 
     useEffect(() => {
-        if (id) {
-            getWorkOrder()
-        }
-
-        if (props.location.pathname.includes('/staffdash')) {
-            setId(props.location.pathname.substring(21));
-        } else if (props.location.pathname.includes('/dash')) {
-            setId(props.location.pathname.substring(16));
-        }
-    }, [id])
+        getWorkOrder();
+    }, [])
 
     const getWorkOrder = () => {
-        axios.get(`/api/workorder/${id}`)
+        axios.get(`/api/workorder/${props.location.id}`)
             .then(res => {
                 setWorkOrder(res.data[0]);
             })
@@ -34,11 +26,12 @@ const ManageWorkOrder = (props) => {
         return (
             <>
                 <div className='workorder-title'>
-                    <h2 id='workorder-title'>{title}</h2>
-                    <span>#{id}</span>
+                    <h2 id='wo-title'>{title} <span>#{id}</span></h2>
+                    <h3 id='status-workorder' className={status === 'Open' ? 'completed' : 'default-status'}>Status: {status}</h3>
+                    <Button className='close-workorder-btn' onClick={() => props.closeModal()}>Close</Button>
                 </div>
                 <div className='workorder-details'>
-                    <h3 id='status-workorder'>Status: {status}</h3>
+
                     <div className='status-updates'>
                         <span className='status-update-workorder'>Created: {dayjs(datecreated).format('dddd MMMM D YYYY h:mm A')}</span><br />
                         {lastupdated === null
@@ -64,18 +57,19 @@ const ManageWorkOrder = (props) => {
                 </div>
                 <div className='workorder-description'>
                     <h3 id='description-workorder'>Workorder Description:</h3>
-                    <p>{description}</p>
+                    <section className='wo-description-content'>
+                        <p >{description}</p>
+                    </section>
                 </div>
             </>
         )
     }
-    // console.log('workorder', props)
     return (
         <section className='workorder-container'>
-            <button className='close-workorder-btn' onClick={() => props.closeModal()}>Close</button>
+
             {displayWorkOrder()}
             <section className='comment-container'>
-                <Comments workorderid={id} />
+                <Comments workorderid={props.location.id} />
             </section>
         </section>
     )
