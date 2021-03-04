@@ -18,16 +18,20 @@ import orderBy from "lodash/orderBy";
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import CreateIcon from '@material-ui/icons/Create';
+import CancelIcon from '@material-ui/icons/Cancel';
 import { Link } from 'react-router-dom';
 import './StaffDash.css'
 import { compare } from 'bcryptjs';
 
 const useStyles = makeStyles({
     tablehead: {
-        background: 'pink'
+        background: 'rgb(188, 70, 92)'
     },
     tablehead2: {
-        background: 'lightgreen'
+        background: 'rgb(199, 135, 67)'
+    },
+    tablehead3: {
+        background: 'rgba(52, 130, 25, 0.955)'
     },
     red: {
         color: 'red'
@@ -45,6 +49,7 @@ function StaffDash(props) {
     const [workorders, setWorkorders] = useState([])
     const [scheduled, setScheduled] = useState([]);
     const [search, setSearch] = useState('');
+    const [editView, setEditView] = useState(false)
     const [isLoading, setLoading] = useState(true);
     const [columnToSort, setColumnToSort] = useState('')
     const [sortDirection, setSortDirection] = useState('')
@@ -53,6 +58,7 @@ function StaffDash(props) {
         desc: 'asc'
     }
     const [dateToggle, setDateToggle] = useState(true)
+    const [editedId, setEditedId] = useState(0)
 
     useEffect(() => {
         if (props.user.staffid) {
@@ -94,7 +100,7 @@ function StaffDash(props) {
         { id: 'dateCreated', label: 'Date Created' },
         { id: 'lastUpdated', label: 'Last Updated' },
         { id: 'status', label: 'Status', disableSorting: true },
-        { id: 'action', label: 'Action', disableSorting: true }
+        { id: 'mark', label: 'Mark As', disableSorting: true }
     ]
 
     const handleSort = (columnId) => {
@@ -131,6 +137,14 @@ function StaffDash(props) {
         }
     }
 
+    function toggleEdit(id) {
+        setEditedId(id)
+    }
+
+    function handleScroll() {
+        document.getElementById('completed-workorders-staff').scrollIntoView()
+    }
+
     return (
         <div id='staffDash'>
             <br />
@@ -138,7 +152,9 @@ function StaffDash(props) {
                 ?
                 <SpinnerContainer />
                 :
-                <section className='unread-workorders-staff'>
+                <section id='unread-workorders-staff'>
+                    {/* <div><a href='#completed-workorders-staff'>Completed</a></div> */}
+                    <div onClick={handleScroll}>Scroll to Completed</div>
                     <TextField onChange={e => searchwo(e)} className='search-workorder-field' id="outlined-basic" label="Search" variant="outlined" value={search} />
                     <TableContainer className='table-container' component={Paper}>
                         <Table className={classes.table} aria-label="simple table" >
@@ -175,32 +191,52 @@ function StaffDash(props) {
                                 {orderBy(workorders, columnToSort, sortDirection)
                                     .filter(e => e.status === 'Unread' && (e.description.toLowerCase().includes(search.toLocaleLowerCase()) || e.title.toLowerCase().includes(search.toLowerCase())))
                                     .map(wo => (
-                                        <TableRow key={wo.id}>
+                                        <TableRow key={wo.id} className='unread-table-rows' >
                                             <TableCell component="th" scope="row">
                                                 {wo.id}
                                             </TableCell>
                                             <TableCell align="right">{wo.firstname} {wo.lastname}</TableCell>
                                             <TableCell align="right">
-                                            <Link className='link' to={{ pathname: `${props.match.url}/workorder/${wo.id}`, id: wo.id }}>
-                                                        {wo.title}
-                                                    </Link>
+                                                <Link className='link' to={{ pathname: `${props.match.url}/workorder/${wo.id}`, id: wo.id }}>
+                                                    {wo.title}
+                                                </Link>
                                             </TableCell>
                                             <TableCell align="right">{wo.description.length > 100 ? wo.description.substring(0, 80).concat('...') : wo.description}</TableCell>
                                             <TableCell align="right">{dayjs(wo.datecreated).format('MM-DD-YYYY')}</TableCell>
                                             <TableCell align="right">{wo.lastupdated ? dayjs(wo.lastupdated).format('MM-DD-YYYY') : '-'}</TableCell>
                                             <TableCell align="right">{wo.status}</TableCell>
                                             <TableCell align="right">{
-                                                <div >Mark as <span>{
-                                                    <>
-                                                        <select defaultValue={wo.status}
-                                                            name='statusoptions' id='statusoptions'
-                                                            onChange={e => handleSelectChange(e.target.value, wo.id)}>
-                                                            <option value='Unread' >Unread</option>
-                                                            <option value='In Progress'>In Progress</option>
-                                                            <option value='Completed'>Completed</option>
-                                                        </select>
-                                                    </>
-                                                }</span></div>
+                                                <div >
+                                                    {editedId === wo.id ?
+
+                                                        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                                                            <select
+                                                                defaultValue={wo.status}
+                                                                onClick={e => e.stopPropagation()}
+                                                                name='statusoptions' id={wo.id}
+                                                                onChange={e => handleSelectChange(e.target.value, wo.id)}
+                                                            >
+                                                                <option value='Unread' onClick={e => e.stopPropagation()}>Unread</option>
+                                                                <option value='In Progress' onClick={e => e.stopPropagation()}>In Progress</option>
+                                                                <option value='Completed' onClick={e => e.stopPropagation()}>Completed</option>
+                                                            </select>
+                                                            <CancelIcon
+                                                                style={{ cursor: 'pointer' }}
+                                                                onClick={e => {
+                                                                    e.stopPropagation()
+                                                                    setEditedId(0)
+                                                                }} />
+
+                                                        </div>
+                                                        :
+                                                        <CreateIcon
+                                                            style={{ cursor: 'pointer' }}
+                                                            onClick={e => {
+                                                                e.stopPropagation()
+                                                                toggleEdit(wo.id)
+                                                            }} />
+                                                    }
+                                                </div>
                                             }</TableCell>
                                         </TableRow>
                                     ))}
@@ -210,7 +246,9 @@ function StaffDash(props) {
                 </section>
             }
             <br />
-            <section className=''>
+
+
+            <section id='progress-workorders-staff'>
                 <TableContainer className='table-container' component={Paper}>
                     <Table className={classes.table} aria-label="simple table">
                         <TableHead className={classes.tablehead2}>
@@ -245,30 +283,139 @@ function StaffDash(props) {
                             {orderBy(workorders, columnToSort, sortDirection)
                                 .filter(e => e.status === 'In Progress' && (e.description.toLowerCase().includes(search.toLowerCase()) || e.title.toLowerCase().includes(search.toLowerCase())))
                                 .map(wo => (
-                                    <TableRow key={wo.id}>
+                                    <TableRow key={wo.id} className='progress-table-rows' >
                                         <TableCell component="th" scope="row">
                                             {wo.id}
                                         </TableCell>
                                         <TableCell align="right">{wo.firstname} {wo.lastname}</TableCell>
                                         <TableCell align="right">
-                                        <Link className='link' to={{ pathname: `${props.match.url}/workorder/${wo.id}`, id: wo.id }}>
-                                                        {wo.title}
-                                                    </Link>
-                                                    </TableCell>
+                                            <Link className='link' to={{ pathname: `${props.match.url}/workorder/${wo.id}`, id: wo.id }}>
+                                                {wo.title}
+                                            </Link>
+                                        </TableCell>
                                         <TableCell align="right">{wo.description.length > 100 ? wo.description.substring(0, 80).concat('...') : wo.description}</TableCell>
                                         <TableCell align="right">{dayjs(wo.datecreated).format('MM-DD-YYYY')}</TableCell>
                                         <TableCell align="right">{wo.lastupdated ? dayjs(wo.lastupdated).format('MM-DD-YYYY') : '-'}</TableCell>
                                         <TableCell align="right">{wo.status}</TableCell>
                                         <TableCell align="right">{
-                                            <div >Mark as <span>{
-                                                <>
-                                                    <select defaultValue={wo.status} name='statusoptions' id='statusoptions' onChange={e => handleSelectChange(e.target.value, wo.id)}>
-                                                        <option value='Unread' >Unread</option>
-                                                        <option value='In Progress'>In Progress</option>
-                                                        <option value='Completed'>Completed</option>
-                                                    </select>
-                                                </>
-                                            }</span></div>
+                                            <div >
+                                                {editedId === wo.id ?
+
+                                                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                                                        <select
+                                                            defaultValue={wo.status}
+                                                            onClick={e => e.stopPropagation()}
+                                                            name='statusoptions' id={wo.id}
+                                                            onChange={e => handleSelectChange(e.target.value, wo.id)}
+                                                        >
+                                                            <option value='Unread' onClick={e => e.stopPropagation()}>Unread</option>
+                                                            <option value='In Progress' onClick={e => e.stopPropagation()}>In Progress</option>
+                                                            <option value='Completed' onClick={e => e.stopPropagation()}>Completed</option>
+                                                        </select>
+                                                        <CancelIcon
+                                                            style={{ cursor: 'pointer' }}
+                                                            onClick={e => {
+                                                                e.stopPropagation()
+                                                                setEditedId(0)
+                                                            }} />
+
+                                                    </div>
+                                                    :
+                                                    <CreateIcon
+                                                        style={{ cursor: 'pointer' }}
+                                                        onClick={e => {
+                                                            e.stopPropagation()
+                                                            toggleEdit(wo.id)
+                                                        }} />
+                                                }
+                                            </div>
+                                        }</TableCell>
+                                    </TableRow>
+                                ))}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+            </section>
+
+            <br />
+            <section id='completed-workorders-staff'>
+                <TableContainer className='table-container' component={Paper}>
+                    <Table className={classes.table} aria-label="simple table">
+                        <TableHead className={classes.tablehead3}>
+                            <TableRow>
+                                {columnHeads.map(column => (
+                                    <TableCell
+                                        key={column.id}
+                                        align="right"
+                                    >
+                                        {column.disableSorting ? (
+                                            <div>
+                                                {column.label}
+                                            </div>
+                                        ) :
+                                            <div
+                                                className='arrow-filter'
+                                                onClick={() => handleSort(column.id)}>
+                                                <span title='Sort'>{column.label}</span>
+                                                {columnToSort === column.id ? (
+                                                    sortDirection === 'asc' ? (
+                                                        <KeyboardArrowUpIcon />
+                                                    ) : (
+                                                            <KeyboardArrowDownIcon />
+                                                        )
+                                                ) : null}
+                                            </div>}
+                                    </TableCell>
+                                ))}
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {orderBy(workorders, columnToSort, sortDirection)
+                                .filter(e => e.status === 'Completed' && (e.description.toLowerCase().includes(search.toLowerCase()) || e.title.toLowerCase().includes(search.toLowerCase())))
+                                .map(wo => (
+                                    <TableRow key={wo.id} className='completed-table-rows' >
+                                        <TableCell component="th" scope="row">
+                                            {wo.id}
+                                        </TableCell>
+                                        <TableCell align="right">{wo.firstname} {wo.lastname}</TableCell>
+                                        <TableCell align="right">
+                                            {wo.title}</TableCell>
+                                        <TableCell align="right">{wo.description.length > 100 ? wo.description.substring(0, 80).concat('...') : wo.description}</TableCell>
+                                        <TableCell align="right">{dayjs(wo.datecreated).format('MM-DD-YYYY')}</TableCell>
+                                        <TableCell align="right">{wo.lastupdated ? dayjs(wo.lastupdated).format('MM-DD-YYYY') : '-'}</TableCell>
+                                        <TableCell align="right">{wo.status}</TableCell>
+                                        <TableCell align="right">{
+                                            <div >
+                                                {editedId === wo.id ?
+
+                                                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                                                        <select
+                                                            defaultValue={wo.status}
+                                                            onClick={e => e.stopPropagation()}
+                                                            name='statusoptions' id={wo.id}
+                                                            onChange={e => handleSelectChange(e.target.value, wo.id)}
+                                                        >
+                                                            <option value='Unread' onClick={e => e.stopPropagation()}>Unread</option>
+                                                            <option value='In Progress' onClick={e => e.stopPropagation()}>In Progress</option>
+                                                            <option value='Completed' onClick={e => e.stopPropagation()}>Completed</option>
+                                                        </select>
+                                                        <CancelIcon
+                                                            style={{ cursor: 'pointer' }}
+                                                            onClick={e => {
+                                                                e.stopPropagation()
+                                                                setEditedId(0)
+                                                            }} />
+
+                                                    </div>
+                                                    :
+                                                    <CreateIcon
+                                                        style={{ cursor: 'pointer' }}
+                                                        onClick={e => {
+                                                            e.stopPropagation()
+                                                            toggleEdit(wo.id)
+                                                        }} />
+                                                }
+                                            </div>
                                         }</TableCell>
                                     </TableRow>
                                 ))}
