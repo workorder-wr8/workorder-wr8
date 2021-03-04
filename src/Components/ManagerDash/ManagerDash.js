@@ -110,27 +110,36 @@ function ManagerDash(props) {
         let mappedMessages = messages.map(message => {
             if (message.managerid === props.user.managerid) {
                 return <div className='managerSelfMessage' key={message.messageid}>
-                    <div className='messageInfo'>{message.managerlastname}, {message.managerfirstname} :: {message.timesent}</div>
-                    <p>{message.content}</p>
+                    <div className='messageLeft'>
+                        <div className='messageSenderName'>{message.managerlastname}, {message.managerfirstname}</div>
+                        <div className='messageContent'>{message.content}</div>
+                    </div>
+                    <div className='messageInfo'> {dayjs(message.timesent).format('MMMM D, h:mm A')}</div>
                 </div>
             } else if (message.managerid) {
                 return <div className='managerOtherMessage' >
-                    <div className='messageInfo'>{message.managerlastname}, {message.managerfirstname} :: {message.timesent}</div>
-                    <p>{message.content}</p>
+                    <div className='messageLeft'>
+                        <div className='messageSenderName'>{message.managerlastname}, {message.managerfirstname}</div>
+                        <div className='messageContent'>{message.content}</div>
+                    </div>
+                    <div className='messageInfo'> {dayjs(message.timesent).format('MMMM D, h:mm A')}</div>
                 </div>
             } else if (message.staffid) {
                 return <div className='staffMessage' >
-                    <div className='messageInfo'>{message.stafflastname},  {message.stafffirstname}:: {message.timesent}</div>
-                    <p>{message.content}</p>
+                    <div className='messageLeft'>
+                        <div className='messageSenderName'>{message.stafflastname}, {message.stafffirstname}</div>
+                        <div className='messageContent'>{message.content}</div>
+                    </div>
+                    <div className='messageInfo'> {dayjs(message.timesent).format('MMMM D, h:mm A')}</div>
                 </div>
             } else if (message.tenantid) {
                 return <div className='tenantMessage' >
-                    <div className='messageInfo'>{message.tenantlastname}, {message.tenantfirstname} :: {message.timesent}</div>
-                    <p>{message.content}</p>
+                    <div className='messageContent'>{message.content}</div>
+                    <div className='messageInfo'>{message.tenantlastname}, {message.tenantfirstname} :: {dayjs(message.timesent).format('MMMM D, YYYY h:mm A')}</div>
                 </div>
             }
         })
-        setOverlayMessages(<div>{mappedMessages}</div>)
+        setOverlayMessages(<div id='mappedMessages'>{mappedMessages}</div>)
     }
 
     useEffect(mapMessages, [messages])
@@ -304,29 +313,35 @@ function ManagerDash(props) {
 
     return (
         <div className='managerDash'>
-            <div id='managerOverlay' onClick={overlayOff} >
-                <div id='managerOverlayInfo'>
-                    <div id='managerOverlayInfoBox'>
-                        <div>Work Order #{overlayData.overlayId} </div>
-                        <div>Tenant Name: {overlayData.overlayName}</div>  
-                        <div>Title: {overlayData.overlayTitle}</div> 
-                        <div>Status: {overlayData.overlayStatus}</div>
+            <div id='managerOverlay' >
+                <div id='managerOverlayInfoContainer'>
+                    <div id='managerOverlayInfo'>
+                        <div className='managerOverlayTop'>
+                            <div id='managerOverlayInfoBox'>
+                                <div className='overlayTitle'>{overlayData.overlayTitle} #{overlayData.overlayId} </div> 
+                                <div className='overlayStatus'>Status: {overlayData.overlayStatus}</div>
+                                <div className='overlayClose' onClick={overlayOff}>Close</div>
+                            </div>
+                            <div id='overlayTimes'>
+                                <div>  Date Created: {dayjs(overlayData.datecreated).format('MMMM D, YYYY h:mm A')}</div>
+                                <div>  Last Updated: {dayjs(overlayData.overlayLastUpdated).format('MMMM D, YYYY h:mm A')}</div>
+                            </div>
+                            <div className='descriptionTitle'>Workorder Description:</div>
+                            <div className='overlayDescription'>
+                                <div id='descriptionTitle'>Description: </div>
+                                <div>{overlayData.overlayDescription}</div>
+                            </div>
+                        </div>
+                        <div className='managerOverlayBottom'>
+                            <div id='managerOverlayLoadedMessages'  onClick={e => e.stopPropagation()}>
+                                {overlayMessages}
+                            </div>
+                            <form onSubmit={e => { addMessage(overlayData.overlayId, overlayData.overlayMessageInput) }} onClick={e => e.stopPropagation()}>
+                                <input type='text' onClick={e => e.stopPropagation()} onChange={e => setOverlayData({ ...overlayData, overlayMessageInput: e.target.value })} value={overlayData.overlayMessageInput} />
+                                <input type='button' onClick={e => { addMessage(overlayData.overlayId, overlayData.overlayMessageInput) }} value='Send'></input>
+                            </form>
+                        </div>
                     </div>
-                    <div className='overlayDescription'>
-                        <div id='descriptionTitle'>Description: </div>
-                        <div>{overlayData.overlayDescription}</div>
-                    </div>
-                    <div id='overlayTimes'>
-                        <div>  Date Created: {dayjs(overlayData.datecreated).format('MMMM D, YYYY h:mm A')}</div>
-                        <div>  Last Updated: {dayjs(overlayData.overlayLastUpdated).format('MMMM D, YYYY h:mm A')}</div>
-                    </div>
-                    <div id='managerOverlayLoadedMessages'  onClick={e => e.stopPropagation()}>
-                        {overlayMessages}
-                    </div>
-                    <form onSubmit={e => { addMessage(overlayData.overlayId, overlayData.overlayMessageInput) }} onClick={e => e.stopPropagation()}>
-                        <input type='text' onClick={e => e.stopPropagation()} onChange={e => setOverlayData({ ...overlayData, overlayMessageInput: e.target.value })} value={overlayData.overlayMessageInput} />
-                        <input type='button' onClick={e => { addMessage(overlayData.overlayId, overlayData.overlayMessageInput) }} value='Send'></input>
-                    </form>
                 </div>
             </div>
             {isLoading
