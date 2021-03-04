@@ -4,11 +4,14 @@ import AddCommentTenant from './AddCommentTenant';
 import AddCommentStaff from './AddCommentStaff';
 import { connect } from 'react-redux';
 import dayjs from 'dayjs';
+import Alert from '@material-ui/lab/Alert';
 import './Comments.css';
 
 const Comments = props => {
 
     const [comments, setComments] = useState([]);
+    const [show, setShow] = useState(false);
+    const [message, setMessage] = useState('');
 
     useEffect(() => {
         getComments();
@@ -33,12 +36,12 @@ const Comments = props => {
             <section key={comment.message_id}>
                 {id === comment.sender_id
                     ?
-                    <article  className='comment-container me'>
-                    <p className='my-comment'>{comment.content}@<span className='comment-timestamp'>{dayjs(comment.timesent).format('MMMM D, YYYY h:mm A')}</span></p>
+                    <article className='comment-container me'>
+                        <p className='my-comment'>{comment.content}@<span className='comment-timestamp'>{dayjs(comment.timesent).format('MMMM D, YYYY h:mm A')}</span></p>
                     </article>
                     :
                     <article className='comment-container them'>
-                    <p className='their-comment'>{comment.content}@<span className='comment-timestamp'>{dayjs(comment.timesent).format('MMMM D, YYYY h:mm A')}</span></p>
+                        <p className='their-comment'>{comment.content}@<span className='comment-timestamp'>{dayjs(comment.timesent).format('MMMM D, YYYY h:mm A')}</span></p>
                     </article>
                 }
             </section>
