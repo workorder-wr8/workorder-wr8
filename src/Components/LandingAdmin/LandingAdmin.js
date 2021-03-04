@@ -79,10 +79,10 @@ const LandingAdmin = (props) => {
                         firstname, lastname, email, password, phone, propertyid, passcode
                     })
                     .then(res => {
-                        props.history.push('/staffdash')
-                        props.getUser(res.data)
+                        props.history.push('/staffdash');
+                        props.getUser(res.data);
                     })
-                    .catch(err => alert(err.response.data))
+                    .catch(err => alert(err.response.data));
             } else if (role === 'manager') {
                 axios.post('/api/manager/register',
                     {
