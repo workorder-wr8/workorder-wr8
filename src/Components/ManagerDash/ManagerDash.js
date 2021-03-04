@@ -186,6 +186,17 @@ function ManagerDash(props) {
         setAssigned(assignedFiltered);
     }
 
+    let columnHeads = [
+        { id: 'ID#', label: 'ID#' },
+        { id: 'name', label: 'Name' },
+        { id: 'title', label: 'Title' },
+        { id: 'description', label: 'Description' },
+        { id: 'dateCreated', label: 'Date Created' },
+        { id: 'lastUpdated', label: 'Last Updated' },
+        { id: 'status', label: 'Status', disableSorting: true },
+        { id: 'action', label: 'Action', disableSorting: true }
+    ]
+
     const handleSelectChange = async (staffid, id) => {
         await axios.put(`/api/manager/workorders`, { id, staffid })
             .then(res => {
@@ -207,9 +218,10 @@ function ManagerDash(props) {
                         <div>Title: {overlayData.overlayTitle}</div> 
                         <div>Status: {overlayData.overlayStatus}</div>
                     </div>
-                    <div id='descriptionTitle'>Description: </div>
-                    <div>{overlayData.overlayDescription}</div>
-                    <div className='overlayDescription' value={overlayData.overlayDescription}></div>
+                    <div className='overlayDescription'>
+                        <div id='descriptionTitle'>Description: </div>
+                        <div>{overlayData.overlayDescription}</div>
+                    </div>
                     <div id='overlayTimes'>
                         <div>  Date Created: {dayjs(overlayData.datecreated).format('MMMM D, YYYY h:mm A')}</div>
                         <div>  Last Updated: {dayjs(overlayData.overlayLastUpdated).format('MMMM D, YYYY h:mm A')}</div>
@@ -289,7 +301,7 @@ function ManagerDash(props) {
                                         <StyledTableCell align='right'>Created</StyledTableCell>
                                         <StyledTableCell align='right'>Last Updated</StyledTableCell>
                                         <StyledTableCell align='right'>Completed</StyledTableCell>
-                                        <StyledTableCell align='right' width='100px'>Assigned To</StyledTableCell>
+                                        <StyledAssignmentCell align='right' width='100px'>Assigned To</StyledAssignmentCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
