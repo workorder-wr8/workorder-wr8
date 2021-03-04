@@ -16,6 +16,7 @@ import { ModalRoute, ModalContainer } from 'react-router-modal';
 import ManageWorkOrder from '../ManageWorkOrder/ManageWorkOrder';
 import SpinnerContainer from '../Spinner/SpinnerContainer';
 import './StaffDash.css'
+import { compare } from 'bcryptjs';
 
 const useStyles = makeStyles({
     tablehead: {
@@ -77,7 +78,7 @@ function StaffDash(props) {
     const openWO = (id) => {
         props.history.push(`${props.match.url}/workorder/${id}`)
     }
-
+    
     return (
         <div id='staffDash'>
             <br />
@@ -135,9 +136,6 @@ function StaffDash(props) {
                     </TableContainer>
                 </section>
             }
-
-
-
             <section className=''>
                 <TableContainer className='table-container' component={Paper}>
                     <Table className={classes.table} aria-label="simple table">

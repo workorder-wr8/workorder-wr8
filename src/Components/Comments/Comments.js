@@ -16,34 +16,31 @@ const Comments = props => {
 
     const getComments = () => {
         const id = props.workorderid;
-        axios.post('/api/commentsById', { id })
+        axios.post('/api/commentsById', { id})
             .then(fetchedComments => setComments(fetchedComments.data))
             .catch(err => console.log(`Error: ${err.message}`));
     }
 
-    const displayComments = () => {
-        let id;
-        if (props.user.tenantid) {
-            id = props.user.tenantid;
-        } else if (props.user.staffid) {
-            id = props.user.staffid;
-        } else {
-            id = props.user.managerid;
-        }
-        const workOrderComments = comments.map(comment => {
-            <article key={comment.message_id} className='comment-container'>
-                {comment.sender_id === id
-                    ?
-                    <p className='my-comment'>{comment.content}@<span className='comment-timestamp'>{dayjs(comment.timesent).format('MMMM D, YYYY h:mm A')}</span></p>
+    // const displayComments = () => {
+    //     let id;
+    //     if (props.user.tenantid) {
+    //         id = props.user.tenantid;
+    //     } else if (props.user.staffid) {
+    //         id = props.user.staffid;
+    //     } else {
+    //         id = props.user.managerid;
+    //     }
+    //    const workOrderComments =  comments.map(comment => {
+    //         <article key={comment.message_id} className='comment-container'>
+               
+    //                 <p className='my-comment'>{comment.content}@<span className='comment-timestamp'>{dayjs(comment.timesent).format('MMMM D, YYYY h:mm A')}</span></p>
 
-                    :
-                    <p className='their-comment'>{comment.content}@<span className='comment-timestamp'>{dayjs(comment.timesent).format('MMMM D, YYYY h:mm A')}</span></p>
-
-                }
-            </article>
-        })
-        return workOrderComments;
-    }
+                
+    //         </article>
+    //     });
+    
+    //     return workOrderComments;
+    // }
 
     let addComment;
     if (props.user.tenantid) {
@@ -53,13 +50,16 @@ const Comments = props => {
     } else {
         <p>manager stuff here</p>
     }
-    console.log('comments', props)
+    console.log('props', props)
+    console.log('comments', comments)
     return (
         <section>
             <p className='comment-header'>Comments:</p>
 
             <section className='comments'>
-                {displayComments()}
+               {comments.map(comment=>(
+                   <p>{comment.content}</p>
+               ))}
             </section>
             {addComment}
         </section>

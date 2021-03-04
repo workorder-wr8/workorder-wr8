@@ -6,23 +6,23 @@ import dayjs from 'dayjs';
 import Comments from '../Comments/Comments';
 
 const ManageWorkOrder = (props) => {
-    const [id, setId] = useState('')
     const [workOrder, setWorkOrder] = useState([]);
 
     useEffect(() => {
-        if (id) {
-            getWorkOrder()
-        }
+        // if (id) {
+        //     getWorkOrder()
+        // }
 
-        if (props.location.pathname.includes('/staffdash')) {
-            setId(props.location.pathname.substring(21));
-        } else if (props.location.pathname.includes('/dash')) {
-            setId(props.location.pathname.substring(16));
-        }
-    }, [id])
+        // if (props.location.pathname.includes('/staffdash')) {
+        //     setId( + props.location.pathname.substring(21));
+        // } else if (props.location.pathname.includes('/dash')) {
+        //     setId(+ props.location.pathname.substring(16));
+        // }
+        getWorkOrder();
+    }, [])
 
     const getWorkOrder = () => {
-        axios.get(`/api/workorder/${id}`)
+        axios.get(`/api/workorder/${props.location.id}`)
             .then(res => {
                 setWorkOrder(res.data[0]);
             })
@@ -62,13 +62,13 @@ const ManageWorkOrder = (props) => {
             </>
         )
     }
-    console.log('workorder', props)
+
     return (
         <section className='workorder-container'>
             <button className='close-workorder-btn' onClick={() => props.closeModal()}>Close</button>
             {displayWorkOrder()}
             <section className='comment-container'>
-                <Comments workorderid={id} />
+                <Comments workorderid={props.location.id} />
             </section>
         </section>
     )

@@ -54,9 +54,9 @@ const TenantDash = props => {
                     :
                     <section className='workorder-table-container'>
 
-               
-                            <TextField onChange={e => searchWorkOrders(e)} className='search-workorder-field' id="outlined-basic" label="Search" variant="outlined" value={search} />
-             
+
+                        <TextField onChange={e => searchWorkOrders(e)} className='search-workorder-field' id="outlined-basic" label="Search" variant="outlined" value={search} />
+
 
                         <TableContainer className='table-container' component={Paper} >
 
@@ -72,10 +72,12 @@ const TenantDash = props => {
                                     {workOrders.filter(wo => (
                                         wo.status.toLowerCase().includes(search.toLowerCase()) || wo.title.toLowerCase().includes(search.toLowerCase())
                                     )).map(wo => (
-                                        <TableRow key={wo.id} onClick={e => openWO(wo.id)}>
+                                        <TableRow key={wo.id} >
                                             <TableCell>{wo.id}</TableCell>
                                             <TableCell component="th" scope="row">
-                                                {wo.title}
+                                                <Link className='link' to={{ pathname: `${props.match.url}/workorder/${wo.id}`, id: wo.id }}>
+                                                    {wo.title}
+                                                </Link>
                                             </TableCell>
                                             <TableCell align="right" className='tenant-wo-description'>{wo.description}</TableCell>
                                             <TableCell>{dayjs(wo.datecreated).format('MMMM D, YYYY h:mm A')}</TableCell>
@@ -96,7 +98,6 @@ const TenantDash = props => {
                             </Table>
                         </TableContainer>
                     </section>
-
                 }
             </section>
             <ModalRoute className='example-modal'
