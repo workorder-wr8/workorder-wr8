@@ -16,6 +16,7 @@ import orderBy from "lodash/orderBy";
 import SpinnerContainer from '../Spinner/SpinnerContainer';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
+import click from '../../assets/click_me.svg';
 import './TenantDash.css';
 
 const TenantDash = props => {
@@ -49,10 +50,6 @@ const TenantDash = props => {
 
     const searchWorkOrders = e => {
         setSearch(e.target.value);
-    }
-
-    const openWO = (id) => {
-        props.history.push(`/dash/workorder/${id}`)
     }
 
     const handleSort = (columnId) => {
@@ -102,6 +99,7 @@ const TenantDash = props => {
                                             <TableCell
                                                 key={column.id}
                                                 align="right"
+                                                className='table-head-workorders'
                                             >
                                                 {column.disableSorting ? (
                                                     <div>
@@ -129,11 +127,12 @@ const TenantDash = props => {
                                         .filter(wo => (
                                             wo.status.toLowerCase().includes(search.toLowerCase()) || wo.title.toLowerCase().includes(search.toLowerCase())
                                         )).map(wo => (
-                                            <TableRow key={wo.id} onClick={e => openWO(wo.id)}>
+                                            <TableRow key={wo.id}>
                                                 <TableCell>{wo.id}</TableCell>
-                                                <TableCell component="th" scope="row">
+                                                <TableCell className='wo-title' component="th" scope="row">
                                                     <Link className='link' to={{ pathname: `${props.match.url}/workorder/${wo.id}`, id: wo.id }}>
                                                         {wo.title}
+                                                        <img className='click-me' src={click} alt='click_svg'/>
                                                     </Link>
                                                 </TableCell>
 
@@ -142,7 +141,7 @@ const TenantDash = props => {
                                                 {(wo.status === 'Open' || wo.status === 'Completed')
                                                     ?
                                                     (
-                                                        <TableCell>{wo.status}</TableCell>
+                                                        <TableCell><span className={wo.status === 'Completed' ? 'completed' : 'in-progress-wo'}>{wo.status}</span></TableCell>
                                                     )
                                                     :
 

@@ -21,7 +21,11 @@ const Comments = props => {
         const id = props.workorderid;
         axios.post('/api/commentsById', { id })
             .then(fetchedComments => setComments(fetchedComments.data))
-            .catch(err => console.log(`Error: ${err.message}`));
+            .catch(err => {
+                console.log(`Error: ${err.message}`);
+                setMessage(`${err.response.data}`);
+                setShow(true);
+            });
     }
 
     const displayComments = () => {
@@ -63,7 +67,7 @@ const Comments = props => {
     return (
         <section>
             <p className='comment-header'>Comments:</p>
-
+            {show ? <Alert severity="info">{message}</Alert> : null}
             <section className='comments'>
                 {displayComments()}
             </section>
