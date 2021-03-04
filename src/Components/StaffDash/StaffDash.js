@@ -11,10 +11,13 @@ import TextField from '@material-ui/core/TextField';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import dayjs from 'dayjs';
-import { Link } from 'react-router-dom';
 import { ModalRoute, ModalContainer } from 'react-router-modal';
 import ManageWorkOrder from '../ManageWorkOrder/ManageWorkOrder';
 import SpinnerContainer from '../Spinner/SpinnerContainer';
+import orderBy from "lodash/orderBy";
+import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
+import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
+import CreateIcon from '@material-ui/icons/Create';
 import './StaffDash.css'
 import { compare } from 'bcryptjs';
 
@@ -33,7 +36,7 @@ const useStyles = makeStyles({
     },
     table: {
         minWidth: 650,
-    },
+    }
 });
 
 function StaffDash(props) {
@@ -42,6 +45,13 @@ function StaffDash(props) {
     const [scheduled, setScheduled] = useState([]);
     const [search, setSearch] = useState('');
     const [isLoading, setLoading] = useState(true);
+    const [columnToSort, setColumnToSort] = useState('')
+    const [sortDirection, setSortDirection] = useState('')
+    const invertDirection = {
+        asc: 'desc',
+        desc: 'asc'
+    }
+    const [dateToggle, setDateToggle] = useState(true)
 
     useEffect(() => {
         if (props.user.staffid) {
@@ -78,7 +88,45 @@ function StaffDash(props) {
     const openWO = (id) => {
         props.history.push(`${props.match.url}/workorder/${id}`)
     }
-    
+
+    let columnHeads = [
+        { id: 'ID#', label: 'ID#' },
+        { id: 'name', label: 'Name' },
+        { id: 'title', label: 'Title' },
+        { id: 'description', label: 'Description' },
+        { id: 'dateCreated', label: 'Date Created' },
+        { id: 'lastUpdated', label: 'Last Updated' },
+        { id: 'status', label: 'Status', disableSorting: true },
+        { id: 'action', label: 'Action', disableSorting: true }
+    ]
+
+    const handleSort = (columnId) => {
+        setColumnToSort(columnId)
+        setSortDirection(columnToSort === columnId ? invertDirection[sortDirection] : 'asc')
+
+        if (columnId === 'dateCreated' || columnId === 'ID#') {
+            setSortDirection(columnToSort === columnId ? invertDirection[sortDirection] : 'asc')
+            setDateToggle(!dateToggle)
+            workorders.sort((a, b) => {
+                if (dateToggle) {
+                    return new Date(a.datecreated) - new Date(b.datecreated);
+                } else {
+                    return new Date(b.datecreated) - new Date(a.datecreated);
+                }
+            });
+        } else if (columnId === 'lastUpdated') {
+            setSortDirection(columnToSort === columnId ? invertDirection[sortDirection] : 'asc')
+            setDateToggle(!dateToggle)
+            workorders.sort((a, b) => {
+                if (dateToggle) {
+                    return new Date(a.lastupdated) - new Date(b.lastupdated);
+                } else {
+                    return new Date(b.lastupdated) - new Date(a.lastupdated);
+                }
+            });
+        }
+    }
+
     return (
         <div id='staffDash'>
             <br />
@@ -90,20 +138,37 @@ function StaffDash(props) {
                     <TextField onChange={e => searchwo(e)} className='search-workorder-field' id="outlined-basic" label="Search" variant="outlined" value={search} />
                     <TableContainer className='table-container' component={Paper}>
                         <Table className={classes.table} aria-label="simple table" >
-                            <TableHead className={classes.tablehead} >
+                            <TableHead className={classes.tablehead}>
                                 <TableRow>
-                                    <TableCell>ID#</TableCell>
-                                    <TableCell align="right">Name</TableCell>
-                                    <TableCell align="right">Title</TableCell>
-                                    <TableCell align="right">Description</TableCell>
-                                    <TableCell align="right">Date Created</TableCell>
-                                    <TableCell align="right">Last Updated</TableCell>
-                                    <TableCell align="right">Status</TableCell>
-                                    <TableCell align="right">Action</TableCell>
+                                    {columnHeads.map(column => (
+                                        <TableCell
+                                            key={column.id}
+                                            align="right"
+                                        >
+                                            {column.disableSorting ? (
+                                                <div>
+                                                    {column.label}
+                                                </div>
+                                            ) :
+                                                <div
+                                                    className='arrow-filter'
+                                                    onClick={() => handleSort(column.id)}>
+                                                    <span title='Sort'>{column.label}</span>
+                                                    {columnToSort === column.id ? (
+                                                        sortDirection === 'asc' ? (
+                                                            <KeyboardArrowUpIcon />
+                                                        ) : (
+                                                                <KeyboardArrowDownIcon />
+                                                            )
+                                                    ) : null}
+                                                </div>}
+                                        </TableCell>
+                                    ))}
                                 </TableRow>
                             </TableHead>
+
                             <TableBody>
-                                {workorders
+                                {orderBy(workorders, columnToSort, sortDirection)
                                     .filter(e => e.status === 'Unread' && (e.description.toLowerCase().includes(search.toLocaleLowerCase()) || e.title.toLowerCase().includes(search.toLowerCase())))
                                     .map(wo => (
                                         <TableRow key={wo.id} onClick={e => openWO(wo.id)}>
@@ -115,13 +180,15 @@ function StaffDash(props) {
                                                 {wo.title}
                                             </TableCell>
                                             <TableCell align="right">{wo.description.length > 100 ? wo.description.substring(0, 80).concat('...') : wo.description}</TableCell>
-                                            <TableCell align="right">{dayjs(wo.datecreated).format('MMMM D, YYYY h:mm A')}</TableCell>
-                                            <TableCell align="right">{wo.lastupdated ? dayjs(wo.lastupdated).format('MMMM D, YYYY h:mm A') : '-'}</TableCell>
+                                            <TableCell align="right">{dayjs(wo.datecreated).format('MM-DD-YYYY')}</TableCell>
+                                            <TableCell align="right">{wo.lastupdated ? dayjs(wo.lastupdated).format('MM-DD-YYYY') : '-'}</TableCell>
                                             <TableCell align="right">{wo.status}</TableCell>
                                             <TableCell align="right">{
                                                 <div >Mark as <span>{
                                                     <>
-                                                        <select defaultValue={wo.status} name='statusoptions' id='statusoptions' onChange={e => handleSelectChange(e.target.value, wo.id)}>
+                                                        <select defaultValue={wo.status}
+                                                            name='statusoptions' id='statusoptions'
+                                                            onChange={e => handleSelectChange(e.target.value, wo.id)}>
                                                             <option value='Unread' >Unread</option>
                                                             <option value='In Progress'>In Progress</option>
                                                             <option value='Completed'>Completed</option>
@@ -136,47 +203,68 @@ function StaffDash(props) {
                     </TableContainer>
                 </section>
             }
+            <br />
+
+
             <section className=''>
                 <TableContainer className='table-container' component={Paper}>
                     <Table className={classes.table} aria-label="simple table">
                         <TableHead className={classes.tablehead2}>
                             <TableRow>
-                                <TableCell>ID#</TableCell>
-                                <TableCell align="right">Tenant Name</TableCell>
-                                <TableCell align="right">Title</TableCell>
-                                <TableCell align="right">Description</TableCell>
-                                <TableCell align="right">Date Created</TableCell>
-                                <TableCell align="right">Last Updated</TableCell>
-                                <TableCell align="right">Status</TableCell>
-                                <TableCell align="right">Action</TableCell>
+                                {columnHeads.map(column => (
+                                    <TableCell
+                                        key={column.id}
+                                        align="right"
+                                    >
+                                        {column.disableSorting ? (
+                                            <div>
+                                                {column.label}
+                                            </div>
+                                        ) :
+                                            <div
+                                                className='arrow-filter'
+                                                onClick={() => handleSort(column.id)}>
+                                                <span title='Sort'>{column.label}</span>
+                                                {columnToSort === column.id ? (
+                                                    sortDirection === 'asc' ? (
+                                                        <KeyboardArrowUpIcon />
+                                                    ) : (
+                                                            <KeyboardArrowDownIcon />
+                                                        )
+                                                ) : null}
+                                            </div>}
+                                    </TableCell>
+                                ))}
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {workorders.filter(e => e.status === 'In Progress' && (e.description.includes(search) || e.title.includes(search))).map(wo => (
-                                <TableRow key={wo.id} onClick={e => openWO(wo.id)}>
-                                    <TableCell component="th" scope="row">
-                                        {wo.id}
-                                    </TableCell>
-                                    <TableCell align="right">{wo.firstname} {wo.lastname}</TableCell>
-                                    <TableCell align="right">
-                                        {wo.title}</TableCell>
-                                    <TableCell align="right">{wo.description.length > 100 ? wo.description.substring(0, 80).concat('...') : wo.description}</TableCell>
-                                    <TableCell align="right">{dayjs(wo.datecreated).format('MMMM D, YYYY h:mm A')}</TableCell>
-                                    <TableCell align="right">{wo.lastupdated ? dayjs(wo.lastupdated).format('MMMM D, YYYY h:mm A') : '-'}</TableCell>
-                                    <TableCell align="right">{wo.status}</TableCell>
-                                    <TableCell align="right">{
-                                        <div >Mark as <span>{
-                                            <>
-                                                <select defaultValue={wo.status} name='statusoptions' id='statusoptions' onChange={e => handleSelectChange(e.target.value, wo.id)}>
-                                                    <option value='Unread' >Unread</option>
-                                                    <option value='In Progress'>In Progress</option>
-                                                    <option value='Completed'>Completed</option>
-                                                </select>
-                                            </>
-                                        }</span></div>
-                                    }</TableCell>
-                                </TableRow>
-                            ))}
+                            {orderBy(workorders, columnToSort, sortDirection)
+                                .filter(e => e.status === 'In Progress' && (e.description.toLowerCase().includes(search.toLowerCase()) || e.title.toLowerCase().includes(search.toLowerCase())))
+                                .map(wo => (
+                                    <TableRow key={wo.id} onClick={e => openWO(wo.id)}>
+                                        <TableCell component="th" scope="row">
+                                            {wo.id}
+                                        </TableCell>
+                                        <TableCell align="right">{wo.firstname} {wo.lastname}</TableCell>
+                                        <TableCell align="right">
+                                            {wo.title}</TableCell>
+                                        <TableCell align="right">{wo.description.length > 100 ? wo.description.substring(0, 80).concat('...') : wo.description}</TableCell>
+                                        <TableCell align="right">{dayjs(wo.datecreated).format('MM-DD-YYYY')}</TableCell>
+                                        <TableCell align="right">{wo.lastupdated ? dayjs(wo.lastupdated).format('MM-DD-YYYY') : '-'}</TableCell>
+                                        <TableCell align="right">{wo.status}</TableCell>
+                                        <TableCell align="right">{
+                                            <div >Mark as <span>{
+                                                <>
+                                                    <select defaultValue={wo.status} name='statusoptions' id='statusoptions' onChange={e => handleSelectChange(e.target.value, wo.id)}>
+                                                        <option value='Unread' >Unread</option>
+                                                        <option value='In Progress'>In Progress</option>
+                                                        <option value='Completed'>Completed</option>
+                                                    </select>
+                                                </>
+                                            }</span></div>
+                                        }</TableCell>
+                                    </TableRow>
+                                ))}
                         </TableBody>
                     </Table>
                 </TableContainer>

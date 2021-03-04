@@ -37,29 +37,14 @@
   z-index: 1;
 }
 
-#staffOptions {
-  z-index: 2;
-}
 
 #changeStaffBtn {
   text-decoration: underline;
   color: blue
 }
 
-.unassignedTable {
-  height: auto!important;
-}
-
-.unassignedRow {
-  background-color: #D38A88
-}
-
 .unassignedRow:nth-of-type(odd) {
-  background-color: #B34642;
-}
-
-.unassignedRow:nth-of-type(odd) > .unassignedCell{
-  color: white;
+  background-color: #fdafad;
 }
 
 .unassignedRow:nth-of-type(odd) > td > #staffOptions{
@@ -71,59 +56,14 @@
   height: auto;
 }
 
-.assignedRow {
+.assignedRow:nth-of-type(odd) {
   background-color: #61837D;
 }
 
-.assignedRow:nth-of-type(odd) {
-  background-color: #23360E;
-}
-
-.assignedRow:nth-of-type(odd) > td{
-  color: white;
-}
-
-#staffOptions{
-  color: black;
-}
-
-.unassignedRow > Select {
-  overflow: visible;
-}
-
-.unassignedTable {
-  z-index: 1 !important;
-}
-
-.assignedTable {
-  z-index: 0 !important;
-}
-
-.unassignedTable #staffoptions > div:nth-child(3) > div {
-  background-color: white;
-  position: fixed;
-  z-index: 10;
-}
 
 .unassignedTable #staffoptions {
   position: relative;
   width: 139px;
-}
-
-.unassignedTable  #staffoptions > div:nth-child(3) >*{
-  position: fixed;
-  z-index: 10;
-  background-color: white;
-}
-
-.unassignedTable div[id*='react-select'] {
-  z-index: 10;
-}
-
-.assignedTable #staffoptions > div:nth-child(3) > div {
-  background-color: white;
-  position: relative;
-  z-index: 10;
 }
 
 .assignedTable #staffoptions {
@@ -131,29 +71,17 @@
   width: 139px;
 }
 
-.assignedTable #staffoptions > div:nth-child(3) > * {
-  background-color: white;
-  position: fixed;
-  z-index: 10;
-  color: black;
-}
 
 .unassignedTable div[id*='react-select'] {
   z-index: 10;
 }
+
 .assignedTable th{
   z-index: 1 !important;
 }
 
 .extrarow {
-  height: 80px;
-}
-
-tr {
-  height: 40px !important;
-}
-tr td{
-  height: auto !important;
+  height: 120px;
 }
 
 .descriptionCell {
