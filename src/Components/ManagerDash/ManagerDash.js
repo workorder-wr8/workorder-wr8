@@ -16,7 +16,10 @@ import orderBy from "lodash/orderBy";
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import SpinnerContainer from '../Spinner/SpinnerContainer';
+import {Link} from 'react-router-dom';
 import './ManagerDash.css';
+import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
 import { Autocomplete } from '@material-ui/lab';
 // USES withStyles from material-UI for table cells and rows
 
@@ -109,28 +112,16 @@ function ManagerDash(props) {
     const mapMessages = () => {
         let mappedMessages = messages.map(message => {
             if (message.managerid === props.user.managerid) {
-                return <div className='managerSelfMessage' key={message.messageid}>
-                    <div className='messageInfo'>{message.managerlastname}, {message.managerfirstname} :: {message.timesent}</div>
-                    <p>{message.content}</p>
-                </div>
-            } else if (message.managerid) {
-                return <div className='managerOtherMessage' >
-                    <div className='messageInfo'>{message.managerlastname}, {message.managerfirstname} :: {message.timesent}</div>
-                    <p>{message.content}</p>
-                </div>
-            } else if (message.staffid) {
-                return <div className='staffMessage' >
-                    <div className='messageInfo'>{message.stafflastname},  {message.stafffirstname}:: {message.timesent}</div>
-                    <p>{message.content}</p>
-                </div>
-            } else if (message.tenantid) {
-                return <div className='tenantMessage' >
-                    <div className='messageInfo'>{message.tenantlastname}, {message.tenantfirstname} :: {message.timesent}</div>
-                    <p>{message.content}</p>
-                </div>
-            }
+                return <article  className='comment-container me'>
+                            <p className='my-comment'>{message.content}@<span className='comment-timestamp'>{dayjs(message.timesent).format('MMMM D, YYYY h:mm A')}</span></p>
+                        </article>
+            } else {
+                return <article  className='comment-container them'>
+                            <p className='my-comment'>{message.content}@<span className='comment-timestamp'>{dayjs(message.timesent).format('MMMM D, YYYY h:mm A')}</span></p>
+                        </article>
+            } 
         })
-        setOverlayMessages(<div>{mappedMessages}</div>)
+        setOverlayMessages(<div id='mappedMessages'>{mappedMessages}</div>)
     }
 
     useEffect(mapMessages, [messages])
@@ -140,16 +131,16 @@ function ManagerDash(props) {
 
     const changeOverlay = (event) => {
         console.log('OVERLAY: ', event.target.parentNode.cells)
-        let id = event.target.parentNode.cells[0].textContent;
-        let name = event.target.parentNode.cells[1].textContent;
-        let title = event.target.parentNode.cells[2].textContent;
-        let description = event.target.parentNode.cells[3].id;
-        let status = event.target.parentNode.cells[4].textContent;
-        let datecreated = event.target.parentNode.cells[5].textContent;
+        let id = event.target.parentNode.parentNode.cells[0].textContent;
+        let name = event.target.parentNode.parentNode.cells[1].textContent;
+        let title = event.target.parentNode.parentNode.cells[2].textContent;
+        let description = event.target.parentNode.parentNode.cells[3].id;
+        let status = event.target.parentNode.parentNode.cells[4].textContent;
+        let datecreated = event.target.parentNode.parentNode.cells[5].textContent;
         let lastupdated, datecompleted;
-        if (event.target.parentNode.cells[7]) {
-            lastupdated = event.target.parentNode.cells[6].textContent;
-            datecompleted = event.target.parentNode.cells[7].textContent;
+        if (event.target.parentNode.parentNode.cells[7]) {
+            lastupdated = event.target.parentNode.parentNode.cells[6].textContent;
+            datecompleted = event.target.parentNode.parentNode.cells[7].textContent;
         }
 
         getMessages(id);
@@ -195,6 +186,17 @@ function ManagerDash(props) {
         setUnassigned(unassignedFiltered);
         setAssigned(assignedFiltered);
     }
+
+    let columnHeads = [
+        { id: 'ID#', label: 'ID#' },
+        { id: 'name', label: 'Name' },
+        { id: 'title', label: 'Title' },
+        { id: 'description', label: 'Description' },
+        { id: 'dateCreated', label: 'Date Created' },
+        { id: 'lastUpdated', label: 'Last Updated' },
+        { id: 'status', label: 'Status', disableSorting: true },
+        { id: 'action', label: 'Action', disableSorting: true }
+    ]
 
     const handleSelectChange = async (staffid, id) => {
         await axios.put(`/api/manager/workorders`, { id, staffid })
@@ -293,24 +295,60 @@ function ManagerDash(props) {
 
     return (
         <div className='managerDash'>
-            <div id='managerOverlay' onClick={overlayOff}>
-                <div id='managerOverlayInfo'>
-                    <p>Work Order #{overlayData.overlayId}   Tenant Name: {overlayData.overlayName}  </p>
-                    <p> Title: {overlayData.overlayTitle}</p>
-                    <p> Description: {overlayData.overlayDescription}</p>
-                    <p>  Status: {overlayData.overlayStatus}</p>
-                    <p>  Date Created: {dayjs(overlayData.datecreated).format('MMMM D, YYYY h:mm A')}</p>
-                    <p>  Last Updated: {dayjs(overlayData.overlayLastUpdated).format('MMMM D, YYYY h:mm A')}</p>
-                    <p>  Date Completed: {dayjs(overlayData.overlayDateCompleted).format('MMMM D, YYYY h:mm A')}</p>
-                </div>
-                <div id='managerOverlayMessages' onClick={e => e.stopPropagation()}>
-                    <div id='managerOverlayLoadedMessages'>
-                        {overlayMessages}
-                    </div>
-                    <form onSubmit={e => { addMessage(overlayData.overlayId, overlayData.overlayMessageInput) }} onClick={e => e.stopPropagation()}>
-                        <input type='text' onClick={e => e.stopPropagation()} onChange={e => setOverlayData({ ...overlayData, overlayMessageInput: e.target.value })} value={overlayData.overlayMessageInput} />
-                        <input type='button' onClick={e => { addMessage(overlayData.overlayId, overlayData.overlayMessageInput) }} value='Send'></input>
-                    </form>
+            <div id='managerOverlay' >
+                <div id='managerOverlayInfoContainer'>
+                    <section class='workorder-container'>
+                        <>
+                            <div className='workorder-title'>
+                                <h2 id='wo-title'>{overlayData.overlayTitle} <span>#{overlayData.overlayId}</span></h2>
+                                <h3 id='status-workorder' className={overlayData.overlayStatus === 'Open' ? 'completed' : 'default-status'}>Status: {overlayData.overlayStatus}</h3>
+                                <Button className='close-workorder-btn' onClick={overlayOff}>Close</Button>
+                            </div>
+                            <div className='workorder-details'>
+
+                                <div className='status-updates'>
+                                    <span className='status-update-workorder'>Created: {dayjs(overlayData.dateCreated).format('dddd MMMM D YYYY h:mm A')}</span><br />
+                                    {overlayData.lastUpdated === null
+                                        ?
+                                        null
+                                        :
+                                        <>
+                                            <span>Last Updated: {dayjs(overlayData.lastUpdated).format('dddd MMMM D, YYYY h:mm A')}</span>
+                                        </>
+
+                                    }
+                                    {overlayData.dateCompleted === null
+                                        ?
+                                        null
+                                        :
+                                        <>
+                                            <br />
+                                            <span>Date Completed: {dayjs(overlayData.dateCompleted).format('dddd MMMM D, YYYY h:mm A')}</span>
+                                        </>
+
+                                    }
+                                </div>
+                            </div>
+                            <div className='workorder-description'>
+                                <h3 id='description-workorder'>Workorder Description:</h3>
+                                <section className='wo-description-content'>
+                                    <p >{overlayData.overlayDescription}</p>
+                                </section>
+                            </div>
+                        </>
+                        <section className='comment-container'>
+                            <section>
+                                <p className='comment-header'>Comments:</p>
+                                <section className='comments'>
+                                    {overlayMessages}
+                                </section>
+                                <form onSubmit={e => { addMessage(overlayData.overlayId, overlayData.overlayMessageInput) }} onClick={e => e.stopPropagation()} className='add-comment-container'>
+                                    <TextField type='text' onClick={e => e.stopPropagation()} onChange={e => setOverlayData({ ...overlayData, overlayMessageInput: e.target.value })} value={overlayData.overlayMessageInput} className='comment-input'/>
+                                    <Button type='button' class='addBtn-comment' onClick={e => { addMessage(overlayData.overlayId, overlayData.overlayMessageInput) }}>Add Comment</Button>
+                                </form>
+                            </section>
+                        </section>
+                    </section>
                 </div>
             </div>
             {isLoading
@@ -370,10 +408,10 @@ function ManagerDash(props) {
                                 <TableBody>
                                     {orderBy(unassignedWorkOrders, columnToSort, sortDirection)
                                         .map(wo => (
-                                            <StyledTableRow className='row' key={wo.id} value={wo} onClick={changeOverlay} className='unassignedRow'>
+                                            <StyledTableRow className='row' key={wo.id} value={wo}  className='unassignedRow'>
                                                 <StyledTableCell align='right' className='unassignedCell'>{wo.id}</StyledTableCell>
                                                 <StyledTableCell align='right' className='unassignedCell'>{wo.tenantlast},{wo.tenantfirst}</StyledTableCell>
-                                                <StyledTableCell align='right' className='unassignedCell'>{wo.title}</StyledTableCell>
+                                                <StyledTableCell align='right' className='unassignedCell' onClick={changeOverlay}><Link>{wo.title}</Link></StyledTableCell>
                                                 <StyledDescriptionCell align='right' className='unassignedCell descriptionCell' id={wo.description}>{wo.description.length > 100 ? wo.description.substring(0, 80).concat('...') : wo.description}</StyledDescriptionCell>
                                                 <StyledTableCell align='right' className='unassignedCell'>{wo.status}</StyledTableCell>
                                                 <StyledTableCell align='right' className='unassignedCell'>{dayjs(wo.datecreated).format('MMMM D, YYYY h:mm A')}</StyledTableCell>
@@ -458,10 +496,10 @@ function ManagerDash(props) {
                                 <TableBody>
                                     {orderBy(assignedWorkOrders, columnToSort, sortDirection)
                                         .map(wo => (
-                                            <StyledTableRow key={wo.id} value={wo} onClick={changeOverlay} className='assignedRow'>
+                                            <StyledTableRow key={wo.id} value={wo} className='assignedRow'>
                                                 <StyledTableCell align='right'>{wo.id}</StyledTableCell>
                                                 <StyledTableCell align='right' >{wo.tenantlast},{wo.tenantfirst}</StyledTableCell>
-                                                <StyledTableCell align='right'>{wo.title}</StyledTableCell>
+                                                <StyledTableCell align='right' onClick={changeOverlay} ><Link>{wo.title}</Link></StyledTableCell>
                                                 <StyledDescriptionCell align='right' className='unassignedCell descriptionCell' id={wo.description}>{wo.description.length > 100 ? wo.description.substring(0, 80).concat('...') : wo.description}</StyledDescriptionCell>
                                                 <StyledTableCell align='right'>{wo.status}</StyledTableCell>
                                                 <StyledTableCell align='right'>{dayjs(wo.datecreated).format('MMMM D, YYYY h:mm A')}</StyledTableCell>
