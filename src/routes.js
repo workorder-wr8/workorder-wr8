@@ -1,7 +1,6 @@
 import { Switch, Route } from 'react-router-dom'
 import LandingTenant from './Components/LandingTenant/LandingTenant'
 import LandingAdmin from './Components/LandingAdmin/LandingAdmin'
-import ManageWorkOrder from './Components/ManageWorkOrder/ManageWorkOrder'
 import CreateWorkOrder from './Components/CreateWorkOrder/CreateWorkOrder'
 import TenantDash from './Components/TenantDash/TenantDash'
 import StaffDash from './Components/StaffDash/StaffDash'
