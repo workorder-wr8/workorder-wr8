@@ -101,8 +101,7 @@ function StaffDash(props) {
         setColumnToSort(columnId)
         setSortDirection(columnToSort === columnId ? invertDirection[sortDirection] : 'asc')
 
-        if (columnId === 'dateCreated' || columnId === 'ID#') {
-            setSortDirection(columnToSort === columnId ? invertDirection[sortDirection] : 'asc')
+        if (columnId === 'dateCreated') {
             setDateToggle(!dateToggle)
             workorders.sort((a, b) => {
                 if (dateToggle) {
@@ -112,13 +111,21 @@ function StaffDash(props) {
                 }
             });
         } else if (columnId === 'lastUpdated') {
-            setSortDirection(columnToSort === columnId ? invertDirection[sortDirection] : 'asc')
             setDateToggle(!dateToggle)
             workorders.sort((a, b) => {
                 if (dateToggle) {
                     return new Date(a.lastupdated) - new Date(b.lastupdated);
                 } else {
                     return new Date(b.lastupdated) - new Date(a.lastupdated);
+                }
+            });
+        } else if (columnId === 'ID#') {
+            setDateToggle(!dateToggle)
+            workorders.sort((a, b) => {
+                if (dateToggle) {
+                    return new Date(a.id) - new Date(b.id);
+                } else {
+                    return new Date(b.id) - new Date(a.id);
                 }
             });
         }

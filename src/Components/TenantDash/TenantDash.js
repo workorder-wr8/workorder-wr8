@@ -59,14 +59,22 @@ const TenantDash = props => {
         setColumnToSort(columnId)
         setSortDirection(columnToSort === columnId ? invertDirection[sortDirection] : 'asc')
 
-        if (columnId === 'date' || columnId === 'number') {
-            setSortDirection(columnToSort === columnId ? invertDirection[sortDirection] : 'asc')
+        if (columnId === 'date') {
             setDateToggle(!dateToggle)
             workOrders.sort((a, b) => {
                 if (dateToggle) {
                     return new Date(a.datecreated) - new Date(b.datecreated);
                 } else {
                     return new Date(b.datecreated) - new Date(a.datecreated);
+                }
+            });
+        } else if (columnId === 'number') {
+            setDateToggle(!dateToggle)
+            workOrders.sort((a, b) => {
+                if (dateToggle) {
+                    return new Date(a.id) - new Date(b.id);
+                } else {
+                    return new Date(b.id) - new Date(a.id);
                 }
             });
         }
