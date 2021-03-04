@@ -81,6 +81,7 @@ function StaffDash(props) {
             .then(res => {
                 setScheduled(res.data)
                 setLoading(false)
+                setEditedId(0)
             })
 
             .catch(err => {

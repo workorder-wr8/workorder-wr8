@@ -8,6 +8,10 @@ import StaffDash from './Components/StaffDash/StaffDash'
 import ManagerDash from './Components/ManagerDash/ManagerDash'
 import LandlordDash from './Components/LandlordDash/LandlordDash'
 import LandlordProperty from './Components/LandlordProperty/LandlordProperty'
+import TenantProfile from './Components/TenantProfile/TenantProfile'
+import StaffProfile from './Components/StaffProfile/StaffProfile'
+import ManagerProfile from './Components/ManagerProfile/ManagerProfile'
+import PropertyProfile from './Components/PropertyProfile/PropertyProfile'
 
 export default (
 
@@ -20,5 +24,9 @@ export default (
         <Route path='/landlorddash' component={LandlordDash} />
         <Route path='/landlord/property/:id' component={LandlordProperty} />
         <Route path='/managerdash' component={ManagerDash} />
+        <Route path='/tenantprofile/:id' component={TenantProfile} />
+        <Route path='/staffprofile/:id' component={StaffProfile} />
+        <Route path='/managerprofile/:id' component={ManagerProfile} />
+        <Route path='/property/:id' component={PropertyProfile} />
     </Switch>
 )
