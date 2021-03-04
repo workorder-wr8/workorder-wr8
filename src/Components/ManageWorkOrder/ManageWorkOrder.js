@@ -31,9 +31,8 @@ const ManageWorkOrder = (props) => {
                     <Button className='close-workorder-btn' onClick={() => props.closeModal()}>Close</Button>
                 </div>
                 <div className='workorder-details'>
-
                     <div className='status-updates'>
-                        <span className='status-update-workorder'>Created: {dayjs(datecreated).format('dddd MMMM D YYYY h:mm A')}</span><br />
+                        <span>Created: {dayjs(datecreated).format('dddd MMMM D YYYY h:mm A')}</span><br />
                         {lastupdated === null
                             ?
                             null

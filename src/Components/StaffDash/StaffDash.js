@@ -20,6 +20,7 @@ import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import CreateIcon from '@material-ui/icons/Create';
 import CancelIcon from '@material-ui/icons/Cancel';
 import { Link } from 'react-router-dom';
+import click from '../../assets/click_me.svg';
 import './StaffDash.css'
 import { compare } from 'bcryptjs';
 
@@ -200,6 +201,7 @@ function StaffDash(props) {
                                             <TableCell align="right">
                                                 <Link className='link' to={{ pathname: `${props.match.url}/workorder/${wo.id}`, id: wo.id }}>
                                                     {wo.title}
+                                                    <img className='click-me' src={click} alt='click_svg'/>
                                                 </Link>
                                             </TableCell>
                                             <TableCell align="right">{wo.description.length > 100 ? wo.description.substring(0, 80).concat('...') : wo.description}</TableCell>
@@ -292,6 +294,7 @@ function StaffDash(props) {
                                         <TableCell align="right">
                                             <Link className='link' to={{ pathname: `${props.match.url}/workorder/${wo.id}`, id: wo.id }}>
                                                 {wo.title}
+                                                <img className='click-me' src={click} alt='click_svg'/>
                                             </Link>
                                         </TableCell>
                                         <TableCell align="right">{wo.description.length > 100 ? wo.description.substring(0, 80).concat('...') : wo.description}</TableCell>
@@ -380,7 +383,8 @@ function StaffDash(props) {
                                         </TableCell>
                                         <TableCell align="right">{wo.firstname} {wo.lastname}</TableCell>
                                         <TableCell align="right">
-                                            {wo.title}</TableCell>
+                                            {wo.title}
+                                            </TableCell>
                                         <TableCell align="right">{wo.description.length > 100 ? wo.description.substring(0, 80).concat('...') : wo.description}</TableCell>
                                         <TableCell align="right">{dayjs(wo.datecreated).format('MM-DD-YYYY')}</TableCell>
                                         <TableCell align="right">{wo.lastupdated ? dayjs(wo.lastupdated).format('MM-DD-YYYY') : '-'}</TableCell>

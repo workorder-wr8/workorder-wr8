@@ -29,7 +29,7 @@ const AddCommentStaff = props => {
                 label='Comment'
                 className='comment-input'
             />
-            <Button class='addBtn-comment' onClick={() => addComment()}>Add Comment</Button>
+            <Button class='addBtn-comment' type='submit' onClick={() => addComment()}>Add Comment</Button>
         </section>
     )
 }
