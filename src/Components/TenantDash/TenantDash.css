@@ -23,6 +23,14 @@
  color: white!important;
 }
 
+.table-head-workorders {
+  font-weight: bold!important;
+}
+
+.wo-title {
+  text-transform: capitalize!important;
+}
+
 .tenant-wo-description {
     max-width: 40px;
     text-overflow: ellipsis;
@@ -30,11 +38,25 @@
     white-space: nowrap;
 }
 
+.click-me {
+  width: 1.2rem;
+  height: 1.2rem;
+}
+
 .in-progress-wo {
-  background-color: #D5C586;
+  background-color: #f5f243;
   padding: 5px;
   border-radius: 10px;
   font-size: .8rem;
+  font-weight: bold;
+}
+
+.completed {
+  background-color: rgb(14, 161, 14);
+  padding: 5px;
+  border-radius: 10px;
+  font-size: .8rem;
+  font-weight: bold;
 }
 
 .example-modal {

@@ -4,11 +4,14 @@ import AddCommentTenant from './AddCommentTenant';
 import AddCommentStaff from './AddCommentStaff';
 import { connect } from 'react-redux';
 import dayjs from 'dayjs';
+import Alert from '@material-ui/lab/Alert';
 import './Comments.css';
 
 const Comments = props => {
 
     const [comments, setComments] = useState([]);
+    const [show, setShow] = useState(false);
+    const [message, setMessage] = useState('');
 
     useEffect(() => {
         getComments();
@@ -18,7 +21,11 @@ const Comments = props => {
         const id = props.workorderid;
         axios.post('/api/commentsById', { id })
             .then(fetchedComments => setComments(fetchedComments.data))
-            .catch(err => console.log(`Error: ${err.message}`));
+            .catch(err => {
+                console.log(`Error: ${err.message}`);
+                setMessage(`${err.response.data}`);
+                setShow(true);
+            });
     }
 
     const displayComments = () => {
@@ -38,7 +45,7 @@ const Comments = props => {
                     </article>
                     :
                     <article className='comment-container them'>
-                    <p className='their-comment'>{comment.content}@<span className='comment-timestamp'>{dayjs(comment.timesent).format('MMMM D, YYYY h:mm A')}</span></p>
+                        <p className='their-comment'>{comment.content}@<span className='comment-timestamp'>{dayjs(comment.timesent).format('MMMM D, YYYY h:mm A')}</span></p>
                     </article>
                 }
             </section>
@@ -60,7 +67,7 @@ const Comments = props => {
     return (
         <section>
             <p className='comment-header'>Comments:</p>
-
+            {show ? <Alert severity="info">{message}</Alert> : null}
             <section className='comments'>
                 {displayComments()}
             </section>
