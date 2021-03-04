@@ -5,7 +5,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
-import TableSortLabel from '@material-ui/core/TableSortLabel';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TextField from '@material-ui/core/TextField';
@@ -18,6 +17,7 @@ import SpinnerContainer from '../Spinner/SpinnerContainer';
 import orderBy from "lodash/orderBy";
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
+import CreateIcon from '@material-ui/icons/Create';
 import './StaffDash.css'
 
 const useStyles = makeStyles({
@@ -35,18 +35,7 @@ const useStyles = makeStyles({
     },
     table: {
         minWidth: 650,
-    },
-    visuallyHidden: {
-        border: 0,
-        clip: 'rect(0 0 0 0)',
-        height: 1,
-        margin: -1,
-        overflow: 'hidden',
-        padding: 0,
-        position: 'absolute',
-        top: 20,
-        width: 1,
-    },
+    }
 });
 
 function StaffDash(props) {
@@ -61,7 +50,7 @@ function StaffDash(props) {
         asc: 'desc',
         desc: 'asc'
     }
-    const [datecreatedtoggle, setDateCreatedToggle] = useState(true)
+    const [dateToggle, setDateToggle] = useState(true)
 
     useEffect(() => {
         if (props.user.staffid) {
@@ -110,22 +99,33 @@ function StaffDash(props) {
         { id: 'action', label: 'Action', disableSorting: true }
     ]
 
-    const handleSort = (columnName) => {
-        setColumnToSort(columnName)
-        setSortDirection(columnToSort === columnName ? invertDirection[sortDirection] : 'asc')
-        if (columnName === 'dateCreated' || columnName === 'lastUpdated' || columnName === 'ID#') {
-            setDateCreatedToggle(!datecreatedtoggle)
-            workorders.sort(function (a, b) {
-                if (datecreatedtoggle) {
-                    return new Date(b.datecreated) - new Date(a.datecreated);
-                } else {
+    const handleSort = (columnId) => {
+        setColumnToSort(columnId)
+        setSortDirection(columnToSort === columnId ? invertDirection[sortDirection] : 'asc')
+
+        if (columnId === 'dateCreated' || columnId === 'ID#') {
+            setSortDirection(columnToSort === columnId ? invertDirection[sortDirection] : 'asc')
+            setDateToggle(!dateToggle)
+            workorders.sort((a, b) => {
+                if (dateToggle) {
                     return new Date(a.datecreated) - new Date(b.datecreated);
+                } else {
+                    return new Date(b.datecreated) - new Date(a.datecreated);
+                }
+            });
+        } else if (columnId === 'lastUpdated') {
+            setSortDirection(columnToSort === columnId ? invertDirection[sortDirection] : 'asc')
+            setDateToggle(!dateToggle)
+            workorders.sort((a, b) => {
+                if (dateToggle) {
+                    return new Date(a.lastupdated) - new Date(b.lastupdated);
+                } else {
+                    return new Date(b.lastupdated) - new Date(a.lastupdated);
                 }
             });
         }
     }
 
-    console.log(workorders)
     return (
         <div id='staffDash'>
             <br />
@@ -146,13 +146,13 @@ function StaffDash(props) {
                                         >
                                             {column.disableSorting ? (
                                                 <div>
-                                                    {column.id}
+                                                    {column.label}
                                                 </div>
                                             ) :
                                                 <div
                                                     className='arrow-filter'
                                                     onClick={() => handleSort(column.id)}>
-                                                    <span>{column.id}</span>
+                                                    <span title='Sort'>{column.label}</span>
                                                     {columnToSort === column.id ? (
                                                         sortDirection === 'asc' ? (
                                                             <KeyboardArrowUpIcon />
@@ -185,7 +185,9 @@ function StaffDash(props) {
                                             <TableCell align="right">{
                                                 <div >Mark as <span>{
                                                     <>
-                                                        <select defaultValue={wo.status} name='statusoptions' id='statusoptions' onChange={e => handleSelectChange(e.target.value, wo.id)}>
+                                                        <select defaultValue={wo.status}
+                                                            name='statusoptions' id='statusoptions'
+                                                            onChange={e => handleSelectChange(e.target.value, wo.id)}>
                                                             <option value='Unread' >Unread</option>
                                                             <option value='In Progress'>In Progress</option>
                                                             <option value='Completed'>Completed</option>
@@ -215,13 +217,13 @@ function StaffDash(props) {
                                     >
                                         {column.disableSorting ? (
                                             <div>
-                                                {column.id}
+                                                {column.label}
                                             </div>
                                         ) :
                                             <div
                                                 className='arrow-filter'
                                                 onClick={() => handleSort(column.id)}>
-                                                <span>{column.id}</span>
+                                                <span title='Sort'>{column.label}</span>
                                                 {columnToSort === column.id ? (
                                                     sortDirection === 'asc' ? (
                                                         <KeyboardArrowUpIcon />
@@ -246,8 +248,8 @@ function StaffDash(props) {
                                         <TableCell align="right">
                                             {wo.title}</TableCell>
                                         <TableCell align="right">{wo.description.length > 100 ? wo.description.substring(0, 80).concat('...') : wo.description}</TableCell>
-                                        <TableCell align="right">{dayjs(wo.datecreated).format('MMM D')}</TableCell>
-                                        <TableCell align="right">{wo.lastupdated ? dayjs(wo.lastupdated).format('MMM D') : '-'}</TableCell>
+                                        <TableCell align="right">{dayjs(wo.datecreated).format('MM-DD-YYYY')}</TableCell>
+                                        <TableCell align="right">{wo.lastupdated ? dayjs(wo.lastupdated).format('MM-DD-YYYY') : '-'}</TableCell>
                                         <TableCell align="right">{wo.status}</TableCell>
                                         <TableCell align="right">{
                                             <div >Mark as <span>{
