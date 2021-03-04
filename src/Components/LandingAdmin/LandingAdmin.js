@@ -48,26 +48,29 @@ const LandingAdmin = (props) => {
         if (password !== verPassword) {
             isValidRegister = false;
             console.log('passwords don\'t match', password, verPassword)
-             setErrorMessages([...errorMessages, 'Passwords Do Not Match!'])
+            setErrorMessages([...errorMessages, 'Passwords Do Not Match!'])
         }
 
         if (!isStrongPassword(password)) {
             isValidRegister = false;
             console.log('weak password', !isStrongPassword(password), password)
-             setErrorMessages([...errorMessages, 'Password needs to contain at least one number, uppercase letter, lowercase letter, and symbol.'])
+            setErrorMessages([...errorMessages, 'Password needs to contain at least one number, uppercase letter, lowercase letter, and symbol.'])
         }
 
         if (!isEmail(email, { domain_specific_validation: true })) {
             isValidRegister = false;
             console.log('not Email')
-             setErrorMessages([...errorMessages, 'Invalid email address!']);
+            setErrorMessages([...errorMessages, 'Invalid email address!']);
         }
 
-        setShow(true);
-        setTimeout(() => {
-            setShow(false);
-            setErrorMessages([]);
-        }, 2000);
+        if (!isValidRegister) {
+            setShow(true);
+            setTimeout(() => {
+                setShow(false);
+                setErrorMessages([]);
+            }, 2000);
+        }
+
 
         if (isValidRegister) {
             if (role === 'staff') {
@@ -76,10 +79,10 @@ const LandingAdmin = (props) => {
                         firstname, lastname, email, password, phone, propertyid, passcode
                     })
                     .then(res => {
-                        props.history.push('/staffdash')
-                        props.getUser(res.data)
+                        props.history.push('/staffdash');
+                        props.getUser(res.data);
                     })
-                    .catch(err => alert(err.response.data))
+                    .catch(err => alert(err.response.data));
             } else if (role === 'manager') {
                 axios.post('/api/manager/register',
                     {
