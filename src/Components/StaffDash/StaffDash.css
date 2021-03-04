@@ -23,10 +23,8 @@
     background-color: rgb(245, 238, 37);
 }
 
-/* .tableHeader {
-    text-align: center;
-} */
-
-.unread-workorders-staff {
-    height:40vh;
+.arrow-filter {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
