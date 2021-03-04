@@ -83,7 +83,7 @@ const LandingAdmin = (props) => {
             } else if (role === 'manager') {
                 axios.post('/api/manager/register',
                     {
-                        landlordid: 1, propertyid, firstname, lastname, email, password, phone, passcode
+                        propertyid, firstname, lastname, email, password, phone, passcode
                     })
                     .then(res => {
                         props.history.push('/managerdash')
@@ -112,16 +112,16 @@ const LandingAdmin = (props) => {
         if (role === 'staff') {
             axios.post('/api/staff/login', { email, password })
                 .then(res => {
-                    props.history.push('/staffdash')
                     props.getUser(res.data)
+                    props.history.push('/staffdash')
                 })
                 .catch(err => alert(err.response.data))
         }
         else if (role === 'manager') {
             axios.post('/api/manager/login', { email, password })
                 .then(res => {
-                    props.history.push('/managerdash')
                     props.getUser(res.data)
+                    props.history.push('/managerdash')
                 })
                 .catch(err => alert(err.response.data))
         }
