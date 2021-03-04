@@ -27,6 +27,16 @@ function Header(props) {
             });
     }
 
+    let link;
+    if (props.user.tenantid) {
+        link = <Link to={`/tenantprofile/${props.user.tenantid}`}><li className='header-props'>Welcome {props.user.firstname}, {props.user.lastname}</li></Link>
+    } else if (props.user.staffid) {
+        link = <Link to={`/staffprofile/${props.user.staffid}`}><li className='header-props'>Welcome {props.user.firstname}, {props.user.lastname}</li></Link>
+    } else if (props.user.managerid) {
+        link = <Link to={`/managerprofile/${props.user.managerid}`}><li className='header-props'>Welcome {props.user.firstname}, {props.user.lastname}</li></Link>
+    }
+
+    console.log(props)
     return (
         <header className='navbar'>
 
@@ -36,15 +46,13 @@ function Header(props) {
                 (
                     <nav>
                         <ul className='nav-links'>
-                            <li className='header-props'>Welcome {props.user.firstname}, {props.user.lastname}</li>
-                            <li className='header-props property-title'>{props.user.name}</li>
+                            {link}
+                            <Link to={`/property/${props.user.propertyid}`}><li className='header-props property-title'>{props.user.name}</li></Link>
                             {props.location.pathname === '/dash' ? <Link className='link' to='/create/workorder'><Button className='create-wo-btn'>Create Work Order</Button></Link> : null}
                             <li><Button className='btn logout-btn' onClick={logout}>Logout<FontAwesomeIcon className='logout-icon' icon={faSignOutAlt} /></Button></li>
                         </ul>
                     </nav>
                 )}
-
-
 
         </header>
     )
