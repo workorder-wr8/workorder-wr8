@@ -19,7 +19,9 @@ import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import CreateIcon from '@material-ui/icons/Create';
 import CancelIcon from '@material-ui/icons/Cancel';
+import { Link } from 'react-router-dom';
 import './StaffDash.css'
+import { compare } from 'bcryptjs';
 
 const useStyles = makeStyles({
     tablehead: {
@@ -88,10 +90,6 @@ function StaffDash(props) {
 
     const searchwo = e => {
         setSearch(e.target.value)
-    }
-
-    const openWO = (id) => {
-        props.history.push(`${props.match.url}/workorder/${id}`)
     }
 
     let columnHeads = [
@@ -193,13 +191,15 @@ function StaffDash(props) {
                                 {orderBy(workorders, columnToSort, sortDirection)
                                     .filter(e => e.status === 'Unread' && (e.description.toLowerCase().includes(search.toLocaleLowerCase()) || e.title.toLowerCase().includes(search.toLowerCase())))
                                     .map(wo => (
-                                        <TableRow key={wo.id} className='unread-table-rows' onClick={e => openWO(wo.id)}>
+                                        <TableRow key={wo.id} className='unread-table-rows' >
                                             <TableCell component="th" scope="row">
                                                 {wo.id}
                                             </TableCell>
                                             <TableCell align="right">{wo.firstname} {wo.lastname}</TableCell>
                                             <TableCell align="right">
-                                                {wo.title}
+                                                <Link className='link' to={{ pathname: `${props.match.url}/workorder/${wo.id}`, id: wo.id }}>
+                                                    {wo.title}
+                                                </Link>
                                             </TableCell>
                                             <TableCell align="right">{wo.description.length > 100 ? wo.description.substring(0, 80).concat('...') : wo.description}</TableCell>
                                             <TableCell align="right">{dayjs(wo.datecreated).format('MM-DD-YYYY')}</TableCell>
@@ -283,13 +283,16 @@ function StaffDash(props) {
                             {orderBy(workorders, columnToSort, sortDirection)
                                 .filter(e => e.status === 'In Progress' && (e.description.toLowerCase().includes(search.toLowerCase()) || e.title.toLowerCase().includes(search.toLowerCase())))
                                 .map(wo => (
-                                    <TableRow key={wo.id} className='progress-table-rows' onClick={e => openWO(wo.id)}>
+                                    <TableRow key={wo.id} className='progress-table-rows' >
                                         <TableCell component="th" scope="row">
                                             {wo.id}
                                         </TableCell>
                                         <TableCell align="right">{wo.firstname} {wo.lastname}</TableCell>
                                         <TableCell align="right">
-                                            {wo.title}</TableCell>
+                                            <Link className='link' to={{ pathname: `${props.match.url}/workorder/${wo.id}`, id: wo.id }}>
+                                                {wo.title}
+                                            </Link>
+                                        </TableCell>
                                         <TableCell align="right">{wo.description.length > 100 ? wo.description.substring(0, 80).concat('...') : wo.description}</TableCell>
                                         <TableCell align="right">{dayjs(wo.datecreated).format('MM-DD-YYYY')}</TableCell>
                                         <TableCell align="right">{wo.lastupdated ? dayjs(wo.lastupdated).format('MM-DD-YYYY') : '-'}</TableCell>
@@ -370,7 +373,7 @@ function StaffDash(props) {
                             {orderBy(workorders, columnToSort, sortDirection)
                                 .filter(e => e.status === 'Completed' && (e.description.toLowerCase().includes(search.toLowerCase()) || e.title.toLowerCase().includes(search.toLowerCase())))
                                 .map(wo => (
-                                    <TableRow key={wo.id} className='completed-table-rows' onClick={e => openWO(wo.id)}>
+                                    <TableRow key={wo.id} className='completed-table-rows' >
                                         <TableCell component="th" scope="row">
                                             {wo.id}
                                         </TableCell>
