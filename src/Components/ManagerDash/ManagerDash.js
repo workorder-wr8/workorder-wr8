@@ -2,7 +2,6 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import React from 'react'
 import { connect } from 'react-redux'
-import './ManagerDash.css';
 import { withStyles, makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -14,21 +13,47 @@ import Paper from '@material-ui/core/Paper';
 import Select from 'react-select';
 import dayjs from 'dayjs'
 import SpinnerContainer from '../Spinner/SpinnerContainer';
+import './ManagerDash.css';
+import { Autocomplete } from '@material-ui/lab';
 // USES withStyles from material-UI for table cells and rows
+
+
 const StyledTableCell = withStyles((theme) => ({
-    head: {
-
-    },
-    body: {
-
+    root: {
+        width: 100,
+        height: 50,
+        padding: '10px'
     }
 }))(TableCell);
 
+const StyledDescriptionCell = withStyles((theme) => ({
+    root: {
+        width: 'auto'
+    }
+}))(TableCell)
+
+const StyledAssignmentCell = withStyles((theme) => ({
+    root: {
+        width: '150px'
+    }
+}))(TableCell)
+
 const StyledTableRow = withStyles((theme) => ({
     root: {
-
+        height: 'min-content',
     },
 }))(TableRow);
+
+const StyledTableContainer = withStyles((theme)=> ({
+    root: {
+        height: 'min-content',
+        width: 'max-content',
+        marginTop: '10px',
+        maxWidth: '80%',
+        margin: '0 auto',
+        maxHeight: '600px',
+    }
+}))(TableContainer)
 
 function ManagerDash(props) {
     const [workorders, setWorkOrders] = useState([]);
@@ -37,7 +62,7 @@ function ManagerDash(props) {
     const [staffMembers, setStaffMembers] = useState([]);
     const [staffOptions, setStaffOptions] = useState([]);
     const [selectedStaff, setSelectedStaff] = useState([]);
-    const [changeAssigned, setChangeAssigned] = useState(false)
+    const [changeAssigned, setChangeAssigned] = useState([-1])
     const [toggleOverlay, setToggleOverlay] = useState([]);
     const [messages, setMessages] = useState([])
     const [overlayData, setOverlayData] = useState([{
@@ -104,10 +129,11 @@ function ManagerDash(props) {
     const overlayOn = () => { document.getElementById('managerOverlay').style.display = 'flex' }
 
     const changeOverlay = (event) => {
+        console.log('OVERLAY: ', event.target.parentNode.cells)
         let id = event.target.parentNode.cells[0].textContent;
         let name = event.target.parentNode.cells[1].textContent;
         let title = event.target.parentNode.cells[2].textContent;
-        let description = event.target.parentNode.cells[3].textContent;
+        let description = event.target.parentNode.cells[3].id;
         let status = event.target.parentNode.cells[4].textContent;
         let datecreated = event.target.parentNode.cells[5].textContent;
         let lastupdated, datecompleted;
@@ -141,14 +167,15 @@ function ManagerDash(props) {
         await axios.get('/api/workorder/manager')
             .then(res => {
                 setWorkOrders(res.data);
-                setChangeAssigned(false);
+                setChangeAssigned(-1);
                 setLoading(false);
             })
     }
 
-    const changeAssignedStaff = (e) => {
-        e.stopPropagation()
-        setChangeAssigned(!changeAssigned)
+    const changeAssignedStaff = ( index) => {
+        console.log('THIS IS THE EVENT', index)
+        setChangeAssigned(index)
+        console.log(changeAssigned)
     }
 
     const mapWorkOrders = () => {
@@ -195,15 +222,15 @@ function ManagerDash(props) {
             {isLoading
                 ? <SpinnerContainer />
                 : <>
-                    <div className='tableWrapper'>
-                    <TableContainer className='table-container' component={Paper}>
-                            <Table className='unassignedTable' stickyHeader aria-label="sticky table">
+                    <div className='tableWrapper unassignedTable' >
+                    {unassignedWorkOrders[0] ? <StyledTableContainer component={Paper}>
+                            <Table stickyHeader aria-label="sticky table">
                                 <TableHead>
                                     <TableRow>
                                         <StyledTableCell align='right'>ID</StyledTableCell>
                                         <StyledTableCell align='right'>Tenant</StyledTableCell>
                                         <StyledTableCell align='right'>Title</StyledTableCell>
-                                        <StyledTableCell align='right'>Description</StyledTableCell>
+                                        <StyledDescriptionCell align='right'>Description</StyledDescriptionCell>
                                         <StyledTableCell align='right'>Status</StyledTableCell>
                                         <StyledTableCell align='right'>Created</StyledTableCell>
                                         <StyledTableCell align='right' width='100px'>Assign</StyledTableCell>
@@ -215,14 +242,15 @@ function ManagerDash(props) {
                                             <StyledTableCell align='right' className='unassignedCell'>{wo.id}</StyledTableCell>
                                             <StyledTableCell align='right' className='unassignedCell'>{wo.tenantlast},{wo.tenantfirst}</StyledTableCell>
                                             <StyledTableCell align='right' className='unassignedCell'>{wo.title}</StyledTableCell>
-                                            <StyledTableCell align='right' className='unassignedCell tenant-wo-description'>{wo.description}</StyledTableCell>
+                                            <StyledDescriptionCell align='right' className='unassignedCell descriptionCell' id={wo.description}>{wo.description.length > 100 ? wo.description.substring(0, 80).concat('...') : wo.description}</StyledDescriptionCell>
                                             <StyledTableCell align='right' className='unassignedCell'>{wo.status}</StyledTableCell>
                                             <StyledTableCell align='right' className='unassignedCell'>{dayjs(wo.datecreated).format('MMMM D, YYYY h:mm A')}</StyledTableCell>
                                             <TableCell align="right" onClick={e => e.stopPropagation()} >{
-                                                <div onClick={e => e.stopPropagation()}><span onClick={e => e.stopPropagation()}>
+                                                <div onClick={e => {e.stopPropagation()}}><span onClick={e => e.stopPropagation()}>
                                                     <Select
                                                         name='staffoptions'
                                                         id='staffoptions'
+                                                        menu-outer-top
                                                         value={selectedStaff}
                                                         onClick={e => e.stopPropagation()}
                                                         onChange={e => { handleSelectChange(e.value, wo.id) }}
@@ -231,19 +259,28 @@ function ManagerDash(props) {
                                             }</TableCell>
                                         </StyledTableRow>
                                     ))}
+                                    <StyledTableRow  key={'end'} className='extrarow unassignedRow'>
+                                        <StyledTableCell align='right'>-</StyledTableCell>
+                                        <StyledTableCell align='right'>-</StyledTableCell>
+                                        <StyledTableCell align='right'>-</StyledTableCell>
+                                        <StyledDescriptionCell align='right'>End Of Work Orders</StyledDescriptionCell>
+                                        <StyledTableCell align='right'>-</StyledTableCell>
+                                        <StyledTableCell align='right'>-</StyledTableCell>
+                                        <StyledTableCell align='right'>-</StyledTableCell>
+                                    </StyledTableRow>
                                 </TableBody>
                             </Table>
-                        </TableContainer>
+                         </StyledTableContainer> : <></>}          
                     </div>
-                    <div className='tableWrapper'>
-                        <TableContainer className='table-container' component={Paper}>
-                            <Table className='assignedTable' stickyHeader aria-label="sticky table">
+                    <div className='tableWrapper assignedTable'>
+                        {assignedWorkOrders[0] ? <StyledTableContainer component={Paper}>
+                            <Table stickyHeader aria-label="sticky table">
                                 <TableHead>
                                     <TableRow>
                                         <StyledTableCell align='right'>ID</StyledTableCell>
                                         <StyledTableCell align='right'>Tenant</StyledTableCell>
                                         <StyledTableCell align='right'>Title</StyledTableCell>
-                                        <StyledTableCell align='right'>Description</StyledTableCell>
+                                        <StyledDescriptionCell align='right'>Description</StyledDescriptionCell>
                                         <StyledTableCell align='right'>Status</StyledTableCell>
                                         <StyledTableCell align='right'>Created</StyledTableCell>
                                         <StyledTableCell align='right'>Last Updated</StyledTableCell>
@@ -257,17 +294,17 @@ function ManagerDash(props) {
                                             <StyledTableCell align='right'>{wo.id}</StyledTableCell>
                                             <StyledTableCell align='right' >{wo.tenantlast},{wo.tenantfirst}</StyledTableCell>
                                             <StyledTableCell align='right'>{wo.title}</StyledTableCell>
-                                            <StyledTableCell className='tenant-wo-description' align='right'>{wo.description}</StyledTableCell>
+                                            <StyledDescriptionCell align='right' className='unassignedCell descriptionCell' id={wo.description}>{wo.description.length > 100 ? wo.description.substring(0, 80).concat('...') : wo.description}</StyledDescriptionCell>
                                             <StyledTableCell align='right'>{wo.status}</StyledTableCell>
                                             <StyledTableCell align='right'>{dayjs(wo.datecreated).format('MMMM D, YYYY h:mm A')}</StyledTableCell>
                                             <StyledTableCell align='right'>{wo.lastupdated ? dayjs(wo.lastupdated).format('MMMM D, YYYY h:mm A') : '-'}</StyledTableCell>
                                             <StyledTableCell align='right'>{wo.datecompleted ? dayjs(wo.datecompleted).format('MMMM D, YYYY h:mm A') : '-'}</StyledTableCell>
-                                            {!changeAssigned ? (
-                                                <StyledTableCell align="right">{wo.stafffirst} {wo.stafflast}
-                                                    <br /><div className='changeStaffBtn' onClick={changeAssignedStaff}>Change Assignee</div>
-                                                </StyledTableCell>
+                                            {changeAssigned === -1 || changeAssigned !== wo.id? (
+                                                <StyledAssignmentCell align="right" >{wo.stafffirst} {wo.stafflast}
+                                                    <br /><button className='changeStaffBtn' onClick={e=>{e.stopPropagation(); changeAssignedStaff(wo.id)}}>Change Assignee</button>
+                                                </StyledAssignmentCell>
                                             ) : (
-                                                    <StyledTableCell align="right" onClick={e => e.stopPropagation()}>
+                                                    <StyledAssignmentCell align="right"  onClick={e => e.stopPropagation()}>
 
                                                         <div onClick={e => e.stopPropagation()}>Assign to <span onClick={e => e.stopPropagation()}>
                                                             <Select
@@ -279,22 +316,33 @@ function ManagerDash(props) {
                                                                 onChange={e => { handleSelectChange(e.value, wo.id) }}
                                                                 options={staffOptions} />
                                                         </span>
-                                                            <div className='changeStaffBtn' onClick={changeAssignedStaff}>Don't Change</div>
+                                                            <button className='changeStaffBtn' onClick={e=>{e.stopPropagation();changeAssignedStaff(-1)}}>Don't Change</button>
                                                         </div>
 
 
-                                                    </StyledTableCell>
+                                                    </StyledAssignmentCell>
                                                 )}
                                         </StyledTableRow>
                                     ))}
+                                    <StyledTableRow  key={'end'} className='extrarow assignedRow'>
+                                        <StyledTableCell align='right'>-</StyledTableCell>
+                                        <StyledTableCell align='right'>-</StyledTableCell>
+                                        <StyledTableCell align='right'>-</StyledTableCell>
+                                        <StyledDescriptionCell align='right'>End Of Work Orders</StyledDescriptionCell>
+                                        <StyledTableCell align='right'>-</StyledTableCell>
+                                        <StyledTableCell align='right'>-</StyledTableCell>
+                                        <StyledTableCell align='right'>-</StyledTableCell>
+                                        <StyledTableCell align='right'>-</StyledTableCell>
+                                        <StyledDescriptionCell align='right'>-</StyledDescriptionCell>
+                                    </StyledTableRow>
                                 </TableBody>
                             </Table>
-                        </TableContainer>
+                        </StyledTableContainer> : <></>}
                     </div>
                 </>
             }
         </div>
-    )
+    ) 
 }
 
 const mapStateToProps = reduxState => ({

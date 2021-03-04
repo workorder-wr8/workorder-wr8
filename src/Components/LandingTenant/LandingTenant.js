@@ -5,12 +5,12 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
-import './LandingTenant.css'
+import Alert from '@material-ui/lab/Alert';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import isStrongPassword from 'validator/lib/isStrongPassword';
 import isEmail from 'validator/lib/isEmail';
-
+import './LandingTenant.css'
 
 const LandingTenant = props => {
     const [input, setInput] = useState({
@@ -37,6 +37,8 @@ const LandingTenant = props => {
 
     const [registeredView, setRegisteredView] = useState(false);
 
+    const [show, setShow] = useState(false);
+    const [message, setMessage] = useState('');
     useEffect(() => {
         axios.get('/api/properties')
             .then(properties => {
@@ -77,8 +79,12 @@ const LandingTenant = props => {
                 props.getUser(tenant.data);
                 props.history.push('/dash');
             })
-            .catch(err => alert(err.response.data));
-        //error alerting twice
+            .catch(err => {
+                setMessage(err.response.data);
+                setShow(true);
+                setTimeout(()=> setShow(false), 2000);
+            });
+
     }
 
 
@@ -103,35 +109,35 @@ const LandingTenant = props => {
 
         let isValidRegister = true;
 
-        if(password!==verPassword) {
+        if (password !== verPassword) {
             isValidRegister = false;
             console.log('passwords don\'t match', password, verPassword)
-            setErrorStatementPasswordMatch('Passwords Do Not Match') 
+            setErrorStatementPasswordMatch('Passwords Do Not Match')
         } else {
-            setErrorStatementPasswordMatch('') 
-            
+            setErrorStatementPasswordMatch('')
+
         }
 
-        if(!isStrongPassword(password)) {
+        if (!isStrongPassword(password)) {
             isValidRegister = false;
             console.log('weak password', !isStrongPassword(password), password)
             setErrorStatementPasswordStrength('Password needs to contain at least one number, uppercase letter, lowercase letter, and symbol')
         } else {
             setErrorStatementPasswordStrength('')
-            
+
         }
 
-        if(!isEmail(input.email,{domain_specific_validation: true})) {
+        if (!isEmail(input.email, { domain_specific_validation: true })) {
             isValidRegister = false;
             console.log('not Email')
             setErrorStatementEmail('Invalid email address')
         } else {
             setErrorStatementEmail('')
-            
-        }
-        
 
-        if(isValidRegister) {
+        }
+
+
+        if (isValidRegister) {
             axios.post('/api/tenant/register', {
                 firstName,
                 lastName,
@@ -147,12 +153,11 @@ const LandingTenant = props => {
                 landlord,
                 manager
             })
-            .then(tenant => {
-                props.getUser(tenant.data);
-                //USE REDUX TO SET THEM ON STATE
-                props.history.push('/dash');
-            })
-            .catch(err => alert(err.response.data))
+                .then(tenant => {
+                    props.getUser(tenant.data);
+                    props.history.push('/dash');
+                })
+                .catch(err => alert(err.response.data))
         }
 
     }
@@ -160,9 +165,11 @@ const LandingTenant = props => {
     return (
         <div id='landingtenant'>
             <h1 className='app-heading'>App Name Here</h1>
+            {show ? <Alert className='error-alert fade-in' severity="error">{message}</Alert> : null}
             <section className='container tenant-landing-container'>
                 <section className='input-fields'>
                     {/* id=landingcontent is on LandingAdmin.css */}
+
                     <form id='landingContent' className='landing-form' onSubmit={registeredView ? register : login}>
                         <div id='errorStatementPasswordMatch'>{errorStatementPasswordMatch}</div>
                         <div id='errorStatementEmail'>{errorStatementEmail}</div>
@@ -200,7 +207,7 @@ const LandingTenant = props => {
                                 </>
                             ) : (
                                 <>
-                                    <Button className='btn login-btn' onClick={login} variant="contained">Login</Button>
+                                    <Button className='btn login-btn' type='submit' onClick={login} variant="contained">Login</Button>
                                     <p>Don't have an account? <span className='toggleAuth' onClick={() => handleToggle()}>Register Here</span></p>
                                     <p>For admin access click <Link to='/admin'>Here</Link></p>
                                 </>)}

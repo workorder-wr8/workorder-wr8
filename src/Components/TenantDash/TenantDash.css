@@ -4,10 +4,11 @@
 }
 
 .table-container {
-    margin-top: 10px!important;
     width:60%!important;
     margin: 0 auto;
-    height: 600px;
+    height: auto;
+    max-height: 600px;
+    overflow:visible;
 }
 
 .workorder-tenant-table {
@@ -18,11 +19,23 @@
   width:60%;
 }
 
+.search-workorder-field input {
+ color: white!important;
+}
+
+
 .tenant-wo-description {
     max-width: 40px;
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
+}
+
+.in-progress-wo {
+  background-color: #D5C586;
+  padding: 5px;
+  border-radius: 10px;
+  font-size: .8rem;
 }
 
 .example-modal {

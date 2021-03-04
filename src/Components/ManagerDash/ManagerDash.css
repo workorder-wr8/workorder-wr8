@@ -37,29 +37,14 @@
   z-index: 1;
 }
 
-#staffOptions {
-  z-index: 2;
-}
 
 #changeStaffBtn {
   text-decoration: underline;
   color: blue
 }
 
-.unassignedTable {
-  height: auto!important;
-}
-
-.unassignedRow {
-  background-color: #D38A88
-}
-
 .unassignedRow:nth-of-type(odd) {
-  background-color: #B34642;
-}
-
-.unassignedRow:nth-of-type(odd) > .unassignedCell{
-  color: white;
+  background-color: #fdafad;
 }
 
 .unassignedRow:nth-of-type(odd) > td > #staffOptions{
@@ -71,22 +56,36 @@
   height: auto;
 }
 
-.assignedRow {
+.assignedRow:nth-of-type(odd) {
   background-color: #61837D;
 }
 
-.assignedRow:nth-of-type(odd) {
-  background-color: #23360E;
+
+.unassignedTable #staffoptions {
+  position: relative;
+  width: 139px;
 }
 
-.assignedRow:nth-of-type(odd) > td{
-  color: white;
+.assignedTable #staffoptions {
+  position: relative;
+  width: 139px;
 }
 
-#staffOptions{
-  color: black;
+
+.unassignedTable div[id*='react-select'] {
+  z-index: 10;
 }
 
-.MuiTableContainer-root {
-  height: 900px;
+.assignedTable th{
+  z-index: 1 !important;
+}
+
+.extrarow {
+  height: 120px;
+}
+
+.descriptionCell {
+  max-height: 50px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }

@@ -1,6 +1,25 @@
+.landlord-property-container {
+    margin-top: 20px;
+}
+
+.back-btn-landlord {
+    cursor: pointer;
+}
+
+.chart-header,
+.back-btn-landlord {
+    color: white;
+}
+
 .chart-container {
     margin: 0 auto;
     position: relative;
     height: 350px;
     width: 700px;
+}
+
+.table-numbers-landlord {
+    width: 50%;
+    margin: 0 auto;
+    padding-bottom: 10px;
 }
