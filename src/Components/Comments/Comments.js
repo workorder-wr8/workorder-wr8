@@ -34,7 +34,7 @@ const Comments = props => {
                 {id === comment.sender_id
                     ?
                     <article  className='comment-container me'>
-                    <p className='my-comment'>{comment.content}@<span className='comment-timestamp'>{dayjs(comment.timesent).format('MMMM D, YYYY h:mm A')}</span></p>
+                        <p className='my-comment'>{comment.content}@<span className='comment-timestamp'>{dayjs(comment.timesent).format('MMMM D, YYYY h:mm A')}</span></p>
                     </article>
                     :
                     <article className='comment-container them'>
