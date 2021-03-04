@@ -1,17 +1,21 @@
 .add-comment-container {
-    border: 2px solid blue;
     display: flex;
     flex-direction: row;
+    margin-top: 5px;
 
 }
 
-.add-comment-container input {
+.comment-input {
     width: 75%;
 }
+
 .add-comment-container button {
     width: 25%
 }
 
-#addBtn-comment {
-    background-color: #D5C586;;
+.addBtn-comment {
+    background-color: #588b4b!important;
+    text-transform: capitalize!important;
+    color: white!important;
+    border: none!important;
 }

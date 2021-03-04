@@ -14,13 +14,16 @@
 .workorder-title {
     display: flex;
     flex-direction: row;
-    justify-content: center;
+    justify-content: space-evenly!important;
     align-items: center;
+    margin-top: 15px;
 }
 
 .close-workorder-btn {
-    right: 15px;
     width: 10%;
+    text-transform: capitalize!important;
+    background: #D5C586!important;
+    color: white!important;
 }
 
 .workorder-description {
@@ -36,12 +39,29 @@
     justify-content: space-between;
 }
 
+.wo-description-content {
+    background: white;
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.completed {
+    background: #61837D;
+    color: white;
+}
+
+.default-status {
+    background: #D5C586;
+    color: white;
+}
+
 .comment-header {
     text-align: center;
 }
 
-.comments-container {
+.comment-container {
     margin: 5px;
+    background-color: white;
 }
 
 #description-workorder {
@@ -50,24 +70,32 @@
     text-align: center;
 }
 
-#workorder-title {
-    margin: 0px;
-}
-
 #status-workorder {
     font-weight: 600;
     align-self: center;
     text-align: center;
-    margin-top: 0px;
+    padding: 8px;
+    border-radius: 10px;
+    
+}
+
+.status-updates {
+    color: white;
+    font-weight: bold;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+#status-workorder,
+#wo-title,
+.close-workorder-btn {
+    margin: 0 25px!important;
 }
 
 .comment-input {
     background-color: #A4C1F5;
 }
-
-/* .status-update-workorder {
-    align-self: flex-end;
-} */
 
 #description-workorder {
     margin-top:0px;

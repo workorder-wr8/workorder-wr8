@@ -164,7 +164,7 @@ const LandingTenant = props => {
 
     return (
         <div id='landingtenant'>
-            <h1 className='app-heading'>App Name Here</h1>
+            <h1 className='app-heading'>We WorQ</h1>
             {show ? <Alert className='error-alert fade-in' severity="error">{message}</Alert> : null}
             <section className='container tenant-landing-container'>
                 <section className='input-fields'>
