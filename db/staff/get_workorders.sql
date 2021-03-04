@@ -12,4 +12,5 @@ w.lastupdated,
 w.datecompleted
 from workorders w
 join tenants t on t.id = w.tenantid
-where staffid = $1;
+where staffid = $1
+order by w.lastupdated desc;

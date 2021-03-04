@@ -28,3 +28,16 @@
     align-items: center;
     justify-content: center;
 }
+
+.unread-table-rows:nth-of-type(even) {
+    background-color: rgb(182, 129, 139);
+}
+
+.progress-table-rows:nth-of-type(even) {
+    background-color: rgba(218, 184, 15, 0.975);
+}
+
+.completed-table-rows:nth-of-type(even) {
+    background-color: rgba(18, 181, 97, 0.818);
+}
+
