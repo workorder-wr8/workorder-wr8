@@ -199,18 +199,22 @@ function ManagerDash(props) {
 
     return (
         <div className='managerDash'>
-            <div id='managerOverlay' onClick={overlayOff}>
+            <div id='managerOverlay' onClick={overlayOff} >
                 <div id='managerOverlayInfo'>
-                    <p>Work Order #{overlayData.overlayId}   Tenant Name: {overlayData.overlayName}  </p>
-                    <p> Title: {overlayData.overlayTitle}</p>
-                    <p> Description: {overlayData.overlayDescription}</p>
-                    <p>  Status: {overlayData.overlayStatus}</p>
-                    <p>  Date Created: {dayjs(overlayData.datecreated).format('MMMM D, YYYY h:mm A')}</p>
-                    <p>  Last Updated: {dayjs(overlayData.overlayLastUpdated).format('MMMM D, YYYY h:mm A')}</p>
-                    <p>  Date Completed: {dayjs(overlayData.overlayDateCompleted).format('MMMM D, YYYY h:mm A')}</p>
-                </div>
-                <div id='managerOverlayMessages' onClick={e => e.stopPropagation()}>
-                    <div id='managerOverlayLoadedMessages'>
+                    <div id='managerOverlayInfoBox'>
+                        <div>Work Order #{overlayData.overlayId} </div>
+                        <div>Tenant Name: {overlayData.overlayName}</div>  
+                        <div>Title: {overlayData.overlayTitle}</div> 
+                        <div>Status: {overlayData.overlayStatus}</div>
+                    </div>
+                    <div id='descriptionTitle'>Description: </div>
+                    <div>{overlayData.overlayDescription}</div>
+                    <div className='overlayDescription' value={overlayData.overlayDescription}></div>
+                    <div id='overlayTimes'>
+                        <div>  Date Created: {dayjs(overlayData.datecreated).format('MMMM D, YYYY h:mm A')}</div>
+                        <div>  Last Updated: {dayjs(overlayData.overlayLastUpdated).format('MMMM D, YYYY h:mm A')}</div>
+                    </div>
+                    <div id='managerOverlayLoadedMessages'  onClick={e => e.stopPropagation()}>
                         {overlayMessages}
                     </div>
                     <form onSubmit={e => { addMessage(overlayData.overlayId, overlayData.overlayMessageInput) }} onClick={e => e.stopPropagation()}>
