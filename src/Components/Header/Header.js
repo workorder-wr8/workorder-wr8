@@ -36,7 +36,6 @@ function Header(props) {
         link = <Link className='link' to={`/managerprofile/${props.user.managerid}`}><li className='header-props'>Welcome {props.user.firstname}, {props.user.lastname}</li></Link>
     }
 
-    console.log(props)
     return (
         <header className='navbar'>
 

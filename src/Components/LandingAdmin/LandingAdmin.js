@@ -47,19 +47,16 @@ const LandingAdmin = (props) => {
 
         if (password !== verPassword) {
             isValidRegister = false;
-            console.log('passwords don\'t match', password, verPassword)
             setErrorMessages([...errorMessages, 'Passwords Do Not Match!'])
         }
 
         if (!isStrongPassword(password)) {
             isValidRegister = false;
-            console.log('weak password', !isStrongPassword(password), password)
             setErrorMessages([...errorMessages, 'Password needs to contain at least one number, uppercase letter, lowercase letter, and symbol.'])
         }
 
         if (!isEmail(email, { domain_specific_validation: true })) {
             isValidRegister = false;
-            console.log('not Email')
             setErrorMessages([...errorMessages, 'Invalid email address!']);
         }
 
