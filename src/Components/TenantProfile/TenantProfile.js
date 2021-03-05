@@ -21,7 +21,10 @@ const TenantProfile = ({ user, history }) => {
 
     return (
         <section className='profile-container'>
-            <Button className='back-to-dashboard' onClick={() => goBack()}>Back to Dashboard</Button>
+            <div className='button-container'>
+                <Button className='back-to-dashboard' onClick={() => goBack()}>Back to Dashboard</Button>
+            </div>
+
             <h2>My Information</h2>
             {displayTenant()}
         </section>
