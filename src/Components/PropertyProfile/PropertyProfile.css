@@ -22,6 +22,9 @@
 
 .goBackBtn {
     align-self: flex-end;
-    margin-right: 4px;
-    
+    margin-right: 4px;  
 }
+
+.property-info-details {
+    font-weight: 400;
+} 

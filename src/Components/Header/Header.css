@@ -15,6 +15,11 @@
 
 .header-props {
     text-transform: capitalize;
+    color: white;
+}
+
+.header-props:hover {
+    color: rgb(18, 139, 155);
 }
 
 .property-title {

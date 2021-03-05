@@ -1,16 +1,29 @@
-import React from 'react'
-import { connect } from 'react-redux'
+import { connect } from 'react-redux';
+import Button from '@material-ui/core/Button';
+import './ManagerProfile.css';
 
-function ManagerProfile(props) {
-    const goToDashboard = () => {
-        props.history.push('/managerdash')
+const ManagerProfile = ({ user, history }) => {
+
+    const { firstname, lastname, name, email, phone } = user;
+    const { goBack } = history;
+    const displayManager = () => {
+        return (
+            <article className='manager-info'>
+                <h3 className='manager-header-name'>Name: {firstname} {lastname}</h3>
+                <div>
+                    <p className='property-name'><span className='information'>Property:</span> {name}</p>
+                    <h3>Contact Info</h3>
+                    <p><span className='information'>Email:</span> {email}, <span className='information'>Phone:</span> {phone}</p>
+                </div>
+            </article>
+        )
     }
 
-    console.log('managerinfo:', props)
     return (
-        <section>
-            <button onClick={goToDashboard}>Go To Dashboard </button>
-            ManagerProfile
+        <section className='profile-container'>
+            <Button className='back-to-dashboard' onClick={() => goBack()}>Back to Dashboard</Button>
+            <h2>Manager Info</h2>
+            {displayManager()}
         </section>
     )
 }

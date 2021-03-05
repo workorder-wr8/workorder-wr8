@@ -1,4 +1,5 @@
 import React from 'react'
+import Button from '@material-ui/core/Button';
 import { connect } from 'react-redux'
 import './PropertyProfile.css'
 
@@ -10,16 +11,14 @@ function PropertyProfile(props) {
         props.history.goBack()
     }
 
-    // console.log('propertyprofile props: ', props)
-
     return (
         <div className='property-profile-container'>
-            <button className='goBackBtn' onClick={goBack}>Go Back</button>
+            <Button className='back-to-dashboard' onClick={goBack}>Go Back</Button>
             <h1 id='propertyname'>{name}</h1>
             <div className='property-info'>
-                <h3>Email: {propemail}</h3>
-                <h3>Phone Number: {propphone}</h3>
-                <h3>Address: {propaddress}, {propcity}, {propstate}, {propzip}</h3>
+                <h4>Email: <span className='property-info-details'>{propemail}</span></h4>
+                <h4>Phone Number: <span className='property-info-details'> {propphone}</span></h4>
+                <h4>Address: <span className='property-info-details'>{propaddress}, {propcity}, {propstate}, {propzip}</span></h4>
             </div>
 
         </div>
