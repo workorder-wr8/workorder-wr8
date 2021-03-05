@@ -57,7 +57,7 @@ const ManageWorkOrder = (props) => {
                 <div className='workorder-description'>
                     <h3 id='description-workorder'>Workorder Description:</h3>
                     <section className='wo-description-content'>
-                        <p >{description}</p>
+                        <p>{description}</p>
                     </section>
                 </div>
             </>
