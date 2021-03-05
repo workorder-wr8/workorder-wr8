@@ -1,4 +1,5 @@
-select * from landlords
+select id as landlordid, firstname, lastname, password, email, phone 
+from landlords
 where email = $1;
 
 -- select l.id as landlordid, l.firstname, l.lastname, l.password, p.id, p.name, p.address1, p.city, p.state, p.zip, p.email, p.phone

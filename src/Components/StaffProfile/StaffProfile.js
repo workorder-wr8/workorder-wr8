@@ -4,7 +4,6 @@ import './StaffProfile.css';
 
 const StaffProfile = ({ user, history }) => {
 
-    console.log('staffinfo:', user)
     const { email, firstname, lastname, name, phone } = user;
     const { goBack } = history;
     const displayStaff = () => {
@@ -19,7 +18,7 @@ const StaffProfile = ({ user, history }) => {
             </article>
         )
     }
-    console.log('ddd', history)
+
     return (
         <section className='profile-container'>
             <Button className='back-to-dashboard' onClick={() => goBack()}>Back to Dashboard</Button>

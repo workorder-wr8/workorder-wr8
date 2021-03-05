@@ -34,6 +34,8 @@ function Header(props) {
         link = <Link className='link' to={`/staffprofile/${props.user.staffid}`}><li className='header-props'>Welcome {props.user.firstname}, {props.user.lastname}</li></Link>
     } else if (props.user.managerid) {
         link = <Link className='link' to={`/managerprofile/${props.user.managerid}`}><li className='header-props'>Welcome {props.user.firstname}, {props.user.lastname}</li></Link>
+    } else if (props.user.landlordid) {
+        link = <Link className='link' to={`/landlordprofile/${props.user.landlordid}`}><li className='header-props'>Welcome {props.user.firstname}, {props.user.lastname}</li></Link>
     }
 
     return (
