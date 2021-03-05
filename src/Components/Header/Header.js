@@ -29,14 +29,13 @@ function Header(props) {
 
     let link;
     if (props.user.tenantid) {
-        link = <Link to={`/tenantprofile/${props.user.tenantid}`}><li className='header-props'>Welcome {props.user.firstname}, {props.user.lastname}</li></Link>
+        link = <Link className='link' to={`/tenantprofile/${props.user.tenantid}`}><li className='header-props'>Welcome {props.user.firstname}, {props.user.lastname}</li></Link>
     } else if (props.user.staffid) {
-        link = <Link to={`/staffprofile/${props.user.staffid}`}><li className='header-props'>Welcome {props.user.firstname}, {props.user.lastname}</li></Link>
+        link = <Link className='link' to={`/staffprofile/${props.user.staffid}`}><li className='header-props'>Welcome {props.user.firstname}, {props.user.lastname}</li></Link>
     } else if (props.user.managerid) {
-        link = <Link to={`/managerprofile/${props.user.managerid}`}><li className='header-props'>Welcome {props.user.firstname}, {props.user.lastname}</li></Link>
+        link = <Link className='link' to={`/managerprofile/${props.user.managerid}`}><li className='header-props'>Welcome {props.user.firstname}, {props.user.lastname}</li></Link>
     }
 
-    console.log(props)
     return (
         <header className='navbar'>
 

@@ -15,6 +15,7 @@ module.exports = {
   },
   getManager: async (req, res) => {
     if (req.session.user) {
+      console.log(req.session.user)
       const { propertyid } = req.session.user;
       const workorders = await req.app.get('db').workorder.get_workorders_by_manager(propertyid);
 

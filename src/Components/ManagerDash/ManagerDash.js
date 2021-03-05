@@ -130,7 +130,6 @@ function ManagerDash(props) {
     const overlayOn = () => { document.getElementById('managerOverlay').style.display = 'flex' }
 
     const changeOverlay = (event) => {
-        console.log('OVERLAY: ', event.target.parentNode.cells)
         let id = event.target.parentNode.parentNode.cells[0].textContent;
         let name = event.target.parentNode.parentNode.cells[1].textContent;
         let title = event.target.parentNode.parentNode.cells[2].textContent;
@@ -411,7 +410,7 @@ function ManagerDash(props) {
                                             <StyledTableRow className='row' key={wo.id} value={wo}  className='unassignedRow'>
                                                 <StyledTableCell align='right' className='unassignedCell'>{wo.id}</StyledTableCell>
                                                 <StyledTableCell align='right' className='unassignedCell'>{wo.tenantlast},{wo.tenantfirst}</StyledTableCell>
-                                                <StyledTableCell align='right' className='unassignedCell' onClick={changeOverlay}><Link>{wo.title}</Link></StyledTableCell>
+                                                <StyledTableCell align='right' className='unassignedCell'><Link onClick={changeOverlay}>{wo.title}</Link></StyledTableCell>
                                                 <StyledDescriptionCell align='right' className='unassignedCell descriptionCell' id={wo.description}>{wo.description.length > 100 ? wo.description.substring(0, 80).concat('...') : wo.description}</StyledDescriptionCell>
                                                 <StyledTableCell align='right' className='unassignedCell'>{wo.status}</StyledTableCell>
                                                 <StyledTableCell align='right' className='unassignedCell'>{dayjs(wo.datecreated).format('MMMM D, YYYY h:mm A')}</StyledTableCell>
