@@ -28,7 +28,6 @@ function LandlordProperty(props) {
 
     useEffect(() => {
         let propertyid = +props.match.params.id
-        console.log(propertyid)
         axios.get(`/api/landlord/property/data/${propertyid}`)
             .then(res => {
                 if (res.data[0]) {
@@ -65,7 +64,6 @@ function LandlordProperty(props) {
         props.history.goBack()
     }
 
-    console.log(props)
     return (
         <div className='landlord-property-container'>
             <div className='back-btn-landlord' onClick={goBack}>Go Back</div>

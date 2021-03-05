@@ -111,7 +111,6 @@ const LandingTenant = props => {
 
         if (password !== verPassword) {
             isValidRegister = false;
-            console.log('passwords don\'t match', password, verPassword)
             setErrorStatementPasswordMatch('Passwords Do Not Match')
         } else {
             setErrorStatementPasswordMatch('')
@@ -120,7 +119,6 @@ const LandingTenant = props => {
 
         if (!isStrongPassword(password)) {
             isValidRegister = false;
-            console.log('weak password', !isStrongPassword(password), password)
             setErrorStatementPasswordStrength('Password needs to contain at least one number, uppercase letter, lowercase letter, and symbol')
         } else {
             setErrorStatementPasswordStrength('')
@@ -129,7 +127,6 @@ const LandingTenant = props => {
 
         if (!isEmail(input.email, { domain_specific_validation: true })) {
             isValidRegister = false;
-            console.log('not Email')
             setErrorStatementEmail('Invalid email address')
         } else {
             setErrorStatementEmail('')
