@@ -130,9 +130,9 @@ const TenantDash = props => {
                                             <TableRow key={wo.id}>
                                                 <TableCell>{wo.id}</TableCell>
                                                 <TableCell className='wo-title' component="th" scope="row">
-                                                    <Link className='link' to={{ pathname: `${props.match.url}/workorder/${wo.id}`, id: wo.id }}>
+                                                    <Link className='link' title='Open Workorder View' to={{ pathname: `${props.match.url}/workorder/${wo.id}`, id: wo.id }}>
                                                         {wo.title}
-                                                        <img className='click-me' src={click} alt='click_svg'/>
+                                                        <img className='click-me' src={click} alt='click_svg' />
                                                     </Link>
                                                 </TableCell>
 

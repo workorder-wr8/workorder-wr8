@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import Button from '@material-ui/core/Button';
 import './ManagerProfile.css';
 
-const ManagerProfile = ({ user,history }) => {
+const ManagerProfile = ({ user, history }) => {
 
     const { firstname, lastname, name, email, phone } = user;
     const { goBack } = history;
@@ -21,7 +21,7 @@ const ManagerProfile = ({ user,history }) => {
 
     return (
         <section className='profile-container'>
-            <Button className='back-to-dashboard' onClick={()=>goBack()}>Back to Dashboard</Button>
+            <Button className='back-to-dashboard' onClick={() => goBack()}>Back to Dashboard</Button>
             <h2>Manager Info</h2>
             {displayManager()}
         </section>

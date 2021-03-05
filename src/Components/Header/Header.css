@@ -44,3 +44,7 @@
 .logout-icon {
     margin-left: 3px;
 }
+
+.header-props.property-title {
+    text-decoration: none!important;
+}

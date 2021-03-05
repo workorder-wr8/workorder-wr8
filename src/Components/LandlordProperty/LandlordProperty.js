@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux'
 import axios from 'axios'
 import './LandlordProperty.css'
-import { Bar, Line } from 'react-chartjs-2'
+import { Pie, Line } from 'react-chartjs-2'
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -64,6 +64,7 @@ function LandlordProperty(props) {
         props.history.goBack()
     }
 
+    console.log(count)
     return (
         <div className='landlord-property-container'>
             <div className='back-btn-landlord' onClick={goBack}>Go Back</div>
@@ -77,12 +78,25 @@ function LandlordProperty(props) {
                 <div className='chart-container'>
                     <Line
                         data={data}
-
                     />
                 </div>
             )
                 : null}
             <h2 className='chart-header'>Current Workorders Status</h2>
+            {/* <Pie
+                data={count}
+                options={{
+                    title: {
+                        display: true,
+                        text: 'Average Rainfall per month',
+                        fontSize: 20
+                    },
+                    legend: {
+                        display: true,
+                        position: 'right'
+                    }
+                }}
+            /> */}
             <div className='table-numbers-landlord'>
                 <TableContainer component={Paper}>
                     <Table className={classes.table} aria-label="simple table">

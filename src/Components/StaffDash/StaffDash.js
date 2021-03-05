@@ -199,9 +199,9 @@ function StaffDash(props) {
                                             </TableCell>
                                             <TableCell align="right">{wo.firstname} {wo.lastname}</TableCell>
                                             <TableCell align="right">
-                                                <Link className='link' to={{ pathname: `${props.match.url}/workorder/${wo.id}`, id: wo.id }}>
+                                                <Link className='link' title='Open Workorder View' to={{ pathname: `${props.match.url}/workorder/${wo.id}`, id: wo.id }}>
                                                     {wo.title}
-                                                    <img className='click-me' src={click} alt='click_svg'/>
+                                                    <img className='click-me' src={click} alt='click_svg' />
                                                 </Link>
                                             </TableCell>
                                             <TableCell align="right">{wo.description.length > 100 ? wo.description.substring(0, 80).concat('...') : wo.description}</TableCell>
@@ -292,9 +292,9 @@ function StaffDash(props) {
                                         </TableCell>
                                         <TableCell align="right">{wo.firstname} {wo.lastname}</TableCell>
                                         <TableCell align="right">
-                                            <Link className='link' to={{ pathname: `${props.match.url}/workorder/${wo.id}`, id: wo.id }}>
+                                            <Link className='link' title='Open Workorder View' to={{ pathname: `${props.match.url}/workorder/${wo.id}`, id: wo.id }}>
                                                 {wo.title}
-                                                <img className='click-me' src={click} alt='click_svg'/>
+                                                <img className='click-me' src={click} alt='click_svg' />
                                             </Link>
                                         </TableCell>
                                         <TableCell align="right">{wo.description.length > 100 ? wo.description.substring(0, 80).concat('...') : wo.description}</TableCell>
@@ -384,7 +384,7 @@ function StaffDash(props) {
                                         <TableCell align="right">{wo.firstname} {wo.lastname}</TableCell>
                                         <TableCell align="right">
                                             {wo.title}
-                                            </TableCell>
+                                        </TableCell>
                                         <TableCell align="right">{wo.description.length > 100 ? wo.description.substring(0, 80).concat('...') : wo.description}</TableCell>
                                         <TableCell align="right">{dayjs(wo.datecreated).format('MM-DD-YYYY')}</TableCell>
                                         <TableCell align="right">{wo.lastupdated ? dayjs(wo.lastupdated).format('MM-DD-YYYY') : '-'}</TableCell>
