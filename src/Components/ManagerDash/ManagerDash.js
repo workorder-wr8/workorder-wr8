@@ -16,11 +16,11 @@ import orderBy from "lodash/orderBy";
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import SpinnerContainer from '../Spinner/SpinnerContainer';
-import {Link} from 'react-router-dom';
-import './ManagerDash.css';
+import { Link } from 'react-router-dom';
+import Alert from '@material-ui/lab/Alert';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
-import { Autocomplete } from '@material-ui/lab';
+import './ManagerDash.css';
 // USES withStyles from material-UI for table cells and rows
 
 
@@ -91,7 +91,8 @@ function ManagerDash(props) {
         desc: 'asc'
     }
     const [dateToggle, setDateToggle] = useState(true)
-
+    const [show, setShow] = useState(false);
+    const [message, setMessage] = useState('');
     const addMessage = (id, content) => {
         axios.put('/api/messages/manager/create', { id, content })
             .then(() => {
@@ -112,14 +113,14 @@ function ManagerDash(props) {
     const mapMessages = () => {
         let mappedMessages = messages.map(message => {
             if (message.managerid === props.user.managerid) {
-                return <article  className='comment-container me'>
-                            <p className='my-comment'>{message.content}@<span className='comment-timestamp'>{dayjs(message.timesent).format('MMMM D, YYYY h:mm A')}--</span></p>
-                        </article>
+                return <article className='comment-container me'>
+                    <p className='my-comment'>{message.content}@<span className='comment-timestamp'>{dayjs(message.timesent).format('MMMM D, YYYY h:mm A')}</span></p>
+                </article>
             } else {
-                return <article  className='comment-container them'>
-                            <p className='my-comment'>{message.content}@<span className='comment-timestamp'>{dayjs(message.timesent).format('MMMM D, YYYY h:mm A')}</span></p>
-                        </article>
-            } 
+                return <article className='comment-container them'>
+                    <p className='my-comment'>{message.content}@<span className='comment-timestamp'>{dayjs(message.timesent).format('MMMM D, YYYY h:mm A')}</span></p>
+                </article>
+            }
         })
         setOverlayMessages(<div id='mappedMessages'>{mappedMessages}</div>)
     }
@@ -156,6 +157,7 @@ function ManagerDash(props) {
     const getStaffMembers = async () => {
         await axios.get('/api/manager/staffmembers')
             .then(res => { setStaffMembers(res.data) })
+            .catch(err => console.log(`Error: ${err.response.data}`))
     }
 
     const mapStaff = () => {
@@ -169,6 +171,15 @@ function ManagerDash(props) {
                 setWorkOrders(res.data);
                 setChangeAssigned(-1);
                 setLoading(false);
+            })
+            .catch(err => {
+                console.log(`Error: ${err.response.data}`);
+                setLoading(false);
+                setMessage(`${err.response.data}`)
+                setShow(true);
+                setTimeout(()=>{
+                    setShow(false);
+                }, 1500);
             })
     }
 
@@ -342,7 +353,7 @@ function ManagerDash(props) {
                                     {overlayMessages}
                                 </section>
                                 <form onSubmit={e => { addMessage(overlayData.overlayId, overlayData.overlayMessageInput) }} onClick={e => e.stopPropagation()} className='add-comment-container'>
-                                    <TextField type='text' onClick={e => e.stopPropagation()} onChange={e => setOverlayData({ ...overlayData, overlayMessageInput: e.target.value })} value={overlayData.overlayMessageInput} className='comment-input'/>
+                                    <TextField type='text' onClick={e => e.stopPropagation()} onChange={e => setOverlayData({ ...overlayData, overlayMessageInput: e.target.value })} value={overlayData.overlayMessageInput} className='comment-input' />
                                     <Button type='button' class='addBtn-comment' onClick={e => { addMessage(overlayData.overlayId, overlayData.overlayMessageInput) }}>Add Comment</Button>
                                 </form>
                             </section>
@@ -354,7 +365,8 @@ function ManagerDash(props) {
                 ? <SpinnerContainer />
                 : <>
                     <div className='tableWrapper unassignedTable' >
-                        {unassignedWorkOrders[0] ? <StyledTableContainer component={Paper}>
+                        {show ? <Alert className='fade-in' severity="warning">{message}</Alert> : null}
+                        <StyledTableContainer component={Paper}>
                             <Table stickyHeader aria-label="sticky table">
                                 <TableHead>
                                     <TableRow>
@@ -407,7 +419,7 @@ function ManagerDash(props) {
                                 <TableBody>
                                     {orderBy(unassignedWorkOrders, columnToSort, sortDirection)
                                         .map(wo => (
-                                            <StyledTableRow className='row' key={wo.id} value={wo}  className='unassignedRow'>
+                                            <StyledTableRow className='row' key={wo.id} value={wo} className='unassignedRow'>
                                                 <StyledTableCell align='right' className='unassignedCell'>{wo.id}</StyledTableCell>
                                                 <StyledTableCell align='right' className='unassignedCell'>{wo.tenantlast},{wo.tenantfirst}</StyledTableCell>
                                                 <StyledTableCell align='right' className='unassignedCell'><Link onClick={changeOverlay}>{wo.title}</Link></StyledTableCell>
@@ -428,21 +440,29 @@ function ManagerDash(props) {
                                                 }</TableCell>
                                             </StyledTableRow>
                                         ))}
-                                    <StyledTableRow key={'end'} className='extrarow unassignedRow'>
-                                        <StyledTableCell align='right'>-</StyledTableCell>
-                                        <StyledTableCell align='right'>-</StyledTableCell>
-                                        <StyledTableCell align='right'>-</StyledTableCell>
-                                        <StyledDescriptionCell align='right'>End Of Work Orders</StyledDescriptionCell>
-                                        <StyledTableCell align='right'>-</StyledTableCell>
-                                        <StyledTableCell align='right'>-</StyledTableCell>
-                                        <StyledTableCell align='right'>-</StyledTableCell>
-                                    </StyledTableRow>
+                                    {unassignedWorkOrders.length === 0
+                                        ?
+                                        null
+                                        :
+                                        (
+                                            <StyledTableRow key={'end'} className='extrarow assignedRow'>
+                                                <StyledTableCell align='right'>-</StyledTableCell>
+                                                <StyledTableCell align='right'>-</StyledTableCell>
+                                                <StyledTableCell align='right'>-</StyledTableCell>
+                                                <StyledDescriptionCell align='right'>End Of Work Orders</StyledDescriptionCell>
+                                                <StyledTableCell align='right'>-</StyledTableCell>
+                                                <StyledTableCell align='right'>-</StyledTableCell>
+                                                <StyledTableCell align='right'>-</StyledTableCell>
+                                                <StyledTableCell align='right'>-</StyledTableCell>
+                                                <StyledDescriptionCell align='right'>-</StyledDescriptionCell>
+                                            </StyledTableRow>
+                                        )}
                                 </TableBody>
                             </Table>
-                        </StyledTableContainer> : <></>}
+                        </StyledTableContainer>
                     </div>
                     <div className='tableWrapper assignedTable'>
-                        {assignedWorkOrders[0] ? <StyledTableContainer component={Paper}>
+                        <StyledTableContainer component={Paper}>
                             <Table stickyHeader aria-label="sticky table">
                                 <TableHead>
                                     <TableRow>
@@ -523,26 +543,31 @@ function ManagerDash(props) {
                                                             </span>
                                                                 <button className='changeStaffBtn' onClick={e => { e.stopPropagation(); changeAssignedStaff(-1) }}>Don't Change</button>
                                                             </div>
-
-
                                                         </StyledAssignmentCell>
                                                     )}
                                             </StyledTableRow>
                                         ))}
-                                    <StyledTableRow key={'end'} className='extrarow assignedRow'>
-                                        <StyledTableCell align='right'>-</StyledTableCell>
-                                        <StyledTableCell align='right'>-</StyledTableCell>
-                                        <StyledTableCell align='right'>-</StyledTableCell>
-                                        <StyledDescriptionCell align='right'>End Of Work Orders</StyledDescriptionCell>
-                                        <StyledTableCell align='right'>-</StyledTableCell>
-                                        <StyledTableCell align='right'>-</StyledTableCell>
-                                        <StyledTableCell align='right'>-</StyledTableCell>
-                                        <StyledTableCell align='right'>-</StyledTableCell>
-                                        <StyledDescriptionCell align='right'>-</StyledDescriptionCell>
-                                    </StyledTableRow>
+                                    {assignedWorkOrders.length === 0
+                                        ?
+                                        null
+                                        :
+                                        (
+                                            <StyledTableRow key={'end'} className='extrarow assignedRow'>
+                                                <StyledTableCell align='right'>-</StyledTableCell>
+                                                <StyledTableCell align='right'>-</StyledTableCell>
+                                                <StyledTableCell align='right'>-</StyledTableCell>
+                                                <StyledDescriptionCell align='right'>End Of Work Orders</StyledDescriptionCell>
+                                                <StyledTableCell align='right'>-</StyledTableCell>
+                                                <StyledTableCell align='right'>-</StyledTableCell>
+                                                <StyledTableCell align='right'>-</StyledTableCell>
+                                                <StyledTableCell align='right'>-</StyledTableCell>
+                                                <StyledDescriptionCell align='right'>-</StyledDescriptionCell>
+                                            </StyledTableRow>
+                                        )}
+
                                 </TableBody>
                             </Table>
-                        </StyledTableContainer> : <></>}
+                        </StyledTableContainer>
                     </div>
                 </>
             }

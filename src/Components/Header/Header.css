@@ -15,6 +15,11 @@
 
 .header-props {
     text-transform: capitalize;
+    color: white;
+}
+
+.header-props:hover {
+    color: rgb(18, 139, 155);
 }
 
 .property-title {
@@ -38,4 +43,8 @@
 
 .logout-icon {
     margin-left: 3px;
+}
+
+.header-props.property-title {
+    text-decoration: none!important;
 }

@@ -91,3 +91,19 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+.fade-in {
+  opacity: 0;
+  animation: fadeIn ease-in 1;
+  animation-fill-mode: forwards;
+  animation-duration: 500ms;
+}
+
+@keyframes fadeIn {
+  from {
+     opacity: 0;
+  }
+  to {
+     opacity: 1;
+  }
+}

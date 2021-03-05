@@ -1,0 +1,24 @@
+.profile-container {
+    background-color: white;
+    border-radius: 5px;
+    padding: 5px;
+    width: 60%;
+    margin: 70px auto 0 auto;
+}
+
+.tenant-info {
+    text-align: left;
+}
+
+.information {
+    font-weight: bold;
+}
+
+.property-name {
+    text-transform: capitalize;
+}
+
+.button-container {
+    display:flex;
+    flex-direction: row-reverse;
+}
