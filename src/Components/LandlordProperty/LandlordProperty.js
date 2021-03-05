@@ -11,6 +11,7 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import Button from '@material-ui/core/Button';
 
 const useStyles = makeStyles({
     table: {
@@ -67,7 +68,8 @@ function LandlordProperty(props) {
     console.log(count)
     return (
         <div className='landlord-property-container'>
-            <div className='back-btn-landlord' onClick={goBack}>Go Back</div>
+            {/* <Button onClick={addManager}>Add Manager</Button> */}
+            <Button className='add-btn' onClick={goBack}>Go Back</Button>
             <h2 className='chart-header'>Average Time to Completion: {time !== null ? (
                 <>
                     <span className='chart-header'>{time.days} Days {time.hours} Hours and {time.minutes} Minutes</span>
@@ -102,16 +104,16 @@ function LandlordProperty(props) {
                     <Table className={classes.table} aria-label="simple table">
                         <TableHead>
                             <TableRow>
-                                <TableCell align="right">Status</TableCell>
-                                <TableCell align="right">Count</TableCell>
+                                <TableCell align="center">Status</TableCell>
+                                <TableCell align="center">Count</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
                             {count
                                 .map((wo, i) => {
                                     return <TableRow key={i}>
-                                        <TableCell align="right">{wo.status}</TableCell>
-                                        <TableCell align="right">{wo.count}</TableCell>
+                                        <TableCell align="center">{wo.status}</TableCell>
+                                        <TableCell align="center">{wo.count}</TableCell>
                                     </TableRow>
                                 })}
                         </TableBody>

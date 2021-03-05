@@ -38,13 +38,13 @@ function LandlordDash(props) {
     const [toggleAdd, setToggleAdd] = useState(false)
 
     const getProperties = () => {
-        axios.get(`/api/landlord/properties/${props.user.id}`)
+        axios.get(`/api/landlord/properties/${props.user.landlordid}`)
             .then(res => setProperties(res.data))
             .catch(err => console.log(err))
     }
 
     useEffect(() => {
-        if (props.user.id) {
+        if (props.user.landlordid) {
             getProperties();
         }
     }, [props])
@@ -60,7 +60,7 @@ function LandlordDash(props) {
 
     const addProperty = (e) => {
         e.preventDefault();
-        let landlordid = props.user.id
+        let landlordid = props.user.landlordid;
         let landlordfirst = props.user.firstname;
         const { name, address1, address2, city, state, zip, email, phone, passcode, managerEmail } = input
         let body = { landlordid, name, address1, address2, city, state, zip, email, phone, passcode }
@@ -93,7 +93,7 @@ function LandlordDash(props) {
         setToggleAdd(!toggleAdd)
     }
 
-    // console.log()
+    console.log(props)
     return (
         <div>
             <div id="overlay" onClick={off}>
