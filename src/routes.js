@@ -11,6 +11,7 @@ import TenantProfile from './Components/TenantProfile/TenantProfile'
 import StaffProfile from './Components/StaffProfile/StaffProfile'
 import ManagerProfile from './Components/ManagerProfile/ManagerProfile'
 import PropertyProfile from './Components/PropertyProfile/PropertyProfile'
+import LandlordProfile from './Components/LandlordProfile/LandlordProfile'
 
 export default (
 
@@ -27,5 +28,6 @@ export default (
         <Route path='/staffprofile/:id' component={StaffProfile} />
         <Route path='/managerprofile/:id' component={ManagerProfile} />
         <Route path='/property/:id' component={PropertyProfile} />
+        <Route path='/landlordprofile/:id' component={LandlordProfile} />
     </Switch>
 )

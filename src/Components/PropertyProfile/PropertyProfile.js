@@ -13,7 +13,7 @@ function PropertyProfile(props) {
 
     return (
         <div className='property-profile-container'>
-            <Button className='back-to-dashboard' onClick={goBack}>Go Back</Button>
+            <Button className='back-to-dashboard' id='back-to-dashboard' onClick={goBack}>Go Back</Button>
             <h1 id='propertyname'>{name}</h1>
             <div className='property-info'>
                 <h4>Email: <span className='property-info-details'>{propemail}</span></h4>

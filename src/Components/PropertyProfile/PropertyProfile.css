@@ -28,3 +28,9 @@
 .property-info-details {
     font-weight: 400;
 } 
+
+#back-to-dashboard {
+    align-self: flex-end;
+    margin-right: 8px;
+    margin-top: 8px;
+}
