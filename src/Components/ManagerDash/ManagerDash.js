@@ -445,13 +445,11 @@ function ManagerDash(props) {
                                         null
                                         :
                                         (
-                                            <StyledTableRow key={'end'} className='extrarow assignedRow'>
+                                            <StyledTableRow key={'end'} className='extrarow unassignedRow'>
                                                 <StyledTableCell align='right'>-</StyledTableCell>
                                                 <StyledTableCell align='right'>-</StyledTableCell>
                                                 <StyledTableCell align='right'>-</StyledTableCell>
                                                 <StyledDescriptionCell align='right'>End Of Work Orders</StyledDescriptionCell>
-                                                <StyledTableCell align='right'>-</StyledTableCell>
-                                                <StyledTableCell align='right'>-</StyledTableCell>
                                                 <StyledTableCell align='right'>-</StyledTableCell>
                                                 <StyledTableCell align='right'>-</StyledTableCell>
                                                 <StyledDescriptionCell align='right'>-</StyledDescriptionCell>
