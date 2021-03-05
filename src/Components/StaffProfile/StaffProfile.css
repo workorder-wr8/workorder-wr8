@@ -1,0 +1,21 @@
+.profile-container {
+    background-color: white;
+    border-radius: 5px;
+    padding: 5px;
+    width: 60%;
+    margin: 70px auto 0 auto;
+}
+
+.staff-info {
+    text-align: left;
+}
+
+.staff-header-name {
+    text-transform: capitalize;
+}
+
+.back-to-dashboard {
+    color:white!important;
+    background-color: rgb(66, 115, 179)!important;
+    text-transform: capitalize!important;
+}

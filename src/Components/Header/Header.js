@@ -46,7 +46,7 @@ function Header(props) {
                     <nav>
                         <ul className='nav-links'>
                             {link}
-                            <Link to={`/property/${props.user.propertyid}`}><li className='header-props property-title'>{props.user.name}</li></Link>
+                            <Link className='link' to={`/property/${props.user.propertyid}`}><li className='header-props property-title'>{props.user.name}</li></Link>
                             {props.location.pathname === '/dash' ? <Link className='link' to='/create/workorder'><Button className='create-wo-btn'>Create Work Order</Button></Link> : null}
                             <li><Button className='btn logout-btn' onClick={logout}>Logout<FontAwesomeIcon className='logout-icon' icon={faSignOutAlt} /></Button></li>
                         </ul>
