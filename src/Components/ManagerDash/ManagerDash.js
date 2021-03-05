@@ -113,7 +113,7 @@ function ManagerDash(props) {
         let mappedMessages = messages.map(message => {
             if (message.managerid === props.user.managerid) {
                 return <article  className='comment-container me'>
-                            <p className='my-comment'>{message.content}@<span className='comment-timestamp'>{dayjs(message.timesent).format('MMMM D, YYYY h:mm A')}</span></p>
+                            <p className='my-comment'>{message.content}@<span className='comment-timestamp'>{dayjs(message.timesent).format('MMMM D, YYYY h:mm A')}--</span></p>
                         </article>
             } else {
                 return <article  className='comment-container them'>
