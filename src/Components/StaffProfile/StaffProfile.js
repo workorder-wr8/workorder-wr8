@@ -22,7 +22,7 @@ const StaffProfile = ({ user, history }) => {
     console.log('ddd', history)
     return (
         <section className='profile-container'>
-            <Button className='back-to-dashboard' onClick={()=>goBack()}>Back to Dashboard</Button>
+            <Button className='back-to-dashboard' onClick={() => goBack()}>Back to Dashboard</Button>
             <h2>Staff Information</h2>
             {displayStaff()}
         </section>
