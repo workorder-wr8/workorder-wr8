@@ -1,0 +1,27 @@
+.property-profile-container {
+    background-color: white;
+    width: 60%;
+    border-radius: 4%;
+    height: 40vh;
+    margin: 0 auto;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: column;
+    margin-top: 5vh;
+}
+
+.property-info {
+    text-align: left;
+}
+
+.property-info {
+    align-self: flex-start;
+    margin-left: 20px;
+}
+
+.goBackBtn {
+    align-self: flex-end;
+    margin-right: 4px;
+    
+}

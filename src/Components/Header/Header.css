@@ -41,5 +41,5 @@
 }
 
 .header-props.property-title {
-    text-decoration: none;
+    text-decoration: none!important;
 }
