@@ -1,0 +1,11 @@
+.profile-container {
+    background-color: white;
+    border-radius: 5px;
+    padding: 5px;
+    width: 60%;
+    margin: 70px auto 0 auto;
+}
+
+.manager-info {
+    text-align: left;
+}
