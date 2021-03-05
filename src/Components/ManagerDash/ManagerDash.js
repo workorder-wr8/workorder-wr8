@@ -165,6 +165,7 @@ function ManagerDash(props) {
     }
 
     const getWorkOrders = async () => {
+        console.log(props)
         await axios.get('/api/workorder/manager')
             .then(res => {
                 setWorkOrders(res.data);
